@@ -1,0 +1,497 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;1,400&display=swap');
+
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.body{
+    margin: 0;
+    padding-top: 70px;
+}
+
+.menu{
+    width: 100%;
+    height: 80px;
+    left: 0px;
+
+    background-color: #720e1d00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    top: 0;
+    
+    flex-shrink: 0;
+}
+
+ nav {
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center;
+  gap: 40px; 
+  padding:0 60px; 
+  padding-left: 900px;
+  
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-weight: 400;
+  transition: 0.8s;
+}
+
+nav > a:hover{
+    text-decoration: underline;   
+}
+
+
+button{
+    width: fit-content;
+    padding: 10px 20px 10px 20px;
+
+    border-radius: 5px;
+
+    background: #ff0a0a00;
+    color: #ffffff;
+
+    border: 1px solid #f6f2f3;
+
+    font-size: 14px;
+    font-weight: 400;
+    font-family: Inter;
+
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button img:hover{
+    transform: scale(1.05);
+}
+
+.logo img {
+  height: 100px; 
+  margin-left:  100px;
+  display: flex;
+  transition: 0.3s;
+}
+
+.logo img:hover {
+  transform: scale(1.05);
+}
+
+.comeco{
+    background-image:url(../assets/imgs/sessao1_aviao.png);
+    background-size: cover ;
+    background-position: center;
+
+    width: 100%;
+    height: 610px;
+    display: flex;
+    justify-content:flex-start ;    
+    flex-shrink: 0;
+
+}
+
+.letreiro{
+    position: absolute;
+    width: 530px;
+    height: 200px;
+    margin-left: 38%;
+    margin-top: 6%;
+    background-color: rgba(255, 192, 203, 0);
+}
+.aviao{
+    background-color: rgba(255, 255, 0, 0);
+    width: 300px;
+    height: 90px;
+    background-image:url(../assets/imgs/trajeto_aviao.png);
+    background-size: cover ;
+    background-position: center;
+    margin-top: 5%;
+    margin-left: 44%;
+    z-index: 0;
+    position: absolute;
+    
+}
+
+p{
+    font-family: "Bodoni Moda", serif;
+    font-style: italic;
+    font-size: 100px;
+    font-weight: 50px;
+    }
+
+.legenda{
+    position: absolute;
+    width: 800px;
+    height: 40px;
+    background-color: rgba(255, 166, 0, 0);
+    margin-top: 13.5%;
+    letter-spacing:2px ;
+    margin-left: 33.5%;
+    font-size: 35px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    font-style: normal !important; 
+    color: white;
+}
+
+.cadastrese{
+    background-color: rgb(5, 5, 191);
+    position: absolute;
+    border: none;
+    margin-top: 17%;
+    margin-left: 46.5%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    transition: 0.3s;
+
+    font-size: 20px;
+}
+
+.cadastrese:hover{
+    transform: scale(1.05);
+}
+
+.nossa_solucao{
+    background-color: #ECF7FF;
+    height: 600px;
+    width: 100%;
+}
+.linha{
+    position:absolute;
+    margin-top: 5%;
+    margin-left: 10%;
+    width: 180px;
+    height: 8px;
+    background-color: blue;
+}
+
+.titulo1{
+    position: absolute;
+    background-color:rgba(255, 192, 203, 0.009) ;
+    width: 220px;
+    height: 100px;
+    font-size: 25px;
+    font-weight: 600;
+    margin-left: 20%;
+    margin-top: 4.4%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-style: normal !important; 
+}
+
+.letreiro2{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-style: normal !important; 
+    font-weight: 400;
+    font-size: 50px;
+    margin-top: 8%;
+    background-color: rgba(255, 192, 203, 0.043);
+    margin-left: 10%;
+    letter-spacing:2px ;
+    position: absolute;
+}
+
+.letreiro3{
+   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-style: normal !important; 
+    font-weight: 500;
+    font-size: 50px;
+    margin-top: 11%;
+    background-color: rgba(255, 192, 203, 0);
+    color: blue;
+    margin-left: 10%;
+    letter-spacing:2px ;
+    position: absolute; 
+}
+
+.tesxto_solucao{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-style: normal !important; 
+    font-weight: 500;
+    font-size: 22px;
+    margin-top: 15%;
+    background-color: rgba(255, 192, 203, 0.026);
+    color: rgb(45, 44, 44);
+    margin-left: 10%;
+    letter-spacing:2px ;
+    position: absolute; 
+}
+
+.detalhes{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-style: normal !important; 
+    font-weight: 500;
+    font-size: 18px;
+    margin-top: 23%;
+    background-color:rgb(5, 5, 191);
+    color: rgb(248, 245, 245);
+    margin-left: 10%;
+    letter-spacing:2px ;
+    position: absolute; 
+}
+
+.dash{
+    margin-top: 4%;
+    margin-left: 56%;
+    position: absolute;
+
+    width: 600px;
+    height: 420px;
+    background-color: blue;
+}
+
+.empresa{
+    background-color: #ECF7FF;
+    width: 100%;
+    height: 1000px;
+
+    display: flex;
+    align-items: center;
+}
+
+.quem{
+    width: 26%; /*Essa div e a box*/
+    height:800px;
+    border-radius: 80px;
+    
+    background-color: blue;
+    margin-left: 6%;
+    background-image: url(../assets/imgs/quemsomos.png.png);
+    background-size: 160%;
+    background-position: center;
+
+    overflow: hidden;
+    transition: 
+        transform 0.5s ease,
+        background-size 0.5s ease,
+        box-shadow 0.5s ease;
+
+}
+
+
+
+.quem:hover {
+    transform: scale(1.08);
+    background-size: 125%;
+    box-shadow: 
+    0 0 15px rgb(15, 103, 255),
+    0 0 30px rgba(0, 47, 255, 0.8),
+    0 0 60px rgba(0, 102, 255, 0.6);
+}
+
+.quem::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 12, 0.437);
+    z-index: -10; 
+    transition: 
+        transform 0.5 ease,
+        filter 0.5s ease
+        background-size 0.5s ease;
+
+}
+
+.quem:hover::before {
+    transform: scale(1.08);
+    filter: blur(2px); 
+    background-size:125% ;
+}
+
+
+.p_quem{
+   position: relative;
+    margin-top: 17%;
+    margin-left: 21.5%;
+
+    width: 280px;
+    height: 80px;
+
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-style: normal !important; 
+    font-size: 40px;
+    font-weight: 600;
+    color: white;
+
+    background-color: rgba(0, 0, 255, 0);
+
+    
+}
+
+
+.p_oque{
+    position: relative;
+    margin-top: 15%;
+    margin-left: 13%;
+    width: 378px;
+    height: 80px;
+
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-style: normal !important; 
+    font-size: 40px;
+    font-weight: 600;
+    color: white;
+
+    background-color: rgba(0, 0, 255, 0);
+}
+
+
+
+.oque{
+    width: 26%;
+    height: 800px;
+    border-radius: 80px;
+
+    margin-left: 5%;
+
+    background-color: rgba(0, 0, 255, 0.905);
+    background-image: url(../assets/imgs/oque.png);
+    background-size: 160%;
+    background-position: center;
+
+     transition: 
+        transform 0.5s ease,
+        background-size 0.5s ease,
+        box-shadow 0.5s ease;
+
+
+    overflow: hidden;
+
+}
+
+.oque:hover {
+    transform: scale(1.08);
+    background-size: 125%;
+    box-shadow: 
+    0 0 15px rgb(15, 103, 255),
+    0 0 30px rgba(0, 47, 255, 0.8),
+    0 0 60px rgba(0, 102, 255, 0.6);
+
+}
+
+.oque::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 12, 0.437);
+    z-index: -10; 
+    transition: 
+        transform 0.5 ease,
+        filter 0.5s ease
+        background-size 0.5s ease;
+
+}
+
+.oque:hover::before {
+    transform: scale(1.08);
+    filter: blur(2px); 
+    background-size:125% ;
+}
+
+.objetivo{
+    width: 26%;
+    height: 800px;
+    border-radius: 80px;
+
+  
+    margin-left: 5%;
+    background-image: url(../assets/imgs/obgjetivo.png);
+    background-size: 160%;
+    background-position: center;
+    background-color: rgba(0, 0, 255, 0.931);
+
+   transition: 
+        transform 0.5s ease,
+        background-size 0.5s ease,
+        box-shadow 0.5s ease;
+
+
+    overflow: hidden;
+
+
+}
+
+.objetivo:hover {
+    transform: scale(1.08);
+    background-size: 125%;
+    box-shadow: 
+    0 0 15px rgb(15, 103, 255),
+    0 0 30px rgba(0, 47, 255, 0.8),
+    0 0 60px rgba(0, 102, 255, 0.6);
+
+}
+
+.objetivo::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 12, 0.437);
+    z-index: -10; 
+    transition: 
+        transform 0.5 ease,
+        filter 0.5s ease
+        background-size 0.5s ease;
+
+}
+
+.objetivo:hover::before {
+    transform: scale(1.08);
+    filter: blur(2px); 
+    background-size:125% ;
+}
+
+
+
+.descricao {
+    position: absolute;
+
+    left: 8%;
+    top: 40%;
+    width: 80%;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+    font-size: 22px;
+    line-height: 1.5;
+
+    opacity: 0;
+
+    transform: translateY(20px);
+
+    transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
+}
+
+.quem:hover .descricao {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.oque:hover .descricao {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.objetivo:hover .descricao {
+    opacity: 1;
+    transform: translateY(0);
+}
