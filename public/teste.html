@@ -5,21 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/teste.css">
-    <title>AirGuard</title>
+    <title>AeroGuard</title>
 </head>
 
 <body>
 
     <div class="comeco">
         <header class="menu">
-            <div class="logo">
+            <div class="logo_inicio">
                 <img id="logo" src="assets/imgs/logo.png" class="logo" alt="imagem da logo">
             </div>
             <nav>
-                <a href="#comeco">Nossa solução</a>
-                <a href="#importancia">Nossa empresa</a>
-                <a href="#momentos">Benefícios</a>
-                <a href="login.html"><button>Entre</button></a>
+                <a href="#solucao">Solução</a>
+                <a href="#empresa">Nossa empresa</a>
+                <a href="detalhes.html">Detalhes</a>
+                <a href="testelog.html"><button>Cadastre-se</button></a>
             </nav>
         </header>
 
@@ -28,18 +28,19 @@
             <p style="color: white;">Aero<a style="color: blue;">Guard</a>
         </div>
         <p class="legenda">Tecnologia que mantém tudo <a style="color: blue;">voando.</a></p>
-        <button class="cadastrese">Casdatre-se</button>
+        <button class="cadastrese">Cadastre-se</button>
     </div>
 
-    <div class="nossa_solucao">
+    <div id="solucao" class="nossa_solucao">
         <div class="linha"></div>
         <p class="titulo1">Nossa solução</p>
         <p class="letreiro2">Monitoramento de</p>
         <p class="letreiro3">hardware em aeroportos</p>
-        <p class="tesxto_solucao">Nosso serviço monitora o Hardware de <br> computadores de aviação
-            com a finalidade de <br> prever possíveis falhas e prejuízos, garantindo <br> mais segurança,
-            eficiência e continuidade <br> para o funcionamento dos aeroportos</p>
-        <button class="detalhes">Mais detalhes</button>
+        <p class="tesxto_solucao">Nosso serviço monitora o Hardware de <br> computadores que comportam sistemas de gestão <br>
+            aérea, com a finalidade de  prever possíveis falhas <br> e prejuízos, garantindo  mais segurança,
+            eficiência <br> e continuidade para o funcionamento dos aeroportos</p>
+        <a href="detalhes.html"><button class="detalhes">Mais detalhes</button></a>
+        <div class="dash_sombra"></div>
         <div class="dash"></div>
 
       
@@ -47,7 +48,7 @@
         </div>
     </div>
 
-    <div class="empresa">
+    <div id="empresa" class="empresa">
         <div class="quem">
             <div class="fundo_quem"></div>
             <p class="p_quem">Quem somos</p>
@@ -59,7 +60,7 @@
         <div class="oque">
             <p class="p_oque">O que entregamos</p>
             <p class="descricao">
-                Identificamos sinais de sobrecarga e possíveis falhas anstes que causem o interrupimento do sistema ou um prejuízo financeiro 
+                Identificamos sinais de sobrecarga e possíveis falhas antes que causem a interrupção do sistema ou algum prejuízo financeiro 
             </p>
 
         </div>
@@ -70,14 +71,19 @@
                 Nosso objetivo é garantir a segurança, continuidade, eficiência e economia para operações que não podem
                 parar
             </p>
-
         </div>
-
-
     </div>
 
+    <footer id="footer" class="footer">
+        <div class="footer-content">
+            <div class="contato">
+                <img style="width: 250px;" src="assets/imgs/logo.png" alt="Imagem da Logo da SafeControl">
 
+            </div>
+        </div>
 
+        <p style="font-size: 11px;">AeroGuard - Tecnologia que mantém tudo voando ©2026 Todos os Direitos Reservados</p>
+    </footer>
 </body>
 
 </html>
