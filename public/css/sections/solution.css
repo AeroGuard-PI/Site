@@ -1,0 +1,197 @@
+/* =========================================================
+   02 SOLUTION
+   ========================================================= */
+.shift {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.shift__from {
+  color: rgb(184 194 204 / 0.7);
+  text-decoration: line-through;
+  text-decoration-color: rgb(184 194 204 / 0.5);
+}
+
+.shift__line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--outline), var(--signal));
+}
+
+.caps {
+  display: grid;
+  gap: 1rem;
+  margin-top: 4rem;
+}
+
+.cap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 340px;
+  padding: 1.5rem;
+  overflow: hidden;
+  border: 0px solid var(--border);
+  border-radius: 1.5rem;
+  background: var(--bg);
+  transition:
+    border-color 0.3s,
+    transform 0.3s var(--ease),
+    box-shadow 0.3s;
+}
+
+.cap.monitoramento {
+  background: 
+    linear-gradient(
+        to top,
+        rgb(5, 7, 9) 0%,
+        rgba(5, 7, 9, 0.8) 40%,
+        rgba(5, 7, 9, 0) 60%
+    ),
+    url("/assets/images/monitoring.png") center / cover no-repeat;
+    overflow: hidden;
+}
+
+.cap.anomalias {
+  background: 
+    linear-gradient(
+        to top,
+        rgb(5, 7, 9) 0%,
+        rgba(5, 7, 9, 0.8) 40%,
+        rgba(5, 7, 9, 0) 60%
+    ),
+    url("/assets/images/anomaly.png") center / cover no-repeat;
+    overflow: hidden;
+}
+
+.cap.alertas {
+  background: 
+    linear-gradient(
+        to top,
+        rgb(5, 7, 9) 0%,
+        rgba(5, 7, 9, 0.8) 40%,
+        rgba(5, 7, 9, 0) 60%
+    ),
+    url("/assets/images/smart-alerts.png") center / cover no-repeat;
+    overflow: hidden;
+}
+
+.cap:hover {
+  transform: translateY(-4px);
+  border-color: var(--outline);
+  box-shadow: 0 16px 40px rgb(0 0 0 / 0.3);
+}
+
+.cap__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.cap__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  background: rgb(0 125 197 / 0.15);
+  color: var(--signal);
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.cap:hover .cap__icon {
+  background: var(--primary);
+  color: #fff;
+}
+
+.cap__visual {
+  height: 5rem;
+  margin-block: 2.5rem;
+}
+
+.cap__title {
+  font-size: 1rem;
+  line-height: 0.5;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.cap .body-muted {
+  margin-top: 0.75rem;
+}
+
+.cap-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.cap-bars span {
+  flex: 1;
+  border-radius: 2px;
+  background: rgb(0 174 239 / 0.3);
+  transition: background-color 0.3s;
+}
+
+.cap:hover .cap-bars span {
+  background: rgb(0 174 239 / 0.6);
+}
+
+.cap-anomaly-ring {
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.cap:hover .cap-anomaly-ring {
+  opacity: 1;
+}
+
+.cap-alerts {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.cap-alerts__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  transition: transform 0.3s var(--ease);
+}
+
+.cap-alerts__item--active {
+  background: var(--surface);
+}
+
+.cap:hover .cap-alerts__item--active {
+  transform: translateX(4px);
+}
+
+.cap-alerts__item--past {
+  padding-block: 0.5rem;
+  border-color: rgb(184 194 204 / 0.07);
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.cap-alerts__time {
+  margin-left: auto;
+  font-size: 10px;
+  color: rgb(184 194 204 / 0.7);
+}

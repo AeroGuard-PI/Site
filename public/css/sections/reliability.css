@@ -1,0 +1,102 @@
+/* =========================================================
+   06 RELIABILITY
+   ========================================================= */
+.reliability {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--night);
+}
+
+.reliability__media {
+  position: absolute;
+  inset: 0 0 0 auto;
+  z-index: -1;
+  width: 100%;
+}
+
+.reliability__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reliability__shade {
+  position: absolute;
+  inset: 0;
+  background: rgb(16 22 31 / 0.8);
+}
+
+.reliability__radar {
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  display: none;
+  width: 70%;
+  aspect-ratio: 1;
+  opacity: 0.6;
+  transform: translateY(-50%);
+}
+
+.reliability__content {
+  padding-block: 6rem;
+}
+
+.reliability__copy {
+  max-width: 36rem;
+}
+
+.reliability__lead {
+  margin-top: 1.5rem;
+}
+
+.pillars {
+  margin-top: 3rem;
+  border-top: 1px solid var(--border);
+}
+
+.pillar {
+  display: flex;
+  gap: 1.25rem;
+  padding-block: 1.25rem;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.pillar__icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--outline);
+  border-radius: 50%;
+  color: var(--signal);
+  transition:
+    border-color 0.3s,
+    background-color 0.3s;
+}
+
+.pillar:hover .pillar__icon {
+  border-color: var(--signal);
+  background: rgb(0 174 239 / 0.1);
+}
+
+.pillar__title {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.pillar__title:hover{
+  transition: 0.3s;
+  color: var(--signal);
+}
+
+.pillar__text {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  color: var(--muted);
+}

@@ -1,0 +1,104 @@
+/* ---------- Buttons (Material 3 state layers) ---------- */
+.btn {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.5rem;
+  padding-inline: 1.25rem;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  transition:
+    box-shadow 0.2s ease-out,
+    border-color 0.2s ease-out,
+    transform 0.2s ease-out;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+.btn:hover::before {
+  opacity: 0.08;
+}
+.btn:focus-visible::before {
+  opacity: 0.12;
+}
+.btn:active::before {
+  opacity: 0.16;
+}
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn--filled {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.3);
+}
+
+.btn--filled:hover {
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.35);
+}
+
+.btn--outlined {
+  border: 1px solid var(--outline);
+  color: var(--fg);
+}
+
+.btn--outlined:hover {
+  border-color: rgb(184 194 204 / 0.6);
+}
+
+.btn--lg {
+  height: 3rem;
+  padding-inline: 1.5rem;
+  font-size: 15px;
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.icon-btn {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  color: var(--fg);
+}
+
+.icon-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.icon-btn:hover::before {
+  opacity: 0.08;
+}
+.icon-btn:active::before {
+  opacity: 0.16;
+}

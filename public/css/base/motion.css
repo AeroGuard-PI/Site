@@ -1,0 +1,106 @@
+/* =========================================================
+   MOTION
+   ========================================================= */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.8s var(--ease),
+    transform 0.8s var(--ease);
+}
+
+.js .reveal[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.js .draw-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.js [data-visible="true"] .draw-line {
+  animation: draw 2.2s var(--ease) forwards;
+}
+
+.js .fade-area {
+  opacity: 0;
+}
+
+.js [data-visible="true"] .fade-area {
+  animation: fade-in 1.6s 0.6s ease forwards;
+}
+
+.js .grow-bar {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.js [data-visible="true"] .grow-bar {
+  animation: grow 1.4s var(--ease) forwards;
+}
+
+.flight-dash {
+  stroke-dasharray: 2 6;
+  animation: dash-drift 6s linear infinite;
+}
+
+.radar-sweep {
+  transform-box: view-box;
+  transform-origin: center;
+  animation: sweep 9s linear infinite;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes grow {
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes dash-drift {
+  to {
+    stroke-dashoffset: -64;
+  }
+}
+@keyframes sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes beacon {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@keyframes packet {
+  0% {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(44px);
+    opacity: 0;
+  }
+}

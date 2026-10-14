@@ -131,3 +131,22 @@
   initReveal();
   initTelemetry();
 })();
+
+ /* ---------- FAQ ---------- */
+document.querySelectorAll(".faq__question").forEach((question) => {
+  question.addEventListener("click", () => {
+    const item = question.closest(".faq__item");
+    const isOpen = item.classList.contains("is-open");
+
+    document.querySelectorAll(".faq__item").forEach((faqItem) => {
+      faqItem.classList.remove("is-open");
+      faqItem.querySelector(".faq__question").setAttribute("aria-expanded", "false");
+    });
+
+    if (!isOpen) {
+      item.classList.add("is-open");
+      question.setAttribute("aria-expanded", "true");
+    }
+  });
+});
+

@@ -1,0 +1,332 @@
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (min-width: 640px) {
+  .nav__cta {
+    display: inline-flex;
+  }
+  .nav__mobile-cta {
+    display: none;
+  }
+
+  .hero__title {
+    font-size: 3.75rem;
+  }
+  .hero__actions {
+    flex-direction: row;
+  }
+
+  .problem-figure {
+    aspect-ratio: 16 / 10;
+  }
+
+  .kpis {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .dash__url {
+    display: block;
+  }
+
+  .layer {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .layer__id {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 3.5rem;
+  }
+  .layer__tech {
+    justify-content: flex-end;
+  }
+  .connector {
+    margin-left: 3rem;
+  }
+
+  .cta__title {
+    font-size: 3rem;
+  }
+
+  .footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+  }
+  .footer__bottom {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-inline: 2.5rem;
+  }
+
+  .section {
+    padding-block: 10rem;
+  }
+  .h2 {
+    font-size: 3.75rem;
+  }
+  .h2--md {
+    font-size: 3rem;
+  }
+
+  .nav__bar {
+    height: 5rem;
+  }
+  .logo {
+    height: 1.5rem;
+  }
+
+  .hero__content {
+    padding-top: 8rem;
+  }
+  .hero__lead {
+    font-size: 1.25rem;
+  }
+  .hero__telemetry-wrap {
+    padding-bottom: 3.5rem;
+  }
+
+  .telemetry__head {
+    padding-inline: 1.5rem;
+  }
+  .telemetry__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .telemetry__cell {
+    padding: 1.25rem 1.5rem;
+    border-bottom-width: 0 !important;
+    border-right-width: 1px;
+  }
+  .telemetry__cell:last-child {
+    border-right-width: 0;
+  }
+  .telemetry__value {
+    font-size: 1.875rem;
+  }
+  .telemetry__status {
+    font-size: 1rem;
+  }
+
+  .problem-figure {
+    margin-top: 6rem;
+  }
+  .problem-figure__body {
+    padding: 2.5rem;
+  }
+  .problem-figure__value {
+    font-size: 3rem;
+  }
+  .problem-figure__value small {
+    font-size: 1.5rem;
+  }
+  .problem-figure__chart {
+    height: 9rem;
+  }
+
+  .risks {
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 4rem;
+  }
+  .risks__item {
+    padding: 2rem;
+  }
+
+  .caps {
+    margin-top: 6rem;
+  }
+  .cap {
+    padding: 2rem;
+  }
+
+  .dash-wrap {
+    margin-top: 5rem;
+  }
+  .dash__sidebar {
+    display: flex;
+  }
+  .dash__main {
+    padding: 1.5rem;
+  }
+  .dash__row--bottom {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .panel {
+    padding: 1.25rem;
+  }
+  .timeseries__svg {
+    height: 14rem;
+  }
+
+  .flight {
+    display: block;
+  }
+  .steps {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 3rem;
+  }
+  .steps::before,
+  .step__marker {
+    display: none;
+  }
+  .step {
+    padding-inline: 2rem;
+    text-align: center;
+  }
+  .step__text {
+    margin-inline: auto;
+  }
+
+  .layer {
+    padding: 1.5rem;
+  }
+  .connector {
+    margin-left: 3.25rem;
+  }
+
+  .reliability__content {
+    padding-block: 10rem;
+  }
+
+  .goal__text {
+    font-size: 1.5rem;
+  }
+
+  .cta__content {
+    padding-block: 8rem;
+  }
+  .cta__title {
+    font-size: 4.5rem;
+  }
+
+  .footer__inner {
+    padding-block: 5rem;
+  }
+  .footer__top {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .logo--footer {
+    height: 1.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav__links {
+    display: flex;
+  }
+  .nav__toggle,
+  .nav__mobile {
+    display: none;
+  }
+
+  .hero__title {
+    font-size: 5.5rem;
+  }
+
+  .split {
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4rem;
+  }
+  .split__main {
+    grid-column: span 7;
+  }
+  .split__aside {
+    grid-column: span 5;
+    align-self: end;
+  }
+
+  .problem-figure {
+    aspect-ratio: 21 / 9;
+  }
+
+  .caps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .arch {
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .arch__aside {
+    grid-column: span 5;
+  }
+  .arch__sticky {
+    position: sticky;
+    top: 8rem;
+  }
+  .arch__layers {
+    grid-column: span 7;
+  }
+
+  .reliability__media {
+    width: 58%;
+  }
+  .reliability__shade {
+    background: linear-gradient(
+      to right,
+      var(--night),
+      rgb(16 22 31 / 0.5),
+      transparent
+    );
+  }
+  .reliability__radar {
+    display: block;
+  }
+
+  .goal {
+    grid-template-columns: repeat(12, 1fr);
+    align-items: end;
+    gap: 4rem;
+  }
+  .goal__main {
+    grid-column: span 7;
+  }
+  .goal__aside {
+    grid-column: span 5;
+  }
+}
+
+@media (min-width: 1280px) {
+  .kpis {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .dash__row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .dash__row--bottom {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .panel--wide {
+    grid-column: span 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .js .reveal,
+  .js .draw-line,
+  .js .fade-area,
+  .js .grow-bar {
+    opacity: 1;
+    transform: none;
+    stroke-dashoffset: 0;
+    animation: none !important;
+    transition: none;
+  }
+
+  .flight-dash,
+  .packet,
+  .pulse::before,
+  .radar-sweep {
+    animation: none;
+  }
+}

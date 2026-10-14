@@ -1,0 +1,100 @@
+/* ---------- Layout helpers ---------- */
+.section {
+  position: relative;
+  padding-block: 6rem;
+}
+
+.section--alt {
+  border-top: 1px solid var(--border);
+  background: var(--surface-container);
+}
+
+.section--arch {
+  background: var(--surface-container-darker);
+}
+
+.section--bordered {
+  border-top: 1px solid var(--border);
+  background: var(--off-white);
+}
+
+.split {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.narrow-head {
+  max-width: 48rem;
+}
+
+.center-head {
+  max-width: 48rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.center-head__lead {
+  max-width: 36rem;
+  margin: 1.5rem auto 0;
+}
+
+.tech-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image:
+    linear-gradient(to right, #b8c2cc 1px, transparent 1px),
+    linear-gradient(to top, #b8c2cc 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.tech-grid--radial {
+  -webkit-mask-image: radial-gradient(
+    ellipse at bottom center,
+    #000 0%,
+    #000 20%,
+    transparent 75%
+  );
+
+  mask-image: radial-gradient(
+    ellipse at bottom center,
+    #000 0%,
+    #000 20%,
+    transparent 75%
+  );
+}
+
+.tech-grid--band {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 40%,
+    #000 80%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 40%,
+    #000 80%,
+    transparent
+  );
+}
+
+.axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgb(184 194 204 / 0.7);
+}
+
+.axis--dim {
+  text-transform: none;
+  letter-spacing: 0;
+  color: rgb(184 194 204 / 0.6);
+}

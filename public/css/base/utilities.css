@@ -1,0 +1,101 @@
+/* ---------- Utilities ---------- */
+.container {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.relative {
+  position: relative;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform 0.2s var(--ease);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.text-muted-darker {
+  color: var(--muted-darker);
+}
+
+.text-fg {
+  color: var(--fg);
+}
+
+.text-signal {
+  color: var(--signal);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fill {
+  width: 100%;
+  height: 100%;
+}
+
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+.mono-label.text-signal {
+  color: var(--signal);
+}
+
+.mono-caption {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted-darker);
+}
+
+.mono-xs {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.body-muted {
+  color: var(--muted);
+  line-height: 1.625;
+}

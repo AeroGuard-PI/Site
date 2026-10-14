@@ -1,0 +1,25 @@
+/* AeroGuard — ponto único de entrada dos estilos */
+/* Mantenha esta ordem: tokens, base, componentes, layout, seções e responsividade. */
+@import url("./base/tokens.css");
+@import url("./base/reset.css");
+@import url("./base/utilities.css");
+@import url("./base/typography.css");
+@import url("./base/icons.css");
+@import url("./base/indicators.css");
+@import url("./base/buttons.css");
+@import url("./layout/helpers.css");
+@import url("./layout/navbar.css");
+@import url("./layout/footer.css");
+@import url("./sections/hero.css");
+@import url("./sections/problem.css");
+@import url("./sections/solution.css");
+@import url("./sections/dashboard.css");
+@import url("./sections/how-it-works.css");
+@import url("./sections/architecture.css");
+@import url("./sections/reliability.css");
+@import url("./sections/partners.css");
+@import url("./sections/goal.css");
+@import url("./sections/cta.css");
+@import url("./sections/faq.css");
+@import url("./base/motion.css");
+@import url("./responsive.css");

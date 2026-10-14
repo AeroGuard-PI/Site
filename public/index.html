@@ -2,32 +2,36 @@
 <html lang="pt-BR">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AeroGuard — Monitoramento de infraestrutura crítica para tráfego aéreo</title>
-  <meta name="description" content="AeroGuard monitora em tempo real a saúde dos servidores que sustentam operações críticas de controle de tráfego aéreo: CPU, memória, disco, temperatura e alertas inteligentes.">
-  <meta name="theme-color" content="#151C26">
-  <meta name="color-scheme" content="dark">
-  <meta property="og:title" content="AeroGuard — Infraestrutura crítica sob controle">
-  <meta property="og:description" content="Plataforma de monitoramento de hardware para a infraestrutura computacional do controle de tráfego aéreo.">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="pt_BR">
-  <link rel="icon" href="assets/brand/aeroguard-vertical.svg" type="image/svg+xml">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>
+    AeroGuard — Monitoramento de infraestrutura crítica para tráfego aéreo
+  </title>
+  <meta name="description" content="AeroGuard monitora em tempo real a saúde dos servidores que sustentam operações críticas de controle de tráfego aéreo: CPU, memória, disco, temperatura e alertas inteligentes." />
+  <meta name="theme-color" content="#151C26" />
+  <meta name="color-scheme" content="dark" />
+  <meta property="og:title" content="AeroGuard — Infraestrutura crítica sob controle" />
+  <meta property="og:description" content="Plataforma de monitoramento de hardware para a infraestrutura computacional do controle de tráfego aéreo." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <link rel="icon" href="assets/brand/aeroguard-vertical.svg" type="image/svg+xml" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
-  <link rel="preload" as="image" href="assets/images/hero-aircraft.png" fetchpriority="high">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" />
+  <link rel="preload" as="image" href="assets/images/hero-aircraft.png" fetchpriority="high" />
+  <link rel="stylesheet" href="css/style.css" />
 
-  <script>document.documentElement.classList.add('js')</script>
+  <script>
+    document.documentElement.classList.add("js");
+  </script>
   <script src="js/main.js" defer></script>
 </head>
 
 <body>
   <!-- Ícones (Lucide, ISC License) -->
-  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none" aria-hidden="true">
     <symbol id="i-arrow-right" viewBox="0 0 24 24">
       <path d="M5 12h14" />
       <path d="m12 5 7 7-7 7" />
@@ -163,15 +167,15 @@
   <header class="nav" data-nav>
     <nav class="nav__bar container" aria-label="Navegação principal">
       <a href="#inicio" class="nav__brand">
-        <img src="assets/brand/aeroguard-horizontal.svg" alt="AeroGuard" width="4034" height="483" class="logo">
+        <img src="assets/brand/aeroguard-horizontal.svg" alt="AeroGuard" width="4034" height="483" class="logo" />
       </a>
 
       <ul class="nav__links">
         <li><a class="nav__link" href="#inicio">Início</a></li>
-        <li><a class="nav__link" href="#solucao">Solução</a></li>
-        <li><a class="nav__link" href="#monitoramento">Monitoramento</a></li>
-        <li><a class="nav__link" href="#como-funciona">Como funciona</a></li>
+        <li><a class="nav__link" href="#solucao">Como funciona</a></li>
         <li><a class="nav__link" href="#seguranca">Segurança</a></li>
+        <li><a class="nav__link" href="#dashboard">A plataforma</a></li>
+        <li><a class="nav__link" href="#faq">Perguntas Frequentes</a></li>
       </ul>
 
       <div class="nav__actions">
@@ -189,12 +193,24 @@
 
     <div id="mobile-menu" class="nav__mobile" hidden>
       <ul class="nav__mobile-list">
-        <li><a class="nav__mobile-link" href="#inicio" data-nav-close>Início</a></li>
-        <li><a class="nav__mobile-link" href="#solucao" data-nav-close>Solução</a></li>
-        <li><a class="nav__mobile-link" href="#monitoramento" data-nav-close>Monitoramento</a></li>
-        <li><a class="nav__mobile-link" href="#como-funciona" data-nav-close>Como funciona</a></li>
-        <li><a class="nav__mobile-link" href="#seguranca" data-nav-close>Segurança</a></li>
-        <li class="nav__mobile-cta"><a href="#plataforma" class="btn btn--filled btn--lg btn--block" data-nav-close>Acessar plataforma</a></li>
+        <li>
+          <a class="nav__mobile-link" href="#inicio" data-nav-close>Início</a>
+        </li>
+        <li>
+          <a class="nav__mobile-link" href="#solucao" data-nav-close>Solução</a>
+        </li>
+        <li>
+          <a class="nav__mobile-link" href="#monitoramento" data-nav-close>Monitoramento</a>
+        </li>
+        <li>
+          <a class="nav__mobile-link" href="#como-funciona" data-nav-close>Como funciona</a>
+        </li>
+        <li>
+          <a class="nav__mobile-link" href="#seguranca" data-nav-close>Segurança</a>
+        </li>
+        <li class="nav__mobile-cta">
+          <a href="#plataforma" class="btn btn--filled btn--lg btn--block" data-nav-close>Acessar plataforma</a>
+        </li>
       </ul>
     </div>
   </header>
@@ -203,7 +219,7 @@
     <!-- ============ HERO ============ -->
     <section id="inicio" class="hero" aria-labelledby="hero-title">
       <div class="hero__media" data-parallax="0.12">
-        <img src="assets/images/hero-aircraft.png" alt="" class="hero__img" fetchpriority="high" decoding="async">
+        <img src="assets/images/hero-aircraft.png" alt="" class="hero__img" fetchpriority="high" decoding="async" />
         <svg class="hero__overlay" viewBox="0 0 1408 768" preserveAspectRatio="xMaxYMid slice" fill="none" aria-hidden="true">
           <g stroke="#B8C2CC" stroke-opacity="0.14" stroke-width="0.75">
             <circle cx="1078" cy="392" r="150" />
@@ -223,7 +239,9 @@
           </g>
           <g font-family="'JetBrains Mono', monospace" font-size="11" letter-spacing="1.5" fill="#B8C2CC">
             <text x="905" y="250" fill-opacity="0.8">TRK 247° · FL370</text>
-            <text x="1250" y="540" text-anchor="end" fill-opacity="0.55">23°26′S 46°28′W</text>
+            <text x="1250" y="540" text-anchor="end" fill-opacity="0.55">
+              23°26′S 46°28′W
+            </text>
             <text x="632" y="296" fill-opacity="0.5">WPT ALPHA</text>
           </g>
         </svg>
@@ -233,8 +251,14 @@
 
       <div class="container hero__content">
         <div class="hero__copy">
-          <h1 id="hero-title" class="hero__title">Infraestrutura crítica <span class="text-muted">sob controle.</span></h1>
-          <p class="hero__lead">Monitore a saúde dos servidores que sustentam operações críticas de tráfego aéreo em tempo real.</p>
+          <h1 id="hero-title" class="hero__title">
+            Infraestrutura crítica
+            <span class="text-muted">sob controle.</span>
+          </h1>
+          <p class="hero__lead">
+            Monitore a saúde dos servidores que sustentam operações críticas
+            de tráfego aéreo em tempo real.
+          </p>
           <div class="hero__actions">
             <a href="#solucao" class="btn btn--filled btn--lg">
               Conheça a solução
@@ -244,9 +268,13 @@
             </a>
             <a href="#plataforma" class="btn btn--outlined btn--lg">Acessar plataforma</a>
           </div>
+          <div class="hero__arrow">
+            <svg width="24" height="24" viewBox="0 0 176 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 8 L88 88 L168 8" stroke="var(--muted)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
         </div>
       </div>
-
     </section>
 
     <!-- ============ 01 PROBLEMA ============ -->
@@ -254,27 +282,44 @@
       <div class="container">
         <div class="split reveal">
           <div class="split__main">
-            <p class="section-label"><span>01</span><span class="section-label__line" aria-hidden="true"></span><span class="text-muted">O problema</span></p>
-            <h2 id="problem-title" class="h2">Quando a infraestrutura para, a operação sente.</h2>
+            <p class="section-label">
+              <span>01</span><span class="section-label__line" aria-hidden="true"></span><span class="text-muted">O problema</span>
+            </p>
+            <h2 id="problem-title" class="h2">
+              Quando a infraestrutura para, a operação sente.
+            </h2>
           </div>
-          <p class="lead split__aside">Ambientes de controle de tráfego aéreo dependem de sistemas computacionais disponíveis, estáveis e capazes de processar grandes volumes de dados continuamente.</p>
+          <p class="lead split__aside">
+            Ambientes de controle de tráfego aéreo dependem de sistemas
+            computacionais disponíveis, estáveis e capazes de processar
+            grandes volumes de dados continuamente.
+          </p>
         </div>
 
         <ul class="risks">
           <li class="risks__item reveal">
             <p class="mono-label text-signal">CPU</p>
             <h3 class="h3">Saturação de processamento</h3>
-            <p class="body-muted">Picos sustentados elevam a latência no tratamento de dados de vigilância e planos de voo.</p>
+            <p class="body-muted">
+              Picos sustentados elevam a latência no tratamento de dados de
+              vigilância e planos de voo.
+            </p>
           </li>
           <li class="risks__item reveal" data-delay="100">
             <p class="mono-label text-signal">Memória</p>
             <h3 class="h3">Exaustão de recursos</h3>
-            <p class="body-muted">Vazamentos e consumo crescente levam serviços críticos à instabilidade.</p>
+            <p class="body-muted">
+              Vazamentos e consumo crescente levam serviços críticos à
+              instabilidade.
+            </p>
           </li>
           <li class="risks__item reveal" data-delay="200">
             <p class="mono-label text-signal">Disco</p>
             <h3 class="h3">Armazenamento no limite</h3>
-            <p class="body-muted">Volumes cheios interrompem gravações, registros e rotinas de operação.</p>
+            <p class="body-muted">
+              Volumes cheios interrompem gravações, registros e rotinas de
+              operação.
+            </p>
           </li>
         </ul>
       </div>
@@ -285,11 +330,19 @@
       <div class="container">
         <div class="split reveal">
           <div class="split__main">
-            <p class="section-label"><span>02</span><span class="section-label__line" aria-hidden="true"></span><span class="text-muted">A solução</span></p>
-            <h2 id="solution-title" class="h2">Antecipe o problema antes que ele se torne uma parada.</h2>
+            <p class="section-label">
+              <span>02</span><span class="section-label__line" aria-hidden="true"></span><span class="text-muted">A solução</span>
+            </p>
+            <h2 id="solution-title" class="h2">
+              Antecipe o problema antes que ele se torne uma parada.
+            </h2>
           </div>
           <div class="split__aside">
-            <p class="lead">A AeroGuard transforma o monitoramento de infraestrutura de um processo reativo em um processo proativo: sua equipe enxerga a tendência enquanto ainda há tempo de agir.</p>
+            <p class="lead">
+              A AeroGuard transforma o monitoramento de infraestrutura de um
+              processo reativo em um processo proativo: sua equipe enxerga a
+              tendência enquanto ainda há tempo de agir.
+            </p>
             <div class="shift">
               <span class="shift__from">Reativo</span>
               <span class="shift__line" aria-hidden="true"></span>
@@ -308,12 +361,15 @@
               </div>
               <div>
                 <h3 class="cap__title">Monitoramento contínuo</h3>
-                <p class="body-muted">Acompanhe continuamente os principais recursos da infraestrutura.</p>
+                <p class="body-muted">
+                  Acompanhe continuamente os principais recursos da
+                  infraestrutura.
+                </p>
               </div>
             </article>
           </li>
           <li class="reveal" data-delay="120">
-            <article class="cap">
+            <article class="cap anomalias">
               <div class="cap__top">
                 <span class="cap__icon"><svg class="icon icon--24" aria-hidden="true">
                     <use href="#i-scan-search" />
@@ -321,12 +377,15 @@
               </div>
               <div>
                 <h3 class="cap__title">Detecção de anomalias</h3>
-                <p class="body-muted">Identifique comportamentos fora dos padrões antes que afetem a operação.</p>
+                <p class="body-muted">
+                  Identifique comportamentos fora dos padrões antes que afetem
+                  a operação.
+                </p>
               </div>
             </article>
           </li>
           <li class="reveal" data-delay="240">
-            <article class="cap">
+            <article class="cap alertas">
               <div class="cap__top">
                 <span class="cap__icon"><svg class="icon icon--24" aria-hidden="true">
                     <use href="#i-bell-ring" />
@@ -334,7 +393,10 @@
               </div>
               <div>
                 <h3 class="cap__title">Alertas inteligentes</h3>
-                <p class="body-muted">Receba notificações para agir rapidamente diante de situações críticas.</p>
+                <p class="body-muted">
+                  Receba notificações para agir rapidamente diante de
+                  situações críticas.
+                </p>
               </div>
             </article>
           </li>
@@ -345,7 +407,7 @@
     <!-- ============ 03 CONFIABILIDADE ============ -->
     <section id="seguranca" class="reliability" aria-labelledby="reliability-title">
       <div class="reliability__media">
-        <img src="assets/images/radar-tower.png" alt="" loading="lazy" decoding="async">
+        <img src="assets/images/radar-tower.png" alt="" loading="lazy" decoding="async" />
         <div class="reliability__shade" aria-hidden="true"></div>
         <svg class="reliability__radar" viewBox="0 0 400 400" fill="none" aria-hidden="true">
           <defs>
@@ -364,6 +426,7 @@
           <g class="radar-sweep">
             <path d="M200 200 L390 200 A190 190 0 0 0 365 105 Z" fill="url(#sweep)" />
           </g>
+          <circle class="pulse-ring" cx="268" cy="150" r="2.5" fill="#00AEEF" />
           <circle cx="268" cy="150" r="2.5" fill="#00AEEF" />
           <circle cx="140" cy="258" r="2" fill="#B8C2CC" fill-opacity="0.6" />
           <circle cx="300" cy="262" r="2" fill="#B8C2CC" fill-opacity="0.6" />
@@ -373,9 +436,17 @@
       <div class="container reliability__content">
         <div class="reliability__copy">
           <div class="reveal">
-            <p class="section-label"><span>03</span><span class="section-label__line" aria-hidden="true"></span><span class="text-muted">Confiabilidade</span></p>
-            <h2 id="reliability-title" class="h2">Feito para ambientes onde disponibilidade importa.</h2>
-            <p class="lead reliability__lead">Projetado com a disciplina de quem opera sistemas que não podem falhar: dados íntegros, acesso controlado e rastreabilidade de ponta a ponta.</p>
+            <p class="section-label">
+              <span>03</span><span class="section-label__line" aria-hidden="true"></span><span class="text-muted">Confiabilidade</span>
+            </p>
+            <h2 id="reliability-title" class="h2">
+              Feito para ambientes onde disponibilidade importa.
+            </h2>
+            <p class="lead reliability__lead">
+              Projetado com a disciplina de quem opera sistemas que não podem
+              falhar: dados íntegros, acesso controlado e rastreabilidade de
+              ponta a ponta.
+            </p>
           </div>
 
           <ul class="pillars">
@@ -385,7 +456,6 @@
                 </svg></span>
               <div>
                 <h3 class="pillar__title">Monitoramento contínuo</h3>
-                <p class="pillar__text">Coleta ininterrupta, 24 horas por dia, 7 dias por semana.</p>
               </div>
             </li>
             <li class="pillar reveal" data-delay="80">
@@ -394,7 +464,6 @@
                 </svg></span>
               <div>
                 <h3 class="pillar__title">Alertas de anomalias</h3>
-                <p class="pillar__text">Desvios de padrão sinalizados antes do impacto operacional.</p>
               </div>
             </li>
             <li class="pillar reveal" data-delay="160">
@@ -403,7 +472,6 @@
                 </svg></span>
               <div>
                 <h3 class="pillar__title">Histórico de métricas</h3>
-                <p class="pillar__text">Séries temporais para análise de tendências e auditoria.</p>
               </div>
             </li>
             <li class="pillar reveal" data-delay="240">
@@ -412,7 +480,6 @@
                 </svg></span>
               <div>
                 <h3 class="pillar__title">Gestão de incidentes</h3>
-                <p class="pillar__text">Alertas conectados ao fluxo de atendimento da equipe.</p>
               </div>
             </li>
             <li class="pillar reveal" data-delay="320">
@@ -421,7 +488,7 @@
                 </svg></span>
               <div>
                 <h3 class="pillar__title">Visibilidade operacional</h3>
-                <p class="pillar__text">Um retrato claro e compartilhado da saúde da infraestrutura.</p>
+
               </div>
             </li>
           </ul>
@@ -429,14 +496,23 @@
       </div>
     </section>
 
-    <!-- ============ 05 ARQUITETURA ============ -->
-    <section id="arquitetura" class="section section--alt" aria-labelledby="tech-title">
+    <!-- ============ 04 ARQUITETURA ============ -->
+    <section id="arquitetura" class="section section--arch" aria-labelledby="tech-title">
+      <div class="tech-grid tech-grid--radial" aria-hidden="true"></div>
+
       <div class="container arch relative">
         <div class="arch__aside reveal">
           <div class="arch__sticky">
-            <p class="section-label"><span>04</span><span class="section-label__line" aria-hidden="true"></span><span class="text-muted">Arquitetura</span></p>
-            <h2 id="tech-title" class="h2 h2--md">Um fluxo de dados projetado para não perder o sinal.</h2>
-            <p class="lead arch__lead">Cada camada tem uma responsabilidade clara: da coleta no hardware até o alerta que chega à equipe certa.</p>
+            <p class="section-label">
+              <span>04</span><span class="section-label__line" aria-hidden="true"></span><span class="text-muted">Arquitetura</span>
+            </p>
+            <h2 id="tech-title" class="h2 h2--md">
+              Um fluxo de dados projetado para não perder o sinal.
+            </h2>
+            <p class="lead arch__lead">
+              Cada camada tem uma responsabilidade clara: da coleta no
+              hardware até o alerta que chega à equipe certa.
+            </p>
             <div class="arch__stack">
               <p class="mono-label">Stack tecnológica</p>
               <ul class="stack">
@@ -455,90 +531,128 @@
         <ol class="arch__layers" aria-label="Camadas da arquitetura AeroGuard">
           <li class="reveal">
             <div class="layer">
-              <div class="layer__id"><span class="layer__icon"><svg class="icon icon--20" aria-hidden="true">
+              <div class="layer__id">
+                <span class="layer__icon"><svg class="icon icon--20" aria-hidden="true">
                     <use href="#i-server" />
-                  </svg></span><span class="mono-caption">L1</span></div>
+                  </svg></span><span class="mono-caption">Passo 1</span>
+              </div>
               <div class="layer__body">
                 <h3 class="layer__title">Máquinas monitoradas</h3>
-                <p class="layer__text">Servidores e estações que sustentam a operação de tráfego aéreo.</p>
+                <p class="layer__text">
+                  Servidores e estações que sustentam a operação de tráfego
+                  aéreo.
+                </p>
               </div>
               <ul class="layer__tech">
-                <li>Hardware ATC</li>
+                <li>On-Premisses/IAAS</li>
               </ul>
             </div>
-            <div class="connector" aria-hidden="true"><span class="packet"></span></div>
+            <div class="connector" aria-hidden="true">
+              <span class="packet"></span>
+            </div>
           </li>
           <li class="reveal" data-delay="60">
             <div class="layer">
-              <div class="layer__id"><span class="layer__icon"><svg class="icon icon--20" aria-hidden="true">
+              <div class="layer__id">
+                <span class="layer__icon"><svg class="icon icon--20" aria-hidden="true">
                     <use href="#i-cpu" />
-                  </svg></span><span class="mono-caption">L2</span></div>
+                  </svg></span><span class="mono-caption">Passo 2</span>
+              </div>
               <div class="layer__body">
                 <h3 class="layer__title">Agentes de captura</h3>
-                <p class="layer__text">Coleta local de CPU, memória, disco, temperatura e frequência.</p>
+                <p class="layer__text">
+                  Coleta local de CPU, memória, disco, temperatura e
+                  frequência.
+                </p>
               </div>
               <ul class="layer__tech">
                 <li>Java</li>
                 <li>Python</li>
               </ul>
             </div>
-            <div class="connector" aria-hidden="true"><span class="packet"></span></div>
+            <div class="connector" aria-hidden="true">
+              <span class="packet"></span>
+            </div>
           </li>
           <li class="reveal" data-delay="120">
             <div class="layer">
-              <div class="layer__id"><span class="layer__icon"><svg class="icon icon--20" aria-hidden="true">
+              <div class="layer__id">
+                <span class="layer__icon"><svg class="icon icon--20" aria-hidden="true">
                     <use href="#i-workflow" />
-                  </svg></span><span class="mono-caption">L3</span></div>
+                  </svg></span><span class="mono-caption">Passo 3</span>
+              </div>
               <div class="layer__body">
                 <h3 class="layer__title">Processamento</h3>
-                <p class="layer__text">Normalização, tratamento e regras de detecção de anomalias.</p>
+                <p class="layer__text">
+                  Normalização, tratamento e regras de detecção de anomalias.
+                </p>
               </div>
               <ul class="layer__tech">
                 <li>Python</li>
                 <li>Java</li>
               </ul>
             </div>
-            <div class="connector" aria-hidden="true"><span class="packet"></span></div>
+            <div class="connector" aria-hidden="true">
+              <span class="packet"></span>
+            </div>
           </li>
           <li class="reveal" data-delay="180">
             <div class="layer">
-              <div class="layer__id"><span class="layer__icon"><svg class="icon icon--20" aria-hidden="true">
+              <div class="layer__id">
+                <span class="layer__icon"><svg class="icon icon--20" aria-hidden="true">
                     <use href="#i-cloud" />
-                  </svg></span><span class="mono-caption">L4</span></div>
+                  </svg></span><span class="mono-caption">Passo 4</span>
+              </div>
               <div class="layer__body">
                 <h3 class="layer__title">Armazenamento em nuvem</h3>
-                <p class="layer__text">Histórico de métricas persistido em infraestrutura gerenciada.</p>
+                <p class="layer__text">
+                  Histórico de métricas persistido em infraestrutura
+                  gerenciada.
+                </p>
               </div>
               <ul class="layer__tech">
                 <li>AWS</li>
                 <li>MySQL</li>
               </ul>
             </div>
-            <div class="connector" aria-hidden="true"><span class="packet"></span></div>
+            <div class="connector" aria-hidden="true">
+              <span class="packet"></span>
+            </div>
           </li>
           <li class="reveal" data-delay="240">
             <div class="layer layer--highlight">
-              <div class="layer__id"><span class="layer__icon"><svg class="icon icon--20" aria-hidden="true">
+              <div class="layer__id">
+                <span class="layer__icon"><svg class="icon icon--20" aria-hidden="true">
                     <use href="#i-layout-dashboard" />
-                  </svg></span><span class="mono-caption">L5</span></div>
+                  </svg></span><span class="mono-caption">Passo 5</span>
+              </div>
               <div class="layer__body">
                 <h3 class="layer__title">Plataforma web AeroGuard</h3>
-                <p class="layer__text">Dashboards, históricos e indicadores para a equipe de operação.</p>
+                <p class="layer__text">
+                  Dashboards, históricos e indicadores para a equipe de
+                  operação.
+                </p>
               </div>
               <ul class="layer__tech">
                 <li>Web Dashboard</li>
               </ul>
             </div>
-            <div class="connector" aria-hidden="true"><span class="packet"></span></div>
+            <div class="connector" aria-hidden="true">
+              <span class="packet"></span>
+            </div>
           </li>
           <li class="reveal" data-delay="300">
             <div class="layer">
-              <div class="layer__id"><span class="layer__icon"><svg class="icon icon--20" aria-hidden="true">
+              <div class="layer__id">
+                <span class="layer__icon"><svg class="icon icon--20" aria-hidden="true">
                     <use href="#i-bell" />
-                  </svg></span><span class="mono-caption">L6</span></div>
+                  </svg></span><span class="mono-caption">Passo 6</span>
+              </div>
               <div class="layer__body">
                 <h3 class="layer__title">Alertas e gestão de incidentes</h3>
-                <p class="layer__text">Notificações acionáveis integradas ao fluxo de atendimento.</p>
+                <p class="layer__text">
+                  Notificações acionáveis integradas ao fluxo de atendimento.
+                </p>
               </div>
               <ul class="layer__tech">
                 <li>Slack</li>
@@ -550,30 +664,34 @@
       </div>
     </section>
 
-
-
-    <!-- ============ 03 DASHBOARD ============ -->
-    <section id="monitoramento" class="section section--bordered dash-section" aria-labelledby="dashboard-title">
-      <div class="tech-grid tech-grid--radial" aria-hidden="true"></div>
-      <div class="dash-section__glow" aria-hidden="true"></div>
-
+    <!-- ============ 05 DASHBOARD ============ -->
+    <section id="dashboard" class="section dashboard section--bordered dash-section" aria-labelledby="dashboard-title">
       <div class="container relative">
         <div class="center-head reveal">
-          <p class="section-label section-label--center"><span>03</span><span class="section-label__line" aria-hidden="true"></span><span class="text-muted">A plataforma</span></p>
-          <h2 id="dashboard-title" class="h2">Visibilidade em tempo real para decisões mais rápidas.</h2>
-          <p class="lead center-head__lead">Um painel único para acompanhar recursos, tendências e incidentes de cada máquina que sustenta a operação.</p>
+          <p class="section-label darker section-label--center">
+            <span>05</span><span class="section-label__line__darker" aria-hidden="true"></span><span class="text-muted-darker">A plataforma</span>
+          </p>
+          <h2 id="dashboard-title" class="h2 darker">
+            Visibilidade em tempo real para decisões mais rápidas.
+          </h2>
+          <p class="lead darker center-head__lead">
+            Um painel único para acompanhar recursos, tendências e incidentes
+            de cada máquina que sustenta a operação.
+          </p>
         </div>
 
         <div class="dash-wrap reveal">
           <figure class="dash">
             <div class="dash__window" aria-hidden="true">
-              <div class="dash__dots"><span></span><span></span><span></span></div>
+              <div class="dash__dots">
+                <span></span><span></span><span></span>
+              </div>
               <div class="dash__url">portal.aeroguard.app/monitoramento</div>
             </div>
 
             <div class="dash__body">
               <aside class="dash__sidebar" aria-hidden="true">
-                <img src="assets/brand/aeroguard-vertical.svg" alt="" width="1844" height="887" class="dash__sidebar-logo">
+                <img src="assets/brand/aeroguard-vertical.svg" alt="" width="1844" height="887" class="dash__sidebar-logo" />
                 <span class="dash__nav-item is-active"><svg class="icon icon--20">
                     <use href="#i-layout-grid" />
                   </svg></span>
@@ -592,7 +710,10 @@
                 <div class="dash__top">
                   <div>
                     <p class="mono-label">ACC Brasília · Cluster A</p>
-                    <p class="dash__host">ATC-SRV-04 <span class="badge badge--success"><span class="dot dot--success dot--sm" aria-hidden="true"></span>Operacional</span></p>
+                    <p class="dash__host">
+                      ATC-SRV-04
+                      <span class="badge badge--success"><span class="dot dot--success dot--sm" aria-hidden="true"></span>Operacional</span>
+                    </p>
                   </div>
                   <div class="segmented" aria-hidden="true">
                     <span>1h</span><span class="is-active">6h</span><span>24h</span><span>7d</span>
@@ -601,43 +722,63 @@
 
                 <dl class="kpis">
                   <div class="kpi">
-                    <dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true">
+                    <dt class="kpi__label">
+                      <svg class="icon icon--16 text-signal" aria-hidden="true">
                         <use href="#i-cpu" />
-                      </svg>CPU</dt>
+                      </svg>CPU
+                    </dt>
                     <dd class="kpi__value">42<small>%</small></dd>
-                    <dd class="kpi__bar" aria-hidden="true"><span class="grow-bar" style="width:42%"></span></dd>
+                    <dd class="kpi__bar" aria-hidden="true">
+                      <span class="grow-bar" style="width: 42%"></span>
+                    </dd>
                     <dd class="kpi__delta">-3,1%</dd>
                   </div>
                   <div class="kpi">
-                    <dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true">
+                    <dt class="kpi__label">
+                      <svg class="icon icon--16 text-signal" aria-hidden="true">
                         <use href="#i-memory" />
-                      </svg>Memória</dt>
+                      </svg>Memória
+                    </dt>
                     <dd class="kpi__value">68<small>%</small></dd>
-                    <dd class="kpi__bar" aria-hidden="true"><span class="grow-bar" style="width:68%"></span></dd>
+                    <dd class="kpi__bar" aria-hidden="true">
+                      <span class="grow-bar" style="width: 68%"></span>
+                    </dd>
                     <dd class="kpi__delta">+1,4%</dd>
                   </div>
                   <div class="kpi">
-                    <dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true">
+                    <dt class="kpi__label">
+                      <svg class="icon icon--16 text-signal" aria-hidden="true">
                         <use href="#i-hard-drive" />
-                      </svg>Disco</dt>
+                      </svg>Disco
+                    </dt>
                     <dd class="kpi__value">54<small>%</small></dd>
-                    <dd class="kpi__bar" aria-hidden="true"><span class="grow-bar" style="width:54%"></span></dd>
+                    <dd class="kpi__bar" aria-hidden="true">
+                      <span class="grow-bar" style="width: 54%"></span>
+                    </dd>
                     <dd class="kpi__delta">+0,2%</dd>
                   </div>
                   <div class="kpi">
-                    <dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true">
+                    <dt class="kpi__label">
+                      <svg class="icon icon--16 text-signal" aria-hidden="true">
                         <use href="#i-thermometer" />
-                      </svg>Temperatura</dt>
+                      </svg>Temperatura
+                    </dt>
                     <dd class="kpi__value">61<small>°C</small></dd>
-                    <dd class="kpi__bar" aria-hidden="true"><span class="grow-bar" style="width:61%"></span></dd>
+                    <dd class="kpi__bar" aria-hidden="true">
+                      <span class="grow-bar" style="width: 61%"></span>
+                    </dd>
                     <dd class="kpi__delta">estável</dd>
                   </div>
                   <div class="kpi">
-                    <dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true">
+                    <dt class="kpi__label">
+                      <svg class="icon icon--16 text-signal" aria-hidden="true">
                         <use href="#i-gauge" />
-                      </svg>Frequência</dt>
+                      </svg>Frequência
+                    </dt>
                     <dd class="kpi__value">3,2<small>GHz</small></dd>
-                    <dd class="kpi__bar" aria-hidden="true"><span class="grow-bar" style="width:78%"></span></dd>
+                    <dd class="kpi__bar" aria-hidden="true">
+                      <span class="grow-bar" style="width: 78%"></span>
+                    </dd>
                     <dd class="kpi__delta">turbo 4,1</dd>
                   </div>
                 </dl>
@@ -645,7 +786,8 @@
                 <div class="dash__row">
                   <div class="panel panel--wide">
                     <div class="panel__head">
-                      <h3 class="panel__title">CPU e memória</h3><span class="panel__meta">Últimas 6h</span>
+                      <h3 class="panel__title">CPU e memória</h3>
+                      <span class="panel__meta">Últimas 6h</span>
                     </div>
                     <div class="legend">
                       <span><i class="legend__swatch legend__swatch--cpu" aria-hidden="true"></i>CPU</span>
@@ -668,21 +810,36 @@
                         <path class="draw-line" fill="none" stroke="#5B8DEF" stroke-width="1.75" vector-effect="non-scaling-stroke" pathLength="1" data-chart="line" data-w="600" data-h="200" data-series="58,59,61,60,62,63,62,64,65,64,66,65,66,67,69,68,67,68,69,70,68,67,68,68" />
                         <path class="draw-line" fill="none" stroke="#00AEEF" stroke-width="2" vector-effect="non-scaling-stroke" pathLength="1" data-chart="line" data-w="600" data-h="200" data-series="34,38,36,41,45,43,40,44,48,46,42,39,43,47,52,49,45,42,44,41,43,46,44,42" />
                       </svg>
-                      <div class="timeseries__y" aria-hidden="true"><span>100</span><span>50</span><span>0</span></div>
+                      <div class="timeseries__y" aria-hidden="true">
+                        <span>100</span><span>50</span><span>0</span>
+                      </div>
                     </div>
-                    <div class="axis axis--dim" aria-hidden="true"><span>09:00</span><span>10:30</span><span>12:00</span><span>13:30</span><span>15:00</span></div>
+                    <div class="axis axis--dim" aria-hidden="true">
+                      <span>09:00</span><span>10:30</span><span>12:00</span><span>13:30</span><span>15:00</span>
+                    </div>
                   </div>
 
                   <div class="panel">
                     <div class="panel__head">
-                      <h3 class="panel__title">Status dos servidores</h3><span class="panel__meta">5 nós</span>
+                      <h3 class="panel__title">Status dos servidores</h3>
+                      <span class="panel__meta">5 nós</span>
                     </div>
                     <ul class="servers">
-                      <li><span class="dot dot--success" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-01</span><span class="servers__role">Radar primário</span><span class="sr-only">operacional</span></li>
-                      <li><span class="dot dot--success" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-02</span><span class="servers__role">Planos de voo</span><span class="sr-only">operacional</span></li>
-                      <li><span class="dot dot--success" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-04</span><span class="servers__role">Processamento</span><span class="sr-only">operacional</span></li>
-                      <li><span class="pulse pulse--warning" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-07</span><span class="servers__role">Comunicação</span><span class="sr-only">atenção</span></li>
-                      <li><span class="dot dot--success" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-09</span><span class="servers__role">Backup</span><span class="sr-only">operacional</span></li>
+                      <li>
+                        <span class="dot dot--success" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-01</span><span class="servers__role">Radar primário</span><span class="sr-only">operacional</span>
+                      </li>
+                      <li>
+                        <span class="dot dot--success" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-02</span><span class="servers__role">Planos de voo</span><span class="sr-only">operacional</span>
+                      </li>
+                      <li>
+                        <span class="dot dot--success" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-04</span><span class="servers__role">Processamento</span><span class="sr-only">operacional</span>
+                      </li>
+                      <li>
+                        <span class="pulse pulse--warning" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-07</span><span class="servers__role">Comunicação</span><span class="sr-only">atenção</span>
+                      </li>
+                      <li>
+                        <span class="dot dot--success" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-09</span><span class="servers__role">Backup</span><span class="sr-only">operacional</span>
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -690,7 +847,8 @@
                 <div class="dash__row dash__row--bottom">
                   <div class="panel panel--wide">
                     <div class="panel__head">
-                      <h3 class="panel__title">Alertas recentes</h3><span class="panel__meta">Hoje</span>
+                      <h3 class="panel__title">Alertas recentes</h3>
+                      <span class="panel__meta">Hoje</span>
                     </div>
                     <ul class="alerts">
                       <li class="alert">
@@ -728,20 +886,33 @@
 
                   <div class="panel">
                     <div class="panel__head">
-                      <h3 class="panel__title">Uso de disco</h3><span class="panel__meta">Volumes</span>
+                      <h3 class="panel__title">Uso de disco</h3>
+                      <span class="panel__meta">Volumes</span>
                     </div>
                     <ul class="disks">
                       <li>
-                        <div class="disks__row"><span>/</span><span class="text-muted">54%</span></div>
-                        <div class="disks__bar" aria-hidden="true"><span class="grow-bar" style="width:54%"></span></div>
+                        <div class="disks__row">
+                          <span>/</span><span class="text-muted">54%</span>
+                        </div>
+                        <div class="disks__bar" aria-hidden="true">
+                          <span class="grow-bar" style="width: 54%"></span>
+                        </div>
                       </li>
                       <li>
-                        <div class="disks__row"><span>/var/log</span><span class="text-muted">71%</span></div>
-                        <div class="disks__bar" aria-hidden="true"><span class="grow-bar is-warning" style="width:71%"></span></div>
+                        <div class="disks__row">
+                          <span>/var/log</span><span class="text-muted">71%</span>
+                        </div>
+                        <div class="disks__bar" aria-hidden="true">
+                          <span class="grow-bar is-warning" style="width: 71%"></span>
+                        </div>
                       </li>
                       <li>
-                        <div class="disks__row"><span>/data</span><span class="text-muted">38%</span></div>
-                        <div class="disks__bar" aria-hidden="true"><span class="grow-bar" style="width:38%"></span></div>
+                        <div class="disks__row">
+                          <span>/data</span><span class="text-muted">38%</span>
+                        </div>
+                        <div class="disks__bar" aria-hidden="true">
+                          <span class="grow-bar" style="width: 38%"></span>
+                        </div>
                       </li>
                     </ul>
                   </div>
@@ -749,30 +920,433 @@
               </div>
             </div>
 
-            <figcaption class="sr-only">Representação ilustrativa do painel AeroGuard com dados simulados de CPU, memória, disco, temperatura, frequência, status de servidores e alertas recentes.</figcaption>
+            <figcaption class="sr-only">
+              Representação ilustrativa do painel AeroGuard com dados
+              simulados de CPU, memória, disco, temperatura, frequência,
+              status de servidores e alertas recentes.
+            </figcaption>
           </figure>
-          <p class="mono-caption dash-wrap__note">Interface ilustrativa · dados simulados</p>
+          <p class="mono-caption dash-wrap__note">
+            Interface ilustrativa · dados simulados
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- ============ CTA FINAL ============ -->
-    <section id="plataforma" class="cta" aria-labelledby="cta-title">
-      <img src="assets/images/runway-night.png" alt="" class="cta__img" loading="lazy" decoding="async">
-      <div class="cta__shade" aria-hidden="true"></div>
-      <div class="container cta__content">
-        <div class="cta__copy reveal">
-          <h2 id="cta-title" class="cta__title">Monitore o que mantém o céu em movimento.</h2>
-          <p class="hero__lead">AeroGuard. Inteligência para a infraestrutura que não pode parar.</p>
-          <div class="cta__actions">
-            <a href="#solucao" class="btn btn--filled btn--lg">
-              Conheça a AeroGuard
-              <svg class="icon icon--16" aria-hidden="true">
-                <use href="#i-arrow-right" />
-              </svg>
-            </a>
+    <!-- ============ 06 PARCEIROS ============ -->
+    <section class="partners section--partners" id="parceiros">
+      <div class="partners__container">
+        <div class="partners__header reveal">
+          <p class="section-label darker section-label--center">
+            <span class="darker">06</span><span class="section-label__line__darker" aria-hidden="true"></span><span class="text-muted-darker">nosso parceiros</span>
+          </p>
+
+          <h2>
+            Tecnologia para quem mantém<br />
+            <span>o mundo em movimento.</span>
+          </h2>
+
+          <p class="lead darker">
+            De operações aeroespaciais à infraestrutura crítica, <br> conectamos
+            tecnologia, disponibilidade e segurança.
+          </p>
+        </div>
+
+        <div class="partners__carousel reveal" aria-label="Exemplos de empresas e setores">
+          <div class="partners__track">
+            <!-- GRUPO ORIGINAL -->
+            <div class="partners__group">
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <path d="M5 25 31 8 23 32 19 22 5 25Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                  <path d="M19 22 31 8" stroke="#00AEEF" stroke-width="2" />
+                </svg>
+                <span class="partner-logo__name">AERION</span>
+                <span class="partner-logo__sector">AEROSPACE</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <circle cx="20" cy="20" r="14" stroke="currentColor" stroke-width="1.6" />
+                  <circle cx="20" cy="20" r="8" stroke="currentColor" stroke-width="1.4" />
+                  <path d="M20 3V15M37 20H25M20 37V25M3 20H15" stroke="#00AEEF" stroke-width="1.8" />
+                </svg>
+                <span class="partner-logo__name">NEXOR</span>
+                <span class="partner-logo__sector">DEFENSE SYSTEMS</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <path d="M5 30 20 6 35 30H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                  <path d="M13 25 20 14 27 25H13Z" stroke="#00AEEF" stroke-width="1.8" stroke-linejoin="round" />
+                </svg>
+                <span class="partner-logo__name">VERTEX</span>
+                <span class="partner-logo__sector">ENGINEERING</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <path d="M4 12H36M4 20H36M4 28H36" stroke="currentColor" stroke-width="1.5" />
+                  <path d="M12 7V33M20 7V33M28 7V33" stroke="#00AEEF" stroke-width="1.5" />
+                  <circle cx="20" cy="20" r="15" stroke="currentColor" stroke-width="1.3" />
+                </svg>
+                <span class="partner-logo__name">GRIDLINE</span>
+                <span class="partner-logo__sector">INFRASTRUCTURE</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <path d="M6 30 15 10 22 25 28 14 35 30" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  <circle cx="15" cy="10" r="2.5" fill="#00AEEF" />
+                  <circle cx="28" cy="14" r="2.5" fill="#00AEEF" />
+                </svg>
+                <span class="partner-logo__name">ALTITUDE</span>
+                <span class="partner-logo__sector">AVIATION TECH</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <rect x="6" y="6" width="28" height="28" rx="5" stroke="currentColor" stroke-width="1.6" />
+                  <path d="M12 25 18 19 22 23 29 14" stroke="#00AEEF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  <circle cx="29" cy="14" r="2" fill="#00AEEF" />
+                </svg>
+                <span class="partner-logo__name">SENTRIX</span>
+                <span class="partner-logo__sector">INTELLIGENCE</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <path d="M5 13 20 5 35 13V27L20 35 5 27V13Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                  <path d="M5 13 20 22 35 13M20 22V35" stroke="#00AEEF" stroke-width="1.6" />
+                </svg>
+                <span class="partner-logo__name">COREVA</span>
+                <span class="partner-logo__sector">CLOUD SYSTEMS</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <path d="M20 4 34 12V28L20 36 6 28V12L20 4Z" stroke="currentColor" stroke-width="1.6" />
+                  <path d="M13 25V16L20 21 27 16V25" stroke="#00AEEF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="partner-logo__name">VIGILANT</span>
+                <span class="partner-logo__sector">SECURITY TECH</span>
+              </div>
+            </div>
+
+            <!-- CÓPIA PARA O LOOP INFINITO -->
+            <div class="partners__group" aria-hidden="true">
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none">
+                  <path d="M5 25 31 8 23 32 19 22 5 25Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                  <path d="M19 22 31 8" stroke="#00AEEF" stroke-width="2" />
+                </svg>
+                <span class="partner-logo__name">AERION</span>
+                <span class="partner-logo__sector">AEROSPACE</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none">
+                  <circle cx="20" cy="20" r="14" stroke="currentColor" stroke-width="1.6" />
+                  <circle cx="20" cy="20" r="8" stroke="currentColor" stroke-width="1.4" />
+                  <path d="M20 3V15M37 20H25M20 37V25M3 20H15" stroke="#00AEEF" stroke-width="1.8" />
+                </svg>
+                <span class="partner-logo__name">NEXOR</span>
+                <span class="partner-logo__sector">DEFENSE SYSTEMS</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none">
+                  <path d="M5 30 20 6 35 30H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                  <path d="M13 25 20 14 27 25H13Z" stroke="#00AEEF" stroke-width="1.8" stroke-linejoin="round" />
+                </svg>
+                <span class="partner-logo__name">VERTEX</span>
+                <span class="partner-logo__sector">ENGINEERING</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none">
+                  <path d="M4 12H36M4 20H36M4 28H36" stroke="currentColor" stroke-width="1.5" />
+                  <path d="M12 7V33M20 7V33M28 7V33" stroke="#00AEEF" stroke-width="1.5" />
+                  <circle cx="20" cy="20" r="15" stroke="currentColor" stroke-width="1.3" />
+                </svg>
+                <span class="partner-logo__name">GRIDLINE</span>
+                <span class="partner-logo__sector">INFRASTRUCTURE</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none">
+                  <path d="M6 30 15 10 22 25 28 14 35 30" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  <circle cx="15" cy="10" r="2.5" fill="#00AEEF" />
+                  <circle cx="28" cy="14" r="2.5" fill="#00AEEF" />
+                </svg>
+                <span class="partner-logo__name">ALTITUDE</span>
+                <span class="partner-logo__sector">AVIATION TECH</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none">
+                  <rect x="6" y="6" width="28" height="28" rx="5" stroke="currentColor" stroke-width="1.6" />
+                  <path d="M12 25 18 19 22 23 29 14" stroke="#00AEEF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  <circle cx="29" cy="14" r="2" fill="#00AEEF" />
+                </svg>
+                <span class="partner-logo__name">SENTRIX</span>
+                <span class="partner-logo__sector">INTELLIGENCE</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none">
+                  <path d="M5 13 20 5 35 13V27L20 35 5 27V13Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                  <path d="M5 13 20 22 35 13M20 22V35" stroke="#00AEEF" stroke-width="1.6" />
+                </svg>
+                <span class="partner-logo__name">COREVA</span>
+                <span class="partner-logo__sector">CLOUD SYSTEMS</span>
+              </div>
+
+              <div class="partner-logo">
+                <svg viewBox="0 0 40 40" fill="none">
+                  <path d="M20 4 34 12V28L20 36 6 28V12L20 4Z" stroke="currentColor" stroke-width="1.6" />
+                  <path d="M13 25V16L20 21 27 16V25" stroke="#00AEEF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="partner-logo__name">VIGILANT</span>
+                <span class="partner-logo__sector">SECURITY TECH</span>
+              </div>
+            </div>
           </div>
         </div>
+
+        <div class="partners__footer">
+          <span></span>
+          TECNOLOGIA CONECTADA. OPERAÇÕES CONTÍNUAS.
+          <span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 07 FAQ ============ -->
+    <section class="faq" id="faq">
+      <div class="faq__container">
+
+        <header class="faq__header">
+          <p class="section-label darker section-label--center">
+            <span class="darker">07</span><span class="section-label__line__darker" aria-hidden="true"></span><span class="text-muted-darker">Central de ajuda</span>
+          </p>
+
+          <h2>
+            Perguntas frequentes<span>.</span>
+          </h2>
+
+          <p class="faq__header text">
+            Tudo o que você precisa saber sobre o AeroGuard,
+            sua arquitetura e o monitoramento da infraestrutura.
+          </p>
+        </header>
+
+        <div class="faq__content">
+
+          <div class="faq__item">
+            <button class="faq__question" aria-expanded="false">
+              <span class="faq__number">01</span>
+              <span class="faq__question-text">
+                O que é o AeroGuard e qual o seu objetivo principal?
+              </span>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </button>
+
+            <div class="faq__answer">
+              <div class="faq__answer-inner">
+                O <strong>AeroGuard</strong> é uma plataforma de monitoramento
+                contínuo de infraestrutura de hardware voltada para servidores
+                e estações de trabalho que sustentam sistemas de controle de
+                tráfego aéreo, como o SAGITARIO.
+
+                <p>
+                  Seu objetivo é migrar a gestão de infraestrutura de um modelo
+                  reativo para um modelo proativo, reduzindo o tempo de
+                  identificação de gargalos operacionais em até 50% e ajudando
+                  a evitar paralisações causadas pelo esgotamento de recursos.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq__item">
+            <button class="faq__question" aria-expanded="false">
+              <span class="faq__number">02</span>
+              <span class="faq__question-text">
+                Quais componentes e métricas o sistema monitora em tempo real?
+              </span>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </button>
+
+            <div class="faq__answer">
+              <div class="faq__answer-inner">
+                O AeroGuard captura dados críticos de saúde do hardware, incluindo:
+                <ul>
+                  <li>Uso e temperatura da CPU;</li>
+                  <li>Velocidade do processador;</li>
+                  <li>Consumo e disponibilidade de memória RAM;</li>
+                  <li>Capacidade e ocupação de disco;</li>
+                  <li>Tráfego de rede;</li>
+                  <li>Consumo de energia.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq__item">
+            <button class="faq__question" aria-expanded="false">
+              <span class="faq__number">03</span>
+              <span class="faq__question-text">
+                O agente de monitoramento pode impactar a performance do
+                SAGITARIO ou de outros sistemas críticos?
+              </span>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </button>
+
+            <div class="faq__answer">
+              <div class="faq__answer-inner">
+                Os agentes de captura, desenvolvidos em Java e Python, foram
+                projetados para serem leves e não intrusivos. Eles executam em
+                segundo plano nos servidores monitorados, buscando minimizar
+                o impacto sobre o processamento e a estabilidade das aplicações
+                principais de tráfego aéreo.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq__item">
+            <button class="faq__question" aria-expanded="false">
+              <span class="faq__number">04</span>
+              <span class="faq__question-text">
+                Como funciona a arquitetura tecnológica da solução?
+              </span>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </button>
+
+            <div class="faq__answer">
+              <div class="faq__answer-inner">
+                A solução opera em três camadas integradas:
+                <ul>
+                  <li>
+                    <strong>Agentes de captura:</strong> scripts em Java e
+                    Python executados nos servidores locais.
+                  </li>
+                  <li>
+                    <strong>Infraestrutura em nuvem:</strong> banco de dados
+                    MySQL hospedado em uma instância Linux EC2 na AWS para
+                    armazenamento e histórico temporal.
+                  </li>
+                  <li>
+                    <strong>Portal Web:</strong> interface responsiva com
+                    dashboards dinâmicos desenvolvidos com Chart.js para
+                    acompanhamento das métricas.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq__item">
+            <button class="faq__question" aria-expanded="false">
+              <span class="faq__number">05</span>
+              <span class="faq__question-text">
+                Como a equipe de TI é alertada sobre anomalias ou falhas iminentes?
+              </span>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </button>
+
+            <div class="faq__answer">
+              <div class="faq__answer-inner">
+                Quando um parâmetro ultrapassa os limites de segurança definidos
+                (<em>thresholds</em>), o sistema pode emitir notificações
+                automáticas via integração com o Slack. Também permite a abertura
+                de chamados com anexação dos logs relevantes da aplicação,
+                facilitando a investigação e a resposta a incidentes.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq__item">
+            <button class="faq__question" aria-expanded="false">
+              <span class="faq__number">06</span>
+              <span class="faq__question-text">
+                Como os dados são visualizados pelos gestores e administradores?
+              </span>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </button>
+
+            <div class="faq__answer">
+              <div class="faq__answer-inner">
+                Por meio de um painel Web responsivo e intuitivo, acessível via
+                navegador. O portal oferece controle de acesso por login,
+                personalização de dashboards, suporte a temas claro e escuro
+                (<em>light/dark mode</em>) e consulta ao histórico de desempenho
+                para apoiar a tomada de decisões.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq__item">
+            <button class="faq__question" aria-expanded="false">
+              <span class="faq__number">07</span>
+              <span class="faq__question-text">
+                O AeroGuard segue boas práticas de segurança e governança de TI?
+              </span>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </button>
+
+            <div class="faq__answer">
+              <div class="faq__answer-inner">
+                A proposta da plataforma contempla autenticação com senhas
+                armazenadas de forma segura e políticas de gerenciamento de
+                acesso na AWS, utilizando IAM e Security Groups. A gestão de
+                alertas e chamados também pode ser estruturada com base nas
+                boas práticas do framework ITIL, incluindo gerenciamento de
+                serviços, incidentes e problemas.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq__item">
+            <button class="faq__question" aria-expanded="false">
+              <span class="faq__number">08</span>
+              <span class="faq__question-text">
+                Quem são os principais beneficiários do sistema no ambiente operacional?
+              </span>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </button>
+
+            <div class="faq__answer">
+              <div class="faq__answer-inner">
+                <ul>
+                  <li>
+                    <strong>Administradores de TI:</strong> acompanham métricas
+                    em tempo real e gerenciam incidentes com maior agilidade.
+                  </li>
+                  <li>
+                    <strong>Gestores de operações aéreas:</strong> acompanham a
+                    disponibilidade da infraestrutura e buscam reduzir custos
+                    de manutenção emergencial.
+                  </li>
+                  <li>
+                    <strong>Controladores de tráfego aéreo:</strong> dependem
+                    de estações de trabalho estáveis para minimizar lentidões
+                    e congelamentos relacionados ao estresse de hardware.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq__btn">
+        <a href="#solucao" class="btn btn--filled btn--lg">
+          Entre em contato com o suporte
+          <svg class="icon icon--16" aria-hidden="true">
+            <use href="#i-arrow-right" />
+          </svg>
+        </a>
       </div>
     </section>
   </main>
@@ -782,8 +1356,10 @@
     <div class="container footer__inner">
       <div class="footer__top">
         <div class="footer__brand">
-          <img src="assets/brand/aeroguard-horizontal.svg" alt="AeroGuard" width="4034" height="483" class="logo logo--footer" loading="lazy">
-          <p class="body-muted">A inteligência por trás da infraestrutura crítica.</p>
+          <img src="assets/brand/aeroguard-horizontal.svg" alt="AeroGuard" width="4034" height="483" class="logo logo--footer" loading="lazy" />
+          <p class="body-muted">
+            A inteligência por trás da infraestrutura crítica.
+          </p>
         </div>
         <nav aria-label="Rodapé">
           <ul class="footer__links">
@@ -796,11 +1372,12 @@
         </nav>
       </div>
       <div class="footer__bottom">
-        <p>AeroGuard — 2026</p>
-        <p class="footer__status"><span class="dot dot--success dot--sm" aria-hidden="true"></span>Infraestrutura crítica sob controle</p>
+        <p>AeroGuard — Alguns direitos reservados.</p>
+        <p class="footer__status">
+          <span class="dot dot--success dot--sm" aria-hidden="true"></span>Projeto acadêmico feito por estudantes do curso de SIS da SPTech 2026.2
+        </p>
       </div>
     </div>
   </footer>
 </body>
-
 </html>
