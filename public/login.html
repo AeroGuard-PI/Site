@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151C26">
+  <meta name="color-scheme" content="dark">
+  <title>Entrar | AeroGuard</title>
+  <link rel="icon" href="assets/brand/aeroguard-vertical.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <script src="js/auth.js" defer></script>
+</head>
+<body class="auth-page">
+  <main class="auth-shell">
+    <aside class="auth-visual" aria-label="AeroGuard">
+      <a class="auth-brand" href="index.html" aria-label="AeroGuard — página inicial">
+        <img src="assets/brand/aeroguard-horizontal.svg" alt="AeroGuard">
+      </a>
+      <div class="auth-visual__copy">
+        <p class="auth-eyebrow"><span class="status-dot"></span> INFRAESTRUTURA SOB CONTROLE</p>
+        <h1>Visibilidade para agir.<br><span>Confiabilidade para operar.</span></h1>
+        <p>Acompanhe a saúde dos seus servidores e mantenha o foco no que realmente importa: a continuidade da operação.</p>
+      </div>
+    </aside>
+
+    <section class="auth-main" aria-labelledby="auth-title">
+      <div class="auth-mobile-brand">
+        <a href="index.html" aria-label="AeroGuard — página inicial"><img src="assets/brand/aeroguard-horizontal.svg" alt="AeroGuard"></a>
+      </div>
+      <div class="auth-form-wrap">
+        <a class="auth-back" href="index.html"><span aria-hidden="true">←</span> Voltar ao site</a>
+        <div class="auth-heading">
+          <p class="auth-kicker">PORTAL AEROGUARD <span> / 01</span></p>
+          <h2 id="auth-title">Acesse sua conta.</h2>
+          <p>Entre para acompanhar sua infraestrutura em tempo real.</p>
+        </div>
+
+        <form id="login-form" class="auth-form" data-demo-form>
+          <label class="field">
+            <span>E-mail corporativo</span>
+            <input type="email" name="email" placeholder="nome@empresa.com.br" autocomplete="email" required>
+          </label>
+          <label class="field">
+            <span>Senha</span>
+            <span class="field__control">
+              <input type="password" name="senha" placeholder="Digite sua senha" autocomplete="current-password" data-password required>
+              <button class="password-toggle" type="button" data-toggle-password aria-label="Mostrar senha">Mostrar</button>
+            </span>
+          </label>
+          <div class="auth-form__meta">
+            <label class="check-field"><input type="checkbox" name="lembrar"><span>Manter conectado</span></label>
+            <a href="#" class="auth-link" data-not-ready>Esqueci minha senha</a>
+          </div>
+          <button class="btn btn--filled btn--lg btn--block auth-submit" type="submit">Entrar na plataforma <span aria-hidden="true">↗</span></button>
+          <p class="form-feedback" role="status" aria-live="polite" data-form-feedback></p>
+        </form>
+
+        <div class="auth-switch">
+          <span>Ainda não tem acesso?</span>
+          <a href="cadastro.html">Solicitar cadastro <span aria-hidden="true">→</span></a>
+        </div>
+        <p class="auth-legal">Acesso restrito a usuários autorizados. <span>© AeroGuard</span></p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

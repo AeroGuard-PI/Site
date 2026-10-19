@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151c26">
+  <meta name="color-scheme" content="dark">
+  <title>Visão geral | AeroGuard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js" defer></script>
+  <script src="js/dashboard.js" defer></script>
+</head>
+
+<body class="dashboard-page">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Ícones do próprio sistema visual AeroGuard. -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon-library" aria-hidden="true">
+    <symbol id="i-menu" viewBox="0 0 24 24">
+      <path d="M4 6h16M4 12h16M4 18h16" />
+    </symbol>
+    <symbol id="i-layout-grid" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="14" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+    </symbol>
+    <symbol id="i-server" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="18" height="7" rx="2" />
+      <rect x="3" y="14" width="18" height="7" rx="2" />
+      <path d="M7 6.5h.01M7 17.5h.01M11 6.5h6M11 17.5h6" />
+    </symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24">
+      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
+    </symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3" />
+      <path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.8 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.8-1l-1.7.7-1.4-2.4L7.1 15a8 8 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.8-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.8 1l1.7-.7 1.4 2.4-1.4 1.1a8 8 0 0 1-.1 2Z" />
+    </symbol>
+    <symbol id="i-cpu" viewBox="0 0 24 24">
+      <rect x="5" y="5" width="14" height="14" rx="2" />
+      <path d="M9 9h6v6H9zM9 1v4m6-4v4M9 19v4m6-4v4M1 9h4m-4 6h4m14-6h4m-4 6h4" />
+    </symbol>
+    <symbol id="i-memory" viewBox="0 0 24 24">
+      <rect x="3" y="6" width="18" height="12" rx="2" />
+      <path d="M7 10v4m4-4v4m4-4v4m4-4v4M6 3v3m4-3v3m4-3v3m4-3v3M6 18v3m4-3v3m4-3v3m4-3v3" />
+    </symbol>
+    <symbol id="i-hard-drive" viewBox="0 0 24 24">
+      <rect x="3" y="5" width="18" height="14" rx="3" />
+      <path d="M3 14h18M7 17h.01M11 17h.01" />
+    </symbol>
+    <symbol id="i-thermometer" viewBox="0 0 24 24">
+      <path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0Z" />
+    </symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24">
+      <path d="M4 19a9 9 0 1 1 16 0M12 13l4-4M12 19h.01" />
+    </symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24">
+      <path d="m10.3 3.9-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3.1l-8-14a2 2 0 0 0-3.4 0Z" />
+      <path d="M12 9v4m0 4h.01" />
+    </symbol>
+  </svg>
+
+  <div class="dashboard-layout">
+
+    <aside class="dash__sidebar" id="menu-lateral" aria-label="Menu principal">
+
+      <!-- Grupo superior: logo e navegação -->
+      <div class="sidebar__top">
+        <a class="dashboard-brand" href="index.html" aria-label="AeroGuard — página inicial">
+          <img src="assets/brand/aeroguard-vertical.svg" alt="AeroGuard" width="887" height="887">
+        </a>
+
+        <span class="dash__espacador" aria-hidden="true"></span>
+
+        <nav class="dashboard-nav" aria-label="Navegação da dashboard">
+          <a href="#visao-geral" class="dash__nav-item is-active" aria-current="page">
+            <svg class="icon icon--20" aria-hidden="true">
+              <use href="#i-layout-grid" />
+            </svg>
+            <span>Visão Geral</span>
+          </a>
+
+          <a href="#servidores" class="dash__nav-item">
+            <svg class="icon icon--20" aria-hidden="true">
+              <use href="#i-server" />
+            </svg>
+            <span>Servidores</span>
+          </a>
+
+          <a href="#alertas" class="dash__nav-item">
+            <svg class="icon icon--20" aria-hidden="true">
+              <use href="#i-bell" />
+            </svg>
+            <span>Alertas</span>
+          </a>
+
+          <a href="#configuracoes" class="dash__nav-item">
+            <svg class="icon icon--20" aria-hidden="true">
+              <use href="#i-settings" />
+            </svg>
+            <span>Configurações</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Grupo inferior: usuário e logout -->
+      <div class="sidebar__bottom">
+        <span class="dash__espacador" aria-hidden="true"></span>
+
+        <div class="sidebar-user">
+          <div class="sidebar-user__info">
+            <span class="sidebar-user__role">Logado como:</span>
+            <span class="sidebar-user__name">Administrador</span>
+          </div>
+        </div>
+
+        <a href="./index.html" class="btn btn--outlined" type="button" id="btn-sair">
+          Sair
+        </a>
+
+        <p>© AeroGuard - 2026</p>
+      </div>
+
+    </aside>
+
+
+    <main class="dashboard-main" id="conteudo">
+      <header class="dash__top dashboard-header" id="visao-geral">
+        <div class="dashboard-header__host">
+          <p class="mono-label">Home</p>
+          <h1>Visão Geral</h1>
+          <p>Seja bem-vindo a interface de monitoramento da sua operação.</p>
+        </div>
+      </header>
+
+      <div class="dashboard-servers">
+        <section class="grid panel panel--wide">
+          <div class="content">
+            <p class="mono-label">Servidor atual:</p>
+            <h1 class="dash__host">ATC-SRV-04 <span class="badge badge--success"><span class="dot dot--success dot--sm" aria-hidden="true"></span>Operacional</span></h1>
+          </div>
+
+          <select name="Teste" id="teste">
+            <option value="placeholder">Selecione o servidor</option>
+          </select>
+
+        </section>
+      </div>
+
+      <section class="dashboard-kpis" aria-label="Indicadores principais">
+        <dl class="kpis">
+          <div class="kpi">
+            <dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true">
+                <use href="#i-cpu" />
+              </svg>CPU</dt>
+            <dd class="kpi__value">42<small>%</small></dd>
+            <dd class="kpi__bar" aria-label="Uso de CPU: 42 por cento"><span style="width:42%"></span></dd>
+            <dd class="kpi__delta">−3,1%</dd>
+          </div>
+          <div class="kpi">
+            <dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true">
+                <use href="#i-memory" />
+              </svg>Memória</dt>
+            <dd class="kpi__value">68<small>%</small></dd>
+            <dd class="kpi__bar" aria-label="Uso de memória: 68 por cento"><span style="width:68%"></span></dd>
+            <dd class="kpi__delta">+1,4%</dd>
+          </div>
+          <div class="kpi">
+            <dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true">
+                <use href="#i-hard-drive" />
+              </svg>Disco</dt>
+            <dd class="kpi__value">54<small>%</small></dd>
+            <dd class="kpi__bar" aria-label="Uso de disco: 54 por cento"><span style="width:54%"></span></dd>
+            <dd class="kpi__delta">+0,2%</dd>
+          </div>
+          <div class="kpi">
+            <dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true">
+                <use href="#i-gauge" />
+              </svg>Frequência</dt>
+            <dd class="kpi__value">3,2<small>GHz</small></dd>
+            <dd class="kpi__bar" aria-label="Frequência ilustrativa"><span style="width:78%"></span></dd>
+            <dd class="kpi__delta">turbo 4,1</dd>
+          </div>
+        </dl>
+      </section>
+
+      <div class="dashboard-grid dashboard-grid--primary">
+        <section class="panel panel--wide" aria-labelledby="chart-title">
+          <div class="panel__head">
+            <h2 class="panel__title" id="chart-title">CPU e memória</h2>
+            <div class="segmented" role="group" aria-label="Período do gráfico">
+              <button type="button" data-period="1h" aria-pressed="false">1h</button>
+              <button type="button" data-period="6h" class="is-active" aria-pressed="true">6h</button>
+              <button type="button" data-period="24h" aria-pressed="false">24h</button>
+              <button type="button" data-period="7d" aria-pressed="false">7d</button>
+            </div>
+          </div>
+          <div class="legend" aria-label="Legenda do gráfico">
+            <span><i class="legend__swatch legend__swatch--cpu" aria-hidden="true"></i>CPU</span>
+            <span><i class="legend__swatch legend__swatch--mem" aria-hidden="true"></i>Memória</span>
+          </div>
+          <div class="timeseries">
+            <canvas id="cpu-memory-chart" role="img" aria-label="Gráfico de linhas do uso de CPU e memória"></canvas>
+          </div>
+          <div class="axis axis--dim" aria-hidden="true"><span>09:00</span><span>10:30</span><span>12:00</span><span>13:30</span><span>15:00</span></div>
+        </section>
+
+        <section class="panel" id="servidores" aria-labelledby="servers-title">
+          <div class="panel__head">
+            <h2 class="panel__title" id="servers-title">Status dos servidores</h2><span class="panel__meta">5 nós</span>
+          </div>
+          <ul class="servers">
+            <li><span class="dot dot--success" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-01</span><span class="servers__role">Radar primário</span></li>
+            <li><span class="dot dot--success" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-02</span><span class="servers__role">Planos de voo</span></li>
+            <li><span class="dot dot--success" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-04</span><span class="servers__role">Processamento</span></li>
+            <li><span class="dot dot--warning" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-07</span><span class="servers__role">Comunicação</span></li>
+            <li><span class="dot dot--success" aria-hidden="true"></span><span class="mono-xs">ATC-SRV-09</span><span class="servers__role">Backup</span></li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="dashboard-grid dashboard-grid--secondary">
+        <section class="panel panel--wide" id="alertas" aria-labelledby="alerts-title">
+          <div class="panel__head">
+            <h2 class="panel__title" id="alerts-title">Alertas recentes</h2><span class="panel__meta">Hoje</span>
+          </div>
+          <ul class="alerts">
+            <li class="alert">
+              <span class="alert__icon alert__icon--warning" aria-hidden="true"><svg class="icon icon--16">
+                  <use href="#i-alert" />
+                </svg></span>
+              <div class="alert__text">
+                <p class="truncate">Memória acima de 90%</p>
+                <p class="mono-xs text-muted">ATC-SRV-07</p>
+              </div>
+              <time class="alert__time">14:32</time>
+            </li>
+            <li class="alert">
+              <span class="alert__icon alert__icon--info" aria-hidden="true"><svg class="icon icon--16">
+                  <use href="#i-alert" />
+                </svg></span>
+              <div class="alert__text">
+                <p class="truncate">Pico de CPU normalizado</p>
+                <p class="mono-xs text-muted">ATC-SRV-04</p>
+              </div>
+              <time class="alert__time">13:58</time>
+            </li>
+            <li class="alert">
+              <span class="alert__icon alert__icon--success" aria-hidden="true"><svg class="icon icon--16">
+                  <use href="#i-alert" />
+                </svg></span>
+              <div class="alert__text">
+                <p class="truncate">Disco /var liberado</p>
+                <p class="mono-xs text-muted">ATC-SRV-02</p>
+              </div>
+              <time class="alert__time">12:41</time>
+            </li>
+          </ul>
+        </section>
+
+        <section class="panel" aria-labelledby="disks-title">
+          <div class="panel__head">
+            <h2 class="panel__title" id="disks-title">Uso de disco</h2><span class="panel__meta">Volumes</span>
+          </div>
+          <ul class="disks">
+            <li>
+              <div class="disks__row"><span>/</span><span class="text-muted">54%</span></div>
+              <div class="disks__bar"><span style="width:54%"></span></div>
+            </li>
+            <li>
+              <div class="disks__row"><span>/var/log</span><span class="text-muted">71%</span></div>
+              <div class="disks__bar"><span class="is-warning" style="width:71%"></span></div>
+            </li>
+            <li>
+              <div class="disks__row"><span>/data</span><span class="text-muted">38%</span></div>
+              <div class="disks__bar"><span style="width:38%"></span></div>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+
+</html>

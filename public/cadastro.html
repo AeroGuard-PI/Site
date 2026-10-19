@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151C26">
+  <meta name="color-scheme" content="dark">
+  <title>Criar acesso | AeroGuard</title>
+  <link rel="icon" href="assets/brand/aeroguard-vertical.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <script src="js/auth.js" defer></script>
+</head>
+<body class="auth-page auth-page--register">
+  <main class="auth-shell auth-shell--register">
+    <aside class="auth-visual" aria-label="AeroGuard">
+      <a class="auth-brand" href="index.html" aria-label="AeroGuard — página inicial">
+        <img src="assets/brand/aeroguard-horizontal.svg" alt="AeroGuard">
+      </a>
+      <div class="auth-visual__copy">
+        <p class="auth-eyebrow"><span class="status-dot"></span> ACESSO CONTROLADO</p>
+        <h1>Uma visão clara.<br><span>Uma operação mais segura.</span></h1>
+        <p>Crie seu acesso à plataforma e conecte seu trabalho ao monitoramento da infraestrutura crítica.</p>
+      </div>
+    </aside>
+
+    <section class="auth-main auth-main--register" aria-labelledby="auth-title">
+      <div class="auth-mobile-brand">
+        <a href="index.html" aria-label="AeroGuard — página inicial"><img src="assets/brand/aeroguard-horizontal.svg" alt="AeroGuard"></a>
+      </div>
+      <div class="auth-form-wrap auth-form-wrap--register">
+        <a class="auth-back" href="index.html"><span aria-hidden="true">←</span> Voltar ao site</a>
+        <div class="auth-heading">
+          <p class="auth-kicker">PORTAL AEROGUARD <span> / 02</span></p>
+          <h2 id="auth-title">Solicite seu acesso.</h2>
+          <p>Preencha seus dados para iniciar o cadastro na plataforma.</p>
+        </div>
+
+        <form class="auth-form register-form" data-demo-form>
+          <div class="form-grid">
+            <label class="field field--full">
+              <span>Nome completo</span>
+              <input type="text" name="nome" placeholder="Como podemos chamar você?" autocomplete="name" required>
+            </label>
+            <label class="field">
+              <span>Telefone</span>
+              <input type="tel" name="telefone" placeholder="(11) 99999-9999" autocomplete="tel" inputmode="tel" data-phone required>
+            </label>
+            <label class="field">
+              <span>CPF</span>
+              <input type="text" name="cpf" placeholder="000.000.000-00" autocomplete="off" inputmode="numeric" maxlength="14" data-cpf required>
+            </label>
+            <label class="field field--full">
+              <span>E-mail corporativo</span>
+              <input type="email" name="email" placeholder="nome@empresa.com.br" autocomplete="email" required>
+            </label>
+            <label class="field">
+              <span>Senha</span>
+              <span class="field__control">
+                <input type="password" name="senha" placeholder="Mínimo de 8 caracteres" autocomplete="new-password" minlength="8" data-password required>
+                <button class="password-toggle" type="button" data-toggle-password aria-label="Mostrar senha">Mostrar</button>
+              </span>
+            </label>
+            <label class="field">
+              <span>Código da empresa</span>
+              <input type="text" name="codigo_empresa" placeholder="Ex.: AG-000123" autocomplete="off" required>
+            </label>
+            <label class="field field--full">
+              <span>Cargo</span>
+              <input type="text" name="cargo" placeholder="Ex.: Analista de infraestrutura" autocomplete="organization-title" required>
+            </label>
+          </div>
+          <p class="form-hint"><span aria-hidden="true">ⓘ</span> O código da empresa é fornecido pelo administrador da organização.</p>
+          <button class="btn btn--filled btn--lg btn--block auth-submit" type="submit">Criar solicitação <span aria-hidden="true">↗</span></button>
+          <p class="form-feedback" role="status" aria-live="polite" data-form-feedback></p>
+        </form>
+
+        <div class="auth-switch">
+          <span>Já tem uma conta?</span>
+          <a href="login.html">Entrar <span aria-hidden="true">→</span></a>
+        </div>
+        <p class="auth-legal">Seus dados devem ser utilizados apenas para gestão do acesso. <span>© AeroGuard</span></p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
