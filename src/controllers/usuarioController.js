@@ -69,7 +69,7 @@ function cadastrar(req, res) {
 
                 var empresaId = resultadoEmpresa[0].id;
 
-                cargoModel.buscarPorNome(cargo)
+                cargoModel.buscarPorIdOuNome(cargo)
                     .then(function (resultadoCargo) {
                         if (resultadoCargo.length == 0) {
                             res.status(400).send("Cargo não encontrado ou inválido!");

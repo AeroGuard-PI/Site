@@ -65,6 +65,21 @@
   const formCadastro = document.querySelector("#register-form");
 
   if (formCadastro) {
+    const selectCargo = formCadastro.querySelector("#cargo_input");
+    if (selectCargo) {
+      fetch("/cargos/listar")
+        .then((resposta) => resposta.json())
+        .then((cargos) => {
+          cargos.forEach((c) => {
+            const option = document.createElement("option");
+            option.value = c.nome;
+            option.textContent = c.nome;
+            selectCargo.appendChild(option);
+          });
+        })
+        .catch((erro) => console.error("Erro ao listar cargos:", erro));
+    }
+
     formCadastro.addEventListener("submit", (event) => {
       event.preventDefault();
 
@@ -77,14 +92,15 @@
       };
 
       const nome = formCadastro.querySelector('[name="nome"]').value.trim();
+      const cargo = formCadastro.querySelector('[name="cargo"]').value.trim();
       const telefone = formCadastro.querySelector('[name="telefone"]').value.replace(/\D/g, "");
       const cpf = formCadastro.querySelector('[name="cpf"]').value.replace(/\D/g, "");
       const email = formCadastro.querySelector('[name="email"]').value.trim();
       const senha = formCadastro.querySelector('[name="senha"]').value;
+      const confirmarSenha = formCadastro.querySelector('[name="confirmar_senha"]').value;
       const codigoEmpresa = formCadastro.querySelector('[name="codigo_empresa"]').value.trim();
-      const cargo = formCadastro.querySelector('[name="cargo"]').value.trim();
 
-      if (!nome || !telefone || !cpf || !email || !senha || !codigoEmpresa || !cargo) {
+      if (!nome || !cargo || !telefone || !cpf || !email || !senha || !confirmarSenha || !codigoEmpresa) {
         exibirFeedback("Preencha todos os campos obrigatórios.");
         return;
       }
@@ -101,6 +117,11 @@
 
       if (senha.length < 8) {
         exibirFeedback("A senha deve conter no mínimo 8 caracteres.");
+        return;
+      }
+
+      if (senha !== confirmarSenha) {
+        exibirFeedback("As senhas não coincidem.");
         return;
       }
 
