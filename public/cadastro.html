@@ -42,9 +42,15 @@
 
         <form id="register-form" class="auth-form register-form">
           <div class="form-grid">
-            <label class="field field--full">
+            <label class="field">
               <span>Nome completo</span>
               <input type="text" name="nome" placeholder="Como podemos chamar você?" autocomplete="name" required id="nome_input">
+            </label>
+            <label class="field">
+              <span>Cargo</span>
+              <select name="cargo" id="cargo_input" required>
+                <option value="" disabled selected>Selecione seu cargo</option>
+              </select>
             </label>
             <label class="field">
               <span>Telefone</span>
@@ -66,12 +72,15 @@
               </span>
             </label>
             <label class="field">
-              <span>Código da empresa</span>
-              <input type="text" name="codigo_empresa" placeholder="Ex.: A0001" autocomplete="off" required id="codigo_input">
+              <span>Confirmar senha</span>
+              <span class="field__control">
+                <input type="password" name="confirmar_senha" placeholder="Repita sua senha" autocomplete="new-password" minlength="8" data-password required id="confirmar_senha_input">
+                <button class="password-toggle" type="button" data-toggle-password aria-label="Mostrar senha">Mostrar</button>
+              </span>
             </label>
             <label class="field field--full">
-              <span>Cargo</span>
-              <input type="text" name="cargo" placeholder="Ex.: Analista de infraestrutura" autocomplete="organization-title" required id="cargo_input">
+              <span>Código da empresa</span>
+              <input type="text" name="codigo_empresa" placeholder="Ex.: A0001" autocomplete="off" required id="codigo_input">
             </label>
           </div>
           <p class="form-hint"><span aria-hidden="true">ⓘ</span> O código da empresa é fornecido pelo administrador da organização.</p>
