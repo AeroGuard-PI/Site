@@ -40,38 +40,38 @@
           <p>Preencha seus dados para iniciar o cadastro na plataforma.</p>
         </div>
 
-        <form class="auth-form register-form" data-demo-form>
+        <form id="register-form" class="auth-form register-form">
           <div class="form-grid">
             <label class="field field--full">
               <span>Nome completo</span>
-              <input type="text" name="nome" placeholder="Como podemos chamar você?" autocomplete="name" required>
+              <input type="text" name="nome" placeholder="Como podemos chamar você?" autocomplete="name" required id="nome_input">
             </label>
             <label class="field">
               <span>Telefone</span>
-              <input type="tel" name="telefone" placeholder="(11) 99999-9999" autocomplete="tel" inputmode="tel" data-phone required>
+              <input type="tel" name="telefone" placeholder="(11) 99999-9999" autocomplete="tel" inputmode="tel" data-phone required id="telefone_input">
             </label>
             <label class="field">
               <span>CPF</span>
-              <input type="text" name="cpf" placeholder="000.000.000-00" autocomplete="off" inputmode="numeric" maxlength="14" data-cpf required>
+              <input type="text" name="cpf" placeholder="000.000.000-00" autocomplete="off" inputmode="numeric" maxlength="14" data-cpf required id="cpf_input">
             </label>
             <label class="field field--full">
               <span>E-mail corporativo</span>
-              <input type="email" name="email" placeholder="nome@empresa.com.br" autocomplete="email" required>
+              <input type="email" name="email" placeholder="nome@empresa.com.br" autocomplete="email" required id="email_input">
             </label>
             <label class="field">
               <span>Senha</span>
               <span class="field__control">
-                <input type="password" name="senha" placeholder="Mínimo de 8 caracteres" autocomplete="new-password" minlength="8" data-password required>
+                <input type="password" name="senha" placeholder="Mínimo de 8 caracteres" autocomplete="new-password" minlength="8" data-password required id="senha_input">
                 <button class="password-toggle" type="button" data-toggle-password aria-label="Mostrar senha">Mostrar</button>
               </span>
             </label>
             <label class="field">
               <span>Código da empresa</span>
-              <input type="text" name="codigo_empresa" placeholder="Ex.: AG-000123" autocomplete="off" required>
+              <input type="text" name="codigo_empresa" placeholder="Ex.: A0001" autocomplete="off" required id="codigo_input">
             </label>
             <label class="field field--full">
               <span>Cargo</span>
-              <input type="text" name="cargo" placeholder="Ex.: Analista de infraestrutura" autocomplete="organization-title" required>
+              <input type="text" name="cargo" placeholder="Ex.: Analista de infraestrutura" autocomplete="organization-title" required id="cargo_input">
             </label>
           </div>
           <p class="form-hint"><span aria-hidden="true">ⓘ</span> O código da empresa é fornecido pelo administrador da organização.</p>
