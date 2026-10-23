@@ -42,7 +42,7 @@ CREATE TABLE usuario (
 
 CREATE TABLE maquina (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    hostname VARCHAR(50) NOT NULL UNIQUE,  
+    hostname VARCHAR(50) NOT NULL,  
     so VARCHAR(50) NOT NULL,
     macAddress VARCHAR(17) NOT NULL UNIQUE, 
     fkEmpresa INT NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE componentes(
 );
 
 CREATE TABLE configuracao_maquina (
-	id INT NOT NULL,
+	id INT NOT NULL AUTO_INCREMENT,
     data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     disponibilidade CHAR(8) NOT NULL,
     maquina_captura_id INT NOT NULL, 
@@ -71,9 +71,9 @@ CREATE TABLE configuracao_maquina (
     
 
 CREATE TABLE captura (
-	id 	INT NOT NULL,
+	id 	INT NOT NULL AUTO_INCREMENT,
     tipo VARCHAR(60) NOT NULL,
-    valor FLOAT NOT NULL,
+    valor DOUBLE NOT NULL,
     data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     unidade_medida CHAR(10) NOT NULL,
     maquina_id INT NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE discretizacao (
 );
     
 CREATE TABLE historico_alerta(
-	id INT NOT NULL,
+	id INT NOT NULL AUTO_INCREMENT,
     data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     maquina_captura_id INT NOT NULL,
     componentes_captura_id INT NOT NULL,
@@ -131,10 +131,13 @@ INSERT INTO maquina (hostname, so, macAddress, fkEmpresa)
 VALUES ('DESKTOP-OP-01', 'Windows 11 Pro', '00:1A:3F:F1:4C:C6', 1);
 
 INSERT INTO componentes (nome) VALUES 
-('CPU');
+('CPU'),
+('Memória'),
+('Disco');
 
-INSERT INTO discretizacao (limite, nivel_alerta) VALUES
-('90', 'critico');
+INSERT INTO discretizacao (limite, nivel_alerta) VALUES 
+(80, 'ALERTA'),
+(90, 'CRÍTICO');
 
 
 select*from localizacao;
