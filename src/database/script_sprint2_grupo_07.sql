@@ -133,7 +133,9 @@ VALUES ('DESKTOP-OP-01', 'Windows 11 Pro', '00:1A:3F:F1:4C:C6', 1);
 INSERT INTO componentes (nome) VALUES 
 ('CPU'),
 ('Memória'),
-('Disco');
+('Disco'),
+('Rede');
+
 
 INSERT INTO discretizacao (limite, nivel_alerta) VALUES 
 (80, 'ALERTA'),
@@ -149,5 +151,3 @@ select*from captura;
 select*from componentes;
 select*from discretizacao;
 select*from historico_alerta;
-
-
