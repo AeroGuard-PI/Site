@@ -36,6 +36,35 @@ function autenticar(req, res) {
     }
 }
 
+function instalar(req, res) {
+    var email = req.body.emailServer;
+    var senha = req.body.senhaServer;
+    if (typeof email !== "string" || !email.trim() || typeof senha !== "string" || !senha) {
+        return res.status(400).json({ mensagem: "Informe e-mail e senha." });
+    }
+    usuarioModel.autenticar(email.trim(), senha).then(function (usuarios) {
+        if (usuarios.length !== 1) {
+            return res.status(403).json({ mensagem: "E-mail ou senha inválidos." });
+        }
+        if (!process.env.COLETOR_DB_HOST || !process.env.COLETOR_DB_USER || !process.env.COLETOR_DB_PASSWORD) {
+            return res.status(503).json({ mensagem: "A conexão dos coletores não foi configurada na central." });
+        }
+        var usuario = usuarios[0];
+        res.set("Cache-Control", "no-store");
+        res.json({
+            empresa: { cnpj: usuario.empresaCnpj, nome: usuario.empresaNome },
+            banco: {
+                host: process.env.COLETOR_DB_HOST,
+                porta: Number(process.env.COLETOR_DB_PORT || 3306),
+                usuario: process.env.COLETOR_DB_USER,
+                senha: process.env.COLETOR_DB_PASSWORD
+            }
+        });
+    }).catch(function () {
+        res.status(500).json({ mensagem: "Não foi possível consultar o usuário." });
+    });
+}
+
 function cadastrar(req, res) {
     var nome = req.body.nomeServer;
     var telefone = req.body.telefoneServer;
@@ -101,5 +130,6 @@ function cadastrar(req, res) {
 
 module.exports = {
     autenticar,
+    instalar,
     cadastrar
 };

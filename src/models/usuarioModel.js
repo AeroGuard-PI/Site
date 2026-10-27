@@ -2,21 +2,20 @@ var database = require("../database/config");
 
 function autenticar(email, senha) {
     var instrucaoSql = `
-        SELECT id, nome, email, telefone, cpf, empresa_id AS empresaId, cargo_id AS cargoId 
-        FROM usuario 
-        WHERE email = '${email}' AND senha = '${senha}';
+        SELECT u.id, u.nome, u.email, u.telefone, u.cpf, u.empresa_id AS empresaId,
+            u.cargo_id AS cargoId, e.cnpj AS empresaCnpj, e.razao_social AS empresaNome
+        FROM usuario u JOIN empresa e ON e.id = u.empresa_id
+        WHERE u.email = ? AND u.senha = ?;
     `;
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql, [email, senha]);
 }
 
 function cadastrar(nome, telefone, email, cpf, senha, empresaId, cargoId) {
     var instrucaoSql = `
         INSERT INTO usuario (nome, telefone, email, cpf, senha, empresa_id, cargo_id) 
-        VALUES ('${nome}', '${telefone}', '${email}', '${cpf}', '${senha}', ${empresaId}, ${cargoId});
+        VALUES (?, ?, ?, ?, ?, ?, ?);
     `;
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql, [nome, telefone, email, cpf, senha, empresaId, cargoId]);
 }
 
 module.exports = {

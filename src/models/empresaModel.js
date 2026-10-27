@@ -1,8 +1,8 @@
 var database = require("../database/config");
 
 function buscarPorId(id) {
-  var instrucaoSql = `SELECT * FROM empresa WHERE id = '${id}'`;
-  return database.executar(instrucaoSql);
+  var instrucaoSql = "SELECT * FROM empresa WHERE id = ?";
+  return database.executar(instrucaoSql, [id]);
 }
 
 function listar() {
@@ -11,13 +11,13 @@ function listar() {
 }
 
 function buscarPorCnpj(cnpj) {
-  var instrucaoSql = `SELECT * FROM empresa WHERE cnpj = '${cnpj}'`;
-  return database.executar(instrucaoSql);
+  var instrucaoSql = "SELECT * FROM empresa WHERE cnpj = ?";
+  return database.executar(instrucaoSql, [cnpj]);
 }
 
 function buscarPorCodigoAutenticacao(codigoAutenticacao) {
-  var instrucaoSql = `SELECT id, razao_social, cnpj, codigoAutenticacao FROM empresa WHERE codigoAutenticacao = '${codigoAutenticacao}' LIMIT 1;`;
-  return database.executar(instrucaoSql);
+  var instrucaoSql = "SELECT id, razao_social, cnpj, codigoAutenticacao FROM empresa WHERE codigoAutenticacao = ? LIMIT 1";
+  return database.executar(instrucaoSql, [codigoAutenticacao]);
 }
 
 function cadastrar(razaoSocial, cnpj) {
