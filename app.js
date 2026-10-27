@@ -39,5 +39,17 @@ app.get("/saude", function (req, res) {
 });
 
 app.listen(PORTA_APP, HOST_APP, function () {
-    console.log(`AeroGuard iniciado na porta ${PORTA_APP}.`);
+    console.log(`
+    ##   ##  ######   #####             ####       ##     ######     ##              ##  ##    ####    ######
+    ##   ##  ##       ##  ##            ## ##     ####      ##      ####             ##  ##     ##         ##
+    ##   ##  ##       ##  ##            ##  ##   ##  ##     ##     ##  ##            ##  ##     ##        ##
+    ## # ##  ####     #####    ######   ##  ##   ######     ##     ######   ######   ##  ##     ##       ##
+    #######  ##       ##  ##            ##  ##   ##  ##     ##     ##  ##            ##  ##     ##      ##
+    ### ###  ##       ##  ##            ## ##    ##  ##     ##     ##  ##             ####      ##     ##
+    ##   ##  ######   #####             ####     ##  ##     ##     ##  ##              ##      ####    ######
+
+    Servidor do seu site já está rodando! Acesse .: http://localhost:${PORTA_APP} :.
+    Ambiente: .:${process.env.AMBIENTE_PROCESSO}:.
+    A conexão com o banco usa as variáveis de ambiente da aplicação.
+`);
 });
