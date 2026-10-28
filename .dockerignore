@@ -1,6 +1,7 @@
 .git
 .env
-.env.dev
+.env.*
+!.env.example
 coletor.env
 node_modules
 target
