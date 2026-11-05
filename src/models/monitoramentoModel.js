@@ -26,7 +26,7 @@ function ultimasMetricas(empresaId, maquinaId) {
     return database.executar(instrucaoSql, parametros);
 }
 
-function seriePorComponente(empresaId, maquinaId, componente, dataInicial) {
+function seriePorComponente(empresaId, maquinaId, componente, dataInicial, limite) {
     var filtros = "m.fkEmpresa = ? AND c.nome = ? AND cp.data_hora >= ?";
     var parametros = [empresaId, componente, dataInicial];
     if (maquinaId) { filtros += " AND m.id = ?"; parametros.push(maquinaId); }
@@ -36,7 +36,11 @@ function seriePorComponente(empresaId, maquinaId, componente, dataInicial) {
         JOIN maquina m ON m.id = cp.maquina_id
         JOIN componentes c ON c.id = cp.componentes_id
         WHERE ${filtros}
-        ORDER BY cp.data_hora, cp.id`;
+        ORDER BY cp.data_hora DESC, cp.id DESC`;
+    if (limite) {
+        instrucaoSql += " LIMIT ?";
+        parametros.push(limite);
+    }
     return database.executar(instrucaoSql, parametros);
 }
 

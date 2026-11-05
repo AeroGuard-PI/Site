@@ -96,6 +96,7 @@
       const dados = await resposta.json();
       if (!resposta.ok) throw new Error(dados.mensagem || "Não foi possível carregar os dados.");
       preencherMaquinas(dados.maquinas);
+      if (!select.value && dados.maquinaSelecionada) select.value = String(dados.maquinaSelecionada);
       document.querySelector("[data-machine-title]").textContent = select.value ? select.selectedOptions[0].textContent : "Todas as máquinas";
       ["CPU", "Memória", "Disco", "Rede"].forEach(nome => renderizarKpi(dados.metricas, nome));
       renderizarServidores(dados.maquinas, dados.disponibilidade);
