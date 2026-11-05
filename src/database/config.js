@@ -27,6 +27,47 @@ function executar(instrucao, parametros = []) {
     });
 }
 
+// Mantém uma única conexão aberta somente durante operações que precisam ser
+// concluídas juntas (por exemplo, máquina e suas configurações).
+function executarTransacao(operacao) {
+    if (process.env.AMBIENTE_PROCESSO !== "producao" && process.env.AMBIENTE_PROCESSO !== "desenvolvimento") {
+        return Promise.reject("AMBIENTE NÃO CONFIGURADO EM .env");
+    }
+
+    return new Promise(function (resolve, reject) {
+        var conexao = mysql.createConnection(mySqlConfig);
+        conexao.beginTransaction(function (erroInicio) {
+            if (erroInicio) {
+                conexao.end();
+                return reject(erroInicio);
+            }
+
+            function executarNaTransacao(instrucao, parametros = []) {
+                return new Promise(function (resolveConsulta, rejectConsulta) {
+                    conexao.query(instrucao, parametros, function (erro, resultados) {
+                        if (erro) return rejectConsulta(erro);
+                        resolveConsulta(resultados);
+                    });
+                });
+            }
+
+            Promise.resolve(operacao(executarNaTransacao)).then(function (resultado) {
+                conexao.commit(function (erroCommit) {
+                    conexao.end();
+                    if (erroCommit) return reject(erroCommit);
+                    resolve(resultado);
+                });
+            }).catch(function (erro) {
+                conexao.rollback(function () {
+                    conexao.end();
+                    reject(erro);
+                });
+            });
+        });
+    });
+}
+
 module.exports = {
-    executar
+    executar,
+    executarTransacao
 };
