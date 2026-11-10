@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Visão Geral | AeroGuard</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/visao-geral.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js" defer></script>
+  <script src="js/visao-geral.js" defer></script>
+</head>
+
+<body class="dashboard-page">
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon-library">
+    <symbol id="i-layout-grid" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+    </symbol>
+    <symbol id="i-server" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="18" height="7" rx="2" />
+    </symbol>
+  </svg>
+  <div class="dashboard-layout">
+    <aside class="dash__sidebar">
+      <div class="sidebar__top">
+        <a class="dashboard-brand" href="index.html"><img src="assets/brand/aeroguard-vertical.svg" alt="AeroGuard" width="887" height="887" /></a><span class="dash__espacador"></span>
+        <nav class="dashboard-nav">
+          <a href="visao-geral.html" class="dash__nav-item is-active"><svg class="icon icon--20">
+              <use href="#i-layout-grid" />
+            </svg><span>Visão Geral</span></a><a href="dashboard.html" class="dash__nav-item"><svg class="icon icon--20">
+              <use href="#i-server" />
+            </svg><span>Visão Geral</span></a><a href="maquinas.html" class="dash__nav-item"><svg class="icon icon--20">
+              <use href="assets/icons.svg#i-settings" />
+            </svg><span>Máquinas</span></a>
+        </nav>
+      </div>
+      <div class="sidebar__bottom">
+        <span class="dash__espacador"></span>
+        <div class="sidebar-user">
+          <div class="sidebar-user__info">
+            <span class="sidebar-user__role">Logado como:</span><span class="sidebar-user__name">Usuário</span>
+          </div>
+        </div>
+        <a href="index.html" class="btn btn--outlined">Sair</a>
+        <p>© AeroGuard - 2026</p>
+      </div>
+    </aside>
+    <main class="dashboard-main">
+      <header class="dashboard-header">
+        <div class="dashboard-header__host">
+          <p class="mono-label">Histórico</p>
+          <h1>Visão Geral</h1>
+          <p>Máximos históricos e séries de monitoramento.</p>
+        </div>
+      </header>
+      <section class="dashboard-kpis">
+        <dl class="kpis" id="maximos">
+          <div class="kpi">
+            <dt class="kpi__label">CPU</dt>
+            <dd class="kpi__value">—</dd>
+            <dd class="kpi__delta">Sem dados</dd>
+          </div>
+          <div class="kpi">
+            <dt class="kpi__label">Memória</dt>
+            <dd class="kpi__value">—</dd>
+            <dd class="kpi__delta">Sem dados</dd>
+          </div>
+          <div class="kpi">
+            <dt class="kpi__label">Disco</dt>
+            <dd class="kpi__value">—</dd>
+            <dd class="kpi__delta">Sem dados</dd>
+          </div>
+          <div class="kpi">
+            <dt class="kpi__label">Rede</dt>
+            <dd class="kpi__value">—</dd>
+            <dd class="kpi__delta">Sem dados</dd>
+          </div>
+        </dl>
+      </section>
+      <div class="dashboard-grid overview-grid">
+        <section class="panel panel--wide">
+          <div class="panel__head">
+            <h2 class="panel__title">CPU</h2>
+          </div>
+          <div class="timeseries"><canvas id="chart-cpu"></canvas></div>
+        </section>
+        <section class="panel">
+          <div class="panel__head">
+            <h2 class="panel__title">Memória</h2>
+          </div>
+          <div class="timeseries"><canvas id="chart-memoria"></canvas></div>
+        </section>
+      </div>
+      <section class="panel overview-disk">
+        <div class="panel__head">
+          <h2 class="panel__title">Disco</h2>
+        </div>
+        <div class="timeseries"><canvas id="chart-disco"></canvas></div>
+        <p class="panel__meta" id="feedback"></p>
+      </section>
+    </main>
+  </div>
+</body>
+
+</html>

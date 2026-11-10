@@ -15,6 +15,8 @@ var medidasRouter = require("./src/routes/medidas");
 var aquariosRouter = require("./src/routes/aquarios");
 var empresasRouter = require("./src/routes/empresas");
 var cargosRouter = require("./src/routes/cargos");
+var maquinasRouter = require("./src/routes/maquinas");
+var monitoramentoRouter = require("./src/routes/monitoramento");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -29,6 +31,8 @@ app.use("/medidas", medidasRouter);
 app.use("/aquarios", aquariosRouter);
 app.use("/empresas", empresasRouter);
 app.use("/cargos", cargosRouter);
+app.use("/maquinas", maquinasRouter);
+app.use("/monitoramento", monitoramentoRouter);
 
 app.get("/saude", function (req, res) {
     require("./src/database/config").executar("SELECT 1").then(function () {
