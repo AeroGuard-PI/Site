@@ -65,7 +65,7 @@
             <p>Gerencie as máquinas monitoradas pela sua empresa.</p>
           </div>
         </header>
-        <section class="panel machine-form-panel">
+        <section class="panel machine-form-panel slack-panel">
           <div class="panel__head">
             <h2 class="panel__title">Nova máquina</h2>
             <button
@@ -134,6 +134,45 @@
               </tbody>
             </table>
           </div>
+        </section>
+        <section class="panel machine-form-panel slack-panel">
+          <div class="panel__head">
+            <h2 class="panel__title">Notificações no Slack</h2>
+          </div>
+          <form id="slack-form">
+            <label class="slack-toggle">
+              <input type="checkbox" name="ativo" checked />
+              Ativar alertas no Slack
+            </label>
+            <div class="machine-fields">
+              <label>
+                Canal do Slack
+                <input type="text" name="canal" placeholder="#alertas-criticos" required />
+              </label>
+              <label>
+                Modo de envio
+                <select name="modo">
+                  <option value="CONFIGURADO">Configurado (Anti-fadiga)</option>
+                  <option value="TUDO">Receber tudo (toda captura)</option>
+                </select>
+              </label>
+              <label>
+                Nível mínimo
+                <select name="nivel_minimo">
+                  <option value="ALERTA">Alerta (80%+)</option>
+                  <option value="CRITICO">Somente Crítico (90%+)</option>
+                </select>
+              </label>
+              <label>
+                Repetir aviso a cada (min)
+                <input type="number" name="cooldown_min" min="0" max="1440" value="60" required />
+              </label>
+            </div>
+            <div class="machine-actions">
+              <button class="btn btn--outlined" type="submit">Salvar preferências</button>
+            </div>
+          </form>
+          <p class="form-feedback" data-slack-feedback></p>
         </section>
       </main>
     </div>

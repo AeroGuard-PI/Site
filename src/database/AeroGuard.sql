@@ -113,3 +113,15 @@ CREATE TABLE historico_alerta(
 	CONSTRAINT fk_componentes_captura
 		FOREIGN KEY (componentes_captura_id) REFERENCES captura(id)
 );
+
+CREATE TABLE configuracao_slack (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    empresa_id INT NOT NULL UNIQUE,
+    ativo TINYINT(1) NOT NULL DEFAULT 1,
+    canal VARCHAR(80) NOT NULL DEFAULT '#alertas-criticos',
+    modo VARCHAR(20) NOT NULL DEFAULT 'CONFIGURADO' CHECK (modo IN ('TUDO', 'CONFIGURADO')),
+    nivel_minimo VARCHAR(10) NOT NULL DEFAULT 'ALERTA' CHECK (nivel_minimo IN ('ALERTA', 'CRITICO')),
+    cooldown_min INT NOT NULL DEFAULT 60,
+    CONSTRAINT fk_config_slack_empresa
+        FOREIGN KEY (empresa_id) REFERENCES empresa(id)
+);

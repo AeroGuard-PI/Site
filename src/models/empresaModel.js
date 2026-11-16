@@ -25,10 +25,32 @@ function cadastrar(razaoSocial, cnpj) {
   return database.executar(instrucaoSql);
 }
 
+function buscarConfigSlack(empresaId) {
+  var instrucaoSql =
+    "SELECT ativo, canal, modo, nivel_minimo, cooldown_min FROM configuracao_slack WHERE empresa_id = ? LIMIT 1";
+  return database.executar(instrucaoSql, [empresaId]);
+}
+
+function salvarConfigSlack(empresaId, ativo, canal, modo, nivelMinimo, cooldownMin) {
+  var instrucaoSql = `
+    INSERT INTO configuracao_slack (empresa_id, ativo, canal, modo, nivel_minimo, cooldown_min)
+    VALUES (?, ?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE
+      ativo = VALUES(ativo),
+      canal = VALUES(canal),
+      modo = VALUES(modo),
+      nivel_minimo = VALUES(nivel_minimo),
+      cooldown_min = VALUES(cooldown_min)
+  `;
+  return database.executar(instrucaoSql, [empresaId, ativo, canal, modo, nivelMinimo, cooldownMin]);
+}
+
 module.exports = {
   buscarPorCnpj,
   buscarPorId,
   buscarPorCodigoAutenticacao,
   cadastrar,
   listar,
+  buscarConfigSlack,
+  salvarConfigSlack,
 };

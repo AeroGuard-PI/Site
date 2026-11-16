@@ -20,4 +20,12 @@ router.get("/listar", function (req, res) {
   empresaController.listar(req, res);
 });
 
+router.get("/slack/:id", function (req, res) {
+  empresaController.buscarConfigSlack(req, res);
+});
+
+router.put("/slack/:id", function (req, res) {
+  empresaController.salvarConfigSlack(req, res);
+});
+
 module.exports = router;
