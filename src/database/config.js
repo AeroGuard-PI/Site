@@ -5,8 +5,22 @@ var mySqlConfig = {
     database: process.env.DB_DATABASE,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT
+    port: process.env.DB_PORT,
+    timezone: "Z",
+    supportBigNumbers: true,
+    bigNumberStrings: true
 };
+
+function configurarConexao(conexao, operacao, reject) {
+    conexao.on("error", reject);
+    conexao.query("SET time_zone = '+00:00'", function (erro) {
+        if (erro) {
+            conexao.destroy();
+            return reject(erro);
+        }
+        operacao();
+    });
+}
 
 function executar(instrucao, parametros = []) {
 
@@ -17,13 +31,16 @@ function executar(instrucao, parametros = []) {
 
     return new Promise(function (resolve, reject) {
         var conexao = mysql.createConnection(mySqlConfig);
-        conexao.query(instrucao, parametros, function (erro, resultados) {
-            conexao.end();
-            if (erro) {
-                return reject(erro);
-            }
-            resolve(resultados);
-        });
+        configurarConexao(conexao, function () {
+            conexao.query(instrucao, parametros, function (erro, resultados) {
+                if (erro) {
+                    conexao.destroy();
+                    return reject(erro);
+                }
+                conexao.end();
+                resolve(resultados);
+            });
+        }, reject);
     });
 }
 
@@ -36,34 +53,36 @@ function executarTransacao(operacao) {
 
     return new Promise(function (resolve, reject) {
         var conexao = mysql.createConnection(mySqlConfig);
-        conexao.beginTransaction(function (erroInicio) {
-            if (erroInicio) {
-                conexao.end();
-                return reject(erroInicio);
-            }
+        configurarConexao(conexao, function () {
+            conexao.beginTransaction(function (erroInicio) {
+                if (erroInicio) {
+                    conexao.end();
+                    return reject(erroInicio);
+                }
 
-            function executarNaTransacao(instrucao, parametros = []) {
-                return new Promise(function (resolveConsulta, rejectConsulta) {
-                    conexao.query(instrucao, parametros, function (erro, resultados) {
-                        if (erro) return rejectConsulta(erro);
-                        resolveConsulta(resultados);
+                function executarNaTransacao(instrucao, parametros = []) {
+                    return new Promise(function (resolveConsulta, rejectConsulta) {
+                        conexao.query(instrucao, parametros, function (erro, resultados) {
+                            if (erro) return rejectConsulta(erro);
+                            resolveConsulta(resultados);
+                        });
+                    });
+                }
+
+                Promise.resolve().then(function () { return operacao(executarNaTransacao); }).then(function (resultado) {
+                    conexao.commit(function (erroCommit) {
+                        conexao.end();
+                        if (erroCommit) return reject(erroCommit);
+                        resolve(resultado);
+                    });
+                }).catch(function (erro) {
+                    conexao.rollback(function () {
+                        conexao.end();
+                        reject(erro);
                     });
                 });
-            }
-
-            Promise.resolve(operacao(executarNaTransacao)).then(function (resultado) {
-                conexao.commit(function (erroCommit) {
-                    conexao.end();
-                    if (erroCommit) return reject(erroCommit);
-                    resolve(resultado);
-                });
-            }).catch(function (erro) {
-                conexao.rollback(function () {
-                    conexao.end();
-                    reject(erro);
-                });
             });
-        });
+        }, reject);
     });
 }
 
