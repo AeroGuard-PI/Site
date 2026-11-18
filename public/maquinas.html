@@ -4,6 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Máquinas | AeroGuard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
+    />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
@@ -53,7 +59,7 @@
               ><span class="sidebar-user__name" data-user-name>Usuário</span>
             </div>
           </div>
-          <a href="index.html" class="btn btn--outlined">Sair</a>
+          <a href="index.html" class="btn btn--secondary btn--logout">Sair</a>
           <p>© AeroGuard - 2026</p>
         </div>
       </aside>
@@ -69,7 +75,7 @@
           <div class="panel__head">
             <h2 class="panel__title">Nova máquina</h2>
             <button
-              class="btn btn--outlined"
+              class="btn btn--filled"
               type="button"
               id="toggle-form"
               aria-expanded="false"
@@ -103,7 +109,7 @@
             <div class="machine-actions">
               <button class="btn btn--filled" type="submit">
                 Salvar máquina</button
-              ><button class="btn btn--outlined" type="button" id="cancel-form">
+              ><button class="btn btn--secondary" type="button" id="cancel-form">
                 Cancelar
               </button>
             </div>
@@ -169,7 +175,7 @@
               </label>
             </div>
             <div class="machine-actions">
-              <button class="btn btn--outlined" type="submit">Salvar preferências</button>
+              <button class="btn btn--filled" type="submit">Salvar preferências</button>
             </div>
           </form>
           <p class="form-feedback" data-slack-feedback></p>

@@ -1,0 +1,22 @@
+/* Copie para public/css/nome-da-pagina.css.
+   Estilos compartilhados pertencem a style.css e dashboard.css. */
+
+.dashboard-page .nome-da-pagina-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+/* Use tokens existentes e mantenha estilos específicos sob .dashboard-page. */
+.dashboard-page .nome-da-pagina-panel {
+  min-width: 0;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+@media (max-width: 820px) {
+  .dashboard-page .nome-da-pagina-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
