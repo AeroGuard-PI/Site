@@ -108,7 +108,7 @@
       }
       dados.forEach((m) => {
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td></td><td></td><td></td><td></td><td></td><td><button class="btn btn--outlined" type="button">Editar</button> <button class="btn btn--outlined" type="button">Excluir</button></td>`;
+        tr.innerHTML = `<td></td><td></td><td></td><td></td><td></td><td><button class="btn btn--secondary" type="button">Editar</button> <button class="btn btn--danger" type="button">Excluir</button></td>`;
         const td = tr.querySelectorAll("td");
         [
           m.hostname,

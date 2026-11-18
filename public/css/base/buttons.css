@@ -50,10 +50,6 @@
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.3);
 }
 
-.btn--filled:hover {
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.35);
-}
-
 .btn--outlined {
   border: 1px solid var(--outline);
   color: var(--fg);
@@ -61,6 +57,46 @@
 
 .btn--outlined:hover {
   border-color: rgb(184 194 204 / 0.6);
+}
+
+/* Complementary actions: neutral by default, signal blue on interaction. */
+.btn--secondary {
+  border: 1px solid var(--outline);
+  color: var(--fg);
+}
+
+.btn--secondary:hover {
+  border-color: var(--signal);
+  color: var(--signal);
+}
+
+/* Destructive actions must opt in explicitly. */
+.btn--danger {
+  border: 1px solid var(--problem);
+  color: #fff;
+}
+
+.btn--danger:hover {
+  border-color: var(--problem);
+  background: var(--problem);
+  color: #fff;
+}
+
+.btn--danger:hover .icon,
+.btn--danger:active .icon { color: #fff; }
+
+/* Logout is not destructive, but keeps its explicit red interaction state. */
+.btn--logout:hover {
+  border-color: var(--problem);
+  background: var(--problem);
+  color: #fff;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .btn--lg {
