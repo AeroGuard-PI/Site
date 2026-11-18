@@ -334,8 +334,19 @@
   .auth-shell,
   .auth-page--register .auth-shell { display: block; }
   .auth-visual { display: none; }
-  .auth-main { min-height: 100vh; min-height: 100svh; padding: 2rem 1.5rem; }
-  .auth-mobile-brand { display: block; width: 10rem; margin-bottom: 2.5rem; }
+  .auth-main {
+    align-items: stretch;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 2rem 1.5rem;
+  }
+  .auth-mobile-brand {
+    display: block;
+    width: min(10rem, 100%);
+    margin-bottom: 2.5rem;
+  }
   .auth-heading { margin-top: 2rem; }
   .auth-form-wrap--register .auth-heading { margin-top: 1.75rem; }
   .auth-form-wrap--register { max-width: 34rem; }

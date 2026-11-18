@@ -4,6 +4,7 @@ package-lock.json
 
 .github
 .DS_Store
+.Rhistory
 
 .env
 
