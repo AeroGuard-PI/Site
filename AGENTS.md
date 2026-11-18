@@ -32,10 +32,26 @@ Regras:
 O Design System original do AeroGuard deve ser tratado como referência obrigatória para qualquer alteração visual.
 
 Antes de implementar ou modificar interfaces:
-1. Consulte os arquivos CSS e HTML existentes.
-2. Identifique os padrões visuais já estabelecidos.
-3. Reutilize cores, tipografia, espaçamentos, bordas, sombras, gradientes e componentes.
-4. Preserve a consistência entre todas as páginas.
+1. Consulte `DESIGN_SYSTEM.md` e os documentos específicos em `docs/design-system/` relacionados à tarefa.
+2. Consulte os arquivos CSS e HTML existentes.
+3. Identifique componentes e padrões visuais já estabelecidos antes de criar novos.
+4. Reutilize cores, tipografia, espaçamentos, bordas, sombras, gradientes, tokens e classes existentes.
+5. Preserve a consistência entre todas as páginas.
+6. Não invente padrões visuais sem justificativa e documente novos componentes aprovados para reutilização no Design System.
+
+### Fluxo obrigatório para novas páginas operacionais
+
+Antes de criar uma nova página operacional, todo agente deve:
+1. Consultar `DESIGN_SYSTEM.md`.
+2. Consultar `docs/design-system/09-guia-criacao-paginas.md`.
+3. Consultar o template em `docs/templates/dashboard/`.
+4. Identificar componentes existentes antes de implementar novos.
+5. Reutilizar a estrutura e a navegação operacional.
+6. Implementar somente estilos específicos realmente necessários.
+7. Validar a entrega com `docs/design-system/10-checklist-integracao.md`.
+8. Documentar componentes aprovados para reutilização.
+
+Nenhum agente pode criar uma identidade visual nova para uma página operacional sem autorização explícita.
 
 ### Regras visuais
 
