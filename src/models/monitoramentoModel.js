@@ -90,4 +90,40 @@ function maximosHistoricos(empresaId) {
     return database.executar(instrucaoSql, [empresaId]);
 }
 
-module.exports = { listarMaquinas, ultimasMetricas, seriePorComponente, disponibilidadePorEmpresa, alertasRecentes, maximosHistoricos };
+function serieCpu(empresaId, maquinaId, dataInicial, dataFinal) {
+    var filtros = "m.fkEmpresa = ? AND c.nome = 'CPU' AND cp.data_hora >= ? AND cp.data_hora < ?";
+    var parametros = [empresaId, dataInicial, dataFinal];
+    if (maquinaId) { filtros += " AND m.id = ?"; parametros.push(maquinaId); }
+    return database.executar(`
+        SELECT cp.id, cp.valor, cp.unidade_medida AS unidade, cp.data_hora, m.id AS maquina_id, m.hostname
+        FROM captura cp
+        JOIN maquina m ON m.id = cp.maquina_id
+        JOIN componentes c ON c.id = cp.componentes_id
+        WHERE ${filtros}
+        ORDER BY cp.data_hora ASC, cp.id ASC`, parametros);
+}
+
+function limitesCpu() {
+    return database.executar(
+        "SELECT limite, nivel_alerta FROM discretizacao ORDER BY limite ASC, id ASC", []
+    );
+}
+
+function alertasCpu(empresaId, maquinaId, dataInicial, dataFinal) {
+    var filtros = "m.fkEmpresa = ? AND c.nome = 'CPU' AND ha.data_hora >= ? AND ha.data_hora < ?";
+    var parametros = [empresaId, dataInicial, dataFinal];
+    if (maquinaId) { filtros += " AND m.id = ?"; parametros.push(maquinaId); }
+    return database.executar(`
+        SELECT DISTINCT ha.id, ha.data_hora, d.nivel_alerta, d.limite, cp.id AS captura_id,
+            cp.valor, cp.unidade_medida AS unidade, m.hostname
+        FROM historico_alerta ha
+        JOIN captura cp ON cp.id = ha.maquina_captura_id
+        JOIN maquina m ON m.id = cp.maquina_id
+        JOIN componentes c ON c.id = cp.componentes_id
+        JOIN discretizacao d ON d.id = ha.discretizacao_id
+        WHERE ${filtros}
+        ORDER BY ha.data_hora DESC, ha.id DESC
+        LIMIT 10`, parametros);
+}
+
+module.exports = { listarMaquinas, ultimasMetricas, seriePorComponente, disponibilidadePorEmpresa, alertasRecentes, maximosHistoricos, serieCpu, limitesCpu, alertasCpu };

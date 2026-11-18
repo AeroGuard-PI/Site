@@ -1,0 +1,24 @@
+.dashboard-page .cpu-chart-panel,
+.dashboard-page .cpu-history-panel { min-height: 0; margin-top: .75rem; }
+.dashboard-page .cpu-machine-selector { margin-top: .75rem; }
+.dashboard-page .cpu-machine-selector .panel { min-height: 0; }
+.dashboard-page .cpu-machine-selector .dash__host { margin-top: .2rem; font-family: var(--font-mono); font-size: 1.05rem; font-weight: 500; }
+.dashboard-page .cpu-machine-selector .panel__meta { margin: .55rem 0 0; text-transform: none; letter-spacing: normal; }
+.dashboard-page .cpu-swatch--warning { background: var(--warning); }
+.dashboard-page .cpu-swatch--critical { background: var(--problem); }
+.dashboard-page .cpu-chart-meta { margin-left: auto; }
+.dashboard-page .cpu-analysis-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dashboard-page .cpu-overload { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin-top: 1rem; }
+.dashboard-page .cpu-overload div { padding: .75rem; border-radius: .75rem; background: var(--surface-container); }
+.dashboard-page .cpu-overload dt { color: var(--muted); font-size: .75rem; }
+.dashboard-page .cpu-overload dd { margin-top: .35rem; font-family: var(--font-mono); font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.dashboard-page .cpu-analysis-grid .panel__meta { margin-top: 1rem; text-transform: none; letter-spacing: normal; }
+.dashboard-page .cpu-insights { min-height: 8rem; }
+.dashboard-page .cpu-history-panel .machine-table { margin-top: .75rem; }
+.dashboard-page .cpu-show-more[hidden] { display: none; }
+.dashboard-page .cpu-show-more:not([hidden]) { display: block; margin: 1rem auto 0; }
+.dashboard-page .cpu-level { font-family: var(--font-mono); font-size: .75rem; }
+.dashboard-page .cpu-level--critical { color: var(--problem); }
+.dashboard-page .cpu-level--warning { color: var(--warning); }
+@media (max-width: 820px) { .dashboard-page .cpu-analysis-grid { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .dashboard-page .cpu-machine-selector .grid { grid-template-columns: 1fr; gap: .75rem; } .dashboard-page .cpu-machine-selector select { width: 100%; } .dashboard-page .cpu-chart-panel .panel__head { gap: .5rem; } .dashboard-page .cpu-chart-meta { margin-left: 0; } .dashboard-page .cpu-overload { grid-template-columns: 1fr; } }
