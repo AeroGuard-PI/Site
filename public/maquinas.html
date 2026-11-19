@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/dashboard.css" />
     <link rel="stylesheet" href="css/maquinas.css" />
+    <script src="js/auth.js" defer></script>
     <script src="js/maquinas.js" defer></script>
   </head>
   <body class="dashboard-page">
@@ -48,6 +49,9 @@
             ><a href="maquinas.html" class="dash__nav-item is-active"
               ><svg class="icon icon--20"><use href="assets/icons.svg#i-settings" /></svg
               ><span>Máquinas</span></a
+            ><a href="cadastro-funcionarios.html" class="dash__nav-item" data-admin-only hidden
+              ><svg class="icon icon--20"><use href="#i-user-plus" /></svg
+              ><span>Usuários</span></a
             >
           </nav>
         </div>

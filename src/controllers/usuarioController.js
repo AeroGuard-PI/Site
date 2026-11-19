@@ -1,5 +1,4 @@
 var usuarioModel = require("../models/usuarioModel");
-var empresaModel = require("../models/empresaModel");
 var cargoModel = require("../models/cargoModel");
 
 function autenticar(req, res) {
@@ -21,7 +20,9 @@ function autenticar(req, res) {
                         telefone: resultadoAutenticar[0].telefone,
                         cpf: resultadoAutenticar[0].cpf,
                         empresaId: resultadoAutenticar[0].empresaId,
-                        cargoId: resultadoAutenticar[0].cargoId
+                        cargoId: resultadoAutenticar[0].cargoId,
+                        cargoNome: resultadoAutenticar[0].cargoNome,
+                        isAdmin: Boolean(resultadoAutenticar[0].isAdmin)
                     });
                 } else if (resultadoAutenticar.length == 0) {
                     res.status(403).send("Email e/ou senha inválido(s)");
@@ -71,65 +72,70 @@ function cadastrar(req, res) {
     var email = req.body.emailServer;
     var cpf = req.body.cpfServer;
     var senha = req.body.senhaServer;
-    var codigoEmpresa = req.body.codigoEmpresaServer;
+    var empresaId = req.body.empresaIdServer;
     var cargo = req.body.cargoServer;
 
     if (nome == undefined || nome == "") {
-        res.status(400).send("Seu nome está indefinido!");
+        res.status(400).send("O nome está indefinido!");
     } else if (telefone == undefined || telefone == "") {
-        res.status(400).send("Seu telefone está indefinido!");
+        res.status(400).send("O telefone está indefinido!");
     } else if (email == undefined || email == "") {
-        res.status(400).send("Seu email está indefinido!");
+        res.status(400).send("O email está indefinido!");
     } else if (cpf == undefined || cpf == "") {
-        res.status(400).send("Seu CPF está indefinido!");
+        res.status(400).send("O CPF está indefinido!");
     } else if (senha == undefined || senha == "") {
-        res.status(400).send("Sua senha está indefinida!");
-    } else if (codigoEmpresa == undefined || codigoEmpresa == "") {
-        res.status(400).send("O código da empresa está indefinido!");
+        res.status(400).send("A senha está indefinida!");
+    } else if (empresaId == undefined || empresaId == "") {
+        res.status(400).send("A empresa está indefinida!");
     } else if (cargo == undefined || cargo == "") {
-        res.status(400).send("Seu cargo está indefinido!");
+        res.status(400).send("O cargo está indefinido!");
     } else {
-        empresaModel.buscarPorCodigoAutenticacao(codigoEmpresa)
-            .then(function (resultadoEmpresa) {
-                if (resultadoEmpresa.length == 0) {
-                    res.status(400).send("Código da empresa inválido ou não encontrado!");
+        cargoModel.buscarPorIdOuNome(cargo)
+            .then(function (resultadoCargo) {
+                if (resultadoCargo.length == 0) {
+                    res.status(400).send("Cargo não encontrado ou inválido!");
                     return;
                 }
 
-                var empresaId = resultadoEmpresa[0].id;
+                var cargoId = resultadoCargo[0].id;
 
-                cargoModel.buscarPorIdOuNome(cargo)
-                    .then(function (resultadoCargo) {
-                        if (resultadoCargo.length == 0) {
-                            res.status(400).send("Cargo não encontrado ou inválido!");
-                            return;
-                        }
-
-                        var cargoId = resultadoCargo[0].id;
-
-                        usuarioModel.cadastrar(nome, telefone, email, cpf, senha, empresaId, cargoId)
-                            .then(function (resultadoCadastro) {
-                                res.status(201).json(resultadoCadastro);
-                            })
-                            .catch(function (erroCadastro) {
-                                console.log(erroCadastro);
-                                res.status(500).json(erroCadastro.sqlMessage);
-                            });
+                usuarioModel.cadastrar(nome, telefone, email, cpf, senha, empresaId, cargoId)
+                    .then(function (resultadoCadastro) {
+                        res.status(201).json(resultadoCadastro);
                     })
-                    .catch(function (erroCargo) {
-                        console.log(erroCargo);
-                        res.status(500).json(erroCargo.sqlMessage);
+                    .catch(function (erroCadastro) {
+                        console.log(erroCadastro);
+                        if (erroCadastro.code === "ER_DUP_ENTRY") {
+                            return res.status(409).send("E-mail ou CPF já cadastrado.");
+                        }
+                        res.status(500).json(erroCadastro.sqlMessage);
                     });
             })
-            .catch(function (erroEmpresa) {
-                console.log(erroEmpresa);
-                res.status(500).json(erroEmpresa.sqlMessage);
+            .catch(function (erroCargo) {
+                console.log(erroCargo);
+                res.status(500).json(erroCargo.sqlMessage);
             });
     }
+}
+
+function listarPorEmpresa(req, res) {
+    var empresaId = req.params.empresaId;
+    if (!empresaId) {
+        return res.status(400).send("Empresa não informada!");
+    }
+    usuarioModel.listarPorEmpresa(empresaId)
+        .then(function (resultado) {
+            res.json(resultado);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage);
+        });
 }
 
 module.exports = {
     autenticar,
     instalar,
-    cadastrar
+    cadastrar,
+    listarPorEmpresa
 };

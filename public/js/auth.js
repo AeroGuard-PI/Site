@@ -43,6 +43,8 @@
               sessionStorage.EMAIL_USUARIO = dados.email;
               sessionStorage.EMPRESA_ID = dados.empresaId;
               sessionStorage.CARGO_ID = dados.cargoId;
+              sessionStorage.CARGO_NOME = dados.cargoNome || "";
+              sessionStorage.IS_ADMIN = dados.isAdmin ? "1" : "0";
 
               exibirFeedback("Login realizado com sucesso! Entrando...", true);
               setTimeout(() => {
@@ -62,105 +64,18 @@
     });
   }
 
-  const formCadastro = document.querySelector("#register-form");
+  document.querySelectorAll("[data-admin-only]").forEach((elemento) => {
+    elemento.hidden = sessionStorage.IS_ADMIN !== "1";
+  });
 
-  if (formCadastro) {
-    const selectCargo = formCadastro.querySelector("#cargo_input");
-    if (selectCargo) {
-      fetch("/cargos/listar")
-        .then((resposta) => resposta.json())
-        .then((cargos) => {
-          cargos.forEach((c) => {
-            const option = document.createElement("option");
-            option.value = c.nome;
-            option.textContent = c.nome;
-            selectCargo.appendChild(option);
-          });
-        })
-        .catch((erro) => console.error("Erro ao listar cargos:", erro));
-    }
-
-    formCadastro.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      const feedback = formCadastro.querySelector("[data-form-feedback]");
-      const exibirFeedback = (mensagem, sucesso = false) => {
-        if (!feedback) return;
-        feedback.textContent = mensagem;
-        feedback.classList.add("is-visible");
-        feedback.style.color = sucesso ? "#4ade80" : "#f87171";
-      };
-
-      const nome = formCadastro.querySelector('[name="nome"]').value.trim();
-      const cargo = formCadastro.querySelector('[name="cargo"]').value.trim();
-      const telefone = formCadastro.querySelector('[name="telefone"]').value.replace(/\D/g, "");
-      const cpf = formCadastro.querySelector('[name="cpf"]').value.replace(/\D/g, "");
-      const email = formCadastro.querySelector('[name="email"]').value.trim();
-      const senha = formCadastro.querySelector('[name="senha"]').value;
-      const confirmarSenha = formCadastro.querySelector('[name="confirmar_senha"]').value;
-      const codigoEmpresa = formCadastro.querySelector('[name="codigo_empresa"]').value.trim();
-
-      if (!nome || !cargo || !telefone || !cpf || !email || !senha || !confirmarSenha || !codigoEmpresa) {
-        exibirFeedback("Preencha todos os campos obrigatórios.");
-        return;
-      }
-
-      if (telefone.length < 10 || telefone.length > 11) {
-        exibirFeedback("Telefone inválido. Digite DDD + número completo.");
-        return;
-      }
-
-      if (cpf.length !== 11) {
-        exibirFeedback("CPF inválido. Digite os 11 dígitos do documento.");
-        return;
-      }
-
-      if (senha.length < 8) {
-        exibirFeedback("A senha deve conter no mínimo 8 caracteres.");
-        return;
-      }
-
-      if (senha !== confirmarSenha) {
-        exibirFeedback("As senhas não coincidem.");
-        return;
-      }
-
-      exibirFeedback("Processando solicitação...");
-
-      fetch("/usuarios/cadastrar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nomeServer: nome,
-          telefoneServer: telefone,
-          cpfServer: cpf,
-          emailServer: email,
-          senhaServer: senha,
-          codigoEmpresaServer: codigoEmpresa,
-          cargoServer: cargo,
-        }),
-      })
-        .then((resposta) => {
-          if (resposta.ok) {
-            exibirFeedback("Cadastro realizado com sucesso! Redirecionando...", true);
-            formCadastro.reset();
-            setTimeout(() => {
-              window.location.href = "login.html";
-            }, 2000);
-          } else {
-            resposta.text().then((textoErro) => {
-              exibirFeedback(textoErro || "Houve um erro ao realizar o cadastro.");
-            });
-          }
-        })
-        .catch((erro) => {
-          console.error("Erro no cadastro:", erro);
-          exibirFeedback("Não foi possível conectar ao servidor. Tente novamente mais tarde.");
-        });
-    });
+  if (window.location.pathname.endsWith("cadastro-funcionarios.html") && sessionStorage.IS_ADMIN !== "1") {
+    window.location.href = sessionStorage.ID_USUARIO ? "dashboard.html" : "login.html";
+    return;
   }
+
+  document.querySelectorAll("[data-user-name]").forEach((elemento) => {
+    elemento.textContent = sessionStorage.NOME_USUARIO || "Usuário";
+  });
 
   document.querySelectorAll("[data-toggle-password]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -201,19 +116,6 @@
         input.value = digits
           .replace(/^(\d{2})(\d)/, "($1) $2")
           .replace(/(\d{5})(\d)/, "$1-$2");
-      }
-    });
-  });
-
-  document.querySelectorAll("[data-demo-form]").forEach((form) => {
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      if (!form.reportValidity()) return;
-      const feedback = form.querySelector("[data-form-feedback]");
-      if (feedback) {
-        feedback.textContent =
-          "Interface pronta. Para autenticar ou registrar usuários, conecte este formulário ao backend da AeroGuard.";
-        feedback.classList.add("is-visible");
       }
     });
   });

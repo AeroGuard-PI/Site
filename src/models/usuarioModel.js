@@ -3,8 +3,11 @@ var database = require("../database/config");
 function autenticar(email, senha) {
     var instrucaoSql = `
         SELECT u.id, u.nome, u.email, u.telefone, u.cpf, u.empresa_id AS empresaId,
-            u.cargo_id AS cargoId, e.cnpj AS empresaCnpj, e.razao_social AS empresaNome
-        FROM usuario u JOIN empresa e ON e.id = u.empresa_id
+            u.cargo_id AS cargoId, c.nome AS cargoNome, c.is_admin AS isAdmin,
+            e.cnpj AS empresaCnpj, e.razao_social AS empresaNome
+        FROM usuario u
+        JOIN empresa e ON e.id = u.empresa_id
+        JOIN cargo c ON c.id = u.cargo_id
         WHERE u.email = ? AND u.senha = ?;
     `;
     return database.executar(instrucaoSql, [email, senha]);
@@ -18,7 +21,20 @@ function cadastrar(nome, telefone, email, cpf, senha, empresaId, cargoId) {
     return database.executar(instrucaoSql, [nome, telefone, email, cpf, senha, empresaId, cargoId]);
 }
 
+function listarPorEmpresa(empresaId) {
+    var instrucaoSql = `
+        SELECT u.id, u.nome, u.email, u.telefone, u.cpf,
+            u.cargo_id AS cargoId, c.nome AS cargo, c.is_admin AS isAdmin
+        FROM usuario u
+        JOIN cargo c ON c.id = u.cargo_id
+        WHERE u.empresa_id = ?
+        ORDER BY u.id;
+    `;
+    return database.executar(instrucaoSql, [empresaId]);
+}
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    listarPorEmpresa
 };

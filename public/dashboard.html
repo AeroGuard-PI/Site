@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="css/dashboard.css" />
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js" defer></script>
+  <script src="js/auth.js" defer></script>
   <script src="js/dashboard.js" defer></script>
 </head>
 
@@ -24,6 +25,11 @@
 
   <!-- Ícones do próprio sistema visual AeroGuard. -->
   <svg xmlns="http://www.w3.org/2000/svg" class="icon-library" aria-hidden="true">
+    <symbol id="i-user-plus" viewBox="0 0 24 24">
+      <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+      <circle cx="8.5" cy="7" r="4" />
+      <path d="M20 8v6M23 11h-6" />
+    </symbol>
     <symbol id="i-menu" viewBox="0 0 24 24">
       <path d="M4 6h16M4 12h16M4 18h16" />
     </symbol>
@@ -90,6 +96,13 @@
               <use href="assets/icons.svg#i-settings" />
             </svg>
             <span>Máquinas</span>
+          </a>
+
+          <a href="cadastro-funcionarios.html" class="dash__nav-item" data-admin-only hidden>
+            <svg class="icon icon--20" aria-hidden="true">
+              <use href="#i-user-plus" />
+            </svg>
+            <span>Usuários</span>
           </a>
         </nav>
       </div>

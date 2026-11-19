@@ -12,6 +12,10 @@ router.post("/autenticar", function (req, res) {
     usuarioController.autenticar(req, res);
 });
 
+router.get("/listar/:empresaId", function (req, res) {
+    usuarioController.listarPorEmpresa(req, res);
+});
+
 router.post("/instalar", function (req, res) {
     usuarioController.instalar(req, res);
 });

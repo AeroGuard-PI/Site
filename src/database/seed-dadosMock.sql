@@ -5,10 +5,12 @@ SET @local_gru = LAST_INSERT_ID();
 INSERT INTO localizacao (estado, cidade, cep, numero) VALUES ('SP', 'São Paulo', '04626911', 'S/N');
 SET @local_cgh = LAST_INSERT_ID();
 
-INSERT INTO cargo (nome) VALUES ('Analista de Sistemas');
+INSERT INTO cargo (nome, is_admin) VALUES ('Analista de Sistemas', 0);
 SET @analista = LAST_INSERT_ID();
-INSERT INTO cargo (nome) VALUES ('Técnico de Infraestrutura');
+INSERT INTO cargo (nome, is_admin) VALUES ('Técnico de Infraestrutura', 0);
 SET @tecnico = LAST_INSERT_ID();
+INSERT INTO cargo (nome, is_admin) VALUES ('Gestor', 1);
+SET @gestor = LAST_INSERT_ID();
 
 INSERT INTO empresa (cnpj, razao_social, codigoIATA, codigoAutenticacao, fkLocalizacao)
 VALUES ('02575686000148', 'Aeroporto de Guarulhos', 'GRU', 'A0001', @local_gru);
@@ -19,7 +21,8 @@ SET @cgh = LAST_INSERT_ID();
 
 INSERT INTO usuario (nome, telefone, email, cpf, senha, empresa_id, cargo_id) VALUES
 ('João Silva', '11982273526', 'joao.silva@email.com', '38433829392', 'SenhaSegura123', @gru, @analista),
-('Maria Oliveira', '11977665544', 'maria.oliveira@email.com', '12345678901', 'SenhaSegura456', @cgh, @tecnico);
+('Maria Oliveira', '11977665544', 'maria.oliveira@email.com', '12345678901', 'SenhaSegura456', @cgh, @tecnico),
+('Luiz', '11966554433', 'luiz@aeroguard.com', '98765432100', '123456', @gru, @gestor);
 
 INSERT INTO maquina (hostname, so, macAddress, fkEmpresa)
 VALUES ('DESKTOP-OP-01', 'Windows 11 Pro', '00:1a:3f:f1:4c:c6', @gru);

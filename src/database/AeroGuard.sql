@@ -11,7 +11,8 @@ CREATE TABLE localizacao (
 
 CREATE TABLE cargo (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(45) NOT NULL
+    nome VARCHAR(45) NOT NULL,
+    is_admin TINYINT(1) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE empresa (
