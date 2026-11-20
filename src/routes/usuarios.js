@@ -16,6 +16,14 @@ router.get("/listar/:empresaId", function (req, res) {
     usuarioController.listarPorEmpresa(req, res);
 });
 
+router.put("/editar/:id", function (req, res) {
+    usuarioController.editar(req, res);
+});
+
+router.delete("/deletar/:id/:empresaId", function (req, res) {
+    usuarioController.deletar(req, res);
+});
+
 router.post("/instalar", function (req, res) {
     usuarioController.instalar(req, res);
 });

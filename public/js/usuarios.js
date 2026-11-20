@@ -31,7 +31,11 @@
   function mostrarFeedbackModal(mensagem, sucesso = false) {
     if (!modalFeedback) return;
     modalFeedback.textContent = mensagem;
-    modalFeedback.classList.toggle("is-visible", Boolean(mensagem));
+    if (mensagem) {
+      modalFeedback.classList.add("is-visible");
+    } else {
+      modalFeedback.classList.remove("is-visible");
+    }
     if (sucesso) {
       modalFeedback.style.color = "#4ade80";
     } else {
@@ -108,7 +112,7 @@
       return;
     }
 
-    lista.replaceChildren();
+    lista.innerHTML = "";
     usuarios.forEach((usuario) => {
       let classeCargo = "badge--neutral";
       if (usuario.isAdmin) {
@@ -147,7 +151,7 @@
     }
 
     try {
-      const resposta = await fetch(`/usuarios/listar/${encodeURIComponent(empresaId)}`);
+      const resposta = await fetch(`/usuarios/listar/${empresaId}`);
       if (!resposta.ok) {
         lista.innerHTML = '<tr><td colspan="6">Não foi possível carregar os usuários.</td></tr>';
         return;
@@ -188,7 +192,7 @@
     if (event.target === modal) fecharModal();
   });
 
-  lista.addEventListener("click", (event) => {
+  lista.addEventListener("click", async (event) => {
     const botao = event.target.closest("button[data-action]");
     if (!botao) return;
 
@@ -201,12 +205,47 @@
       return;
     }
 
-    if (botao.dataset.action === "delete" && window.confirm(`Deseja excluir o usuário "${usuario.nome}"?`)) {
-      // shortcut: exclusão apenas em memória até implementar DELETE no backend.
-      usuarios = usuarios.filter((u) => u.id !== id);
-      renderizarTabela();
-      pageFeedback.textContent = `Usuário "${usuario.nome}" removido da listagem.`;
-      pageFeedback.hidden = false;
+    if (botao.dataset.action === "delete") {
+      if (Number(sessionStorage.ID_USUARIO) === id) {
+        pageFeedback.textContent = "Você não pode excluir o próprio usuário logado.";
+        pageFeedback.hidden = false;
+        return;
+      }
+
+      if (!window.confirm(`Deseja excluir o usuário "${usuario.nome}"?`)) {
+        return;
+      }
+
+      const empresaId = sessionStorage.EMPRESA_ID;
+      if (!empresaId) {
+        pageFeedback.textContent = "Sessão expirada. Faça login novamente.";
+        pageFeedback.hidden = false;
+        return;
+      }
+
+      try {
+        const resposta = await fetch(`/usuarios/deletar/${id}/${empresaId}`, {
+          method: "DELETE",
+        });
+
+        if (!resposta.ok) {
+          const mensagemErro = await resposta.text();
+          if (mensagemErro) {
+            pageFeedback.textContent = mensagemErro;
+          } else {
+            pageFeedback.textContent = "Não foi possível excluir o usuário.";
+          }
+          pageFeedback.hidden = false;
+          return;
+        }
+
+        await carregarUsuarios();
+        pageFeedback.textContent = `Usuário "${usuario.nome}" excluído com sucesso!`;
+        pageFeedback.hidden = false;
+      } catch {
+        pageFeedback.textContent = "Erro de conexão com o servidor.";
+        pageFeedback.hidden = false;
+      }
     }
   });
 
@@ -247,42 +286,31 @@
       return mostrarFeedbackModal("As senhas não coincidem.");
     }
 
-    if (idEdicao) {
-      // shortcut: edição apenas em memória até implementar PUT no backend.
-      const cargoEncontrado = cargos.find((item) => item.nome === cargo);
-
-      for (let i = 0; i < usuarios.length; i++) {
-        if (usuarios[i].id === idEdicao) {
-          usuarios[i].nome = nome;
-          usuarios[i].cargo = cargo;
-          usuarios[i].email = email;
-          usuarios[i].telefone = telefone;
-          usuarios[i].cpf = cpf;
-          if (cargoEncontrado) {
-            usuarios[i].isAdmin = cargoEncontrado.is_admin;
-          }
-          break;
-        }
-      }
-
-      fecharModal();
-      renderizarTabela();
-      pageFeedback.textContent = `Usuário "${nome}" atualizado na listagem.`;
-      pageFeedback.hidden = false;
-      return;
-    }
-
     const empresaId = sessionStorage.EMPRESA_ID;
     if (!empresaId) {
       return mostrarFeedbackModal("Sessão expirada. Faça login novamente.");
     }
 
+    let url = "/usuarios/cadastrar";
+    let metodo = "POST";
+    let mensagemCarregando = "Cadastrando funcionário...";
+    let mensagemErroPadrao = "Não foi possível cadastrar o funcionário.";
+    let mensagemSucesso = `Funcionário "${nome}" cadastrado com sucesso!`;
+
+    if (idEdicao) {
+      url = `/usuarios/editar/${idEdicao}`;
+      metodo = "PUT";
+      mensagemCarregando = "Salvando alterações...";
+      mensagemErroPadrao = "Não foi possível atualizar o funcionário.";
+      mensagemSucesso = `Usuário "${nome}" atualizado com sucesso!`;
+    }
+
     submitBtn.disabled = true;
-    mostrarFeedbackModal("Cadastrando funcionário...", true);
+    mostrarFeedbackModal(mensagemCarregando, true);
 
     try {
-      const resposta = await fetch("/usuarios/cadastrar", {
-        method: "POST",
+      const resposta = await fetch(url, {
+        method: metodo,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           nomeServer: nome,
@@ -300,14 +328,14 @@
         if (mensagemErro) {
           mostrarFeedbackModal(mensagemErro);
         } else {
-          mostrarFeedbackModal("Não foi possível cadastrar o funcionário.");
+          mostrarFeedbackModal(mensagemErroPadrao);
         }
         return;
       }
 
       fecharModal();
       await carregarUsuarios();
-      pageFeedback.textContent = `Funcionário "${nome}" cadastrado com sucesso!`;
+      pageFeedback.textContent = mensagemSucesso;
       pageFeedback.hidden = false;
     } catch {
       mostrarFeedbackModal("Erro de conexão com o servidor.");

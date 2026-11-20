@@ -33,8 +33,38 @@ function listarPorEmpresa(empresaId) {
     return database.executar(instrucaoSql, [empresaId]);
 }
 
+function editar(id, nome, telefone, email, cpf, senha, empresaId, cargoId) {
+    var instrucaoSql;
+
+    if (senha) {
+        instrucaoSql = `
+            UPDATE usuario
+            SET nome = ?, telefone = ?, email = ?, cpf = ?, senha = ?, cargo_id = ?
+            WHERE id = ? AND empresa_id = ?;
+        `;
+        return database.executar(instrucaoSql, [nome, telefone, email, cpf, senha, cargoId, id, empresaId]);
+    } else {
+        instrucaoSql = `
+            UPDATE usuario
+            SET nome = ?, telefone = ?, email = ?, cpf = ?, cargo_id = ?
+            WHERE id = ? AND empresa_id = ?;
+        `;
+        return database.executar(instrucaoSql, [nome, telefone, email, cpf, cargoId, id, empresaId]);
+    }
+}
+
+function deletar(id, empresaId) {
+    var instrucaoSql = `
+        DELETE FROM usuario
+        WHERE id = ? AND empresa_id = ?;
+    `;
+    return database.executar(instrucaoSql, [id, empresaId]);
+}
+
 module.exports = {
     autenticar,
     cadastrar,
-    listarPorEmpresa
+    listarPorEmpresa,
+    editar,
+    deletar
 };

@@ -133,9 +133,90 @@ function listarPorEmpresa(req, res) {
         });
 }
 
+function editar(req, res) {
+    var id = Number(req.params.id);
+    var nome = req.body.nomeServer;
+    var telefone = req.body.telefoneServer;
+    var email = req.body.emailServer;
+    var cpf = req.body.cpfServer;
+    var senha = req.body.senhaServer;
+    var empresaId = req.body.empresaIdServer;
+    var cargo = req.body.cargoServer;
+
+    if (!id || id <= 0) {
+        return res.status(400).send("O id do usuário é inválido!");
+    } else if (nome == undefined || nome == "") {
+        return res.status(400).send("O nome está indefinido!");
+    } else if (telefone == undefined || telefone == "") {
+        return res.status(400).send("O telefone está indefinido!");
+    } else if (email == undefined || email == "") {
+        return res.status(400).send("O email está indefinido!");
+    } else if (cpf == undefined || cpf == "") {
+        return res.status(400).send("O CPF está indefinido!");
+    } else if (empresaId == undefined || empresaId == "") {
+        return res.status(400).send("A empresa está indefinida!");
+    } else if (cargo == undefined || cargo == "") {
+        return res.status(400).send("O cargo está indefinido!");
+    }
+
+    cargoModel.buscarPorIdOuNome(cargo)
+        .then(function (resultadoCargo) {
+            if (resultadoCargo.length == 0) {
+                return res.status(400).send("Cargo não encontrado ou inválido!");
+            }
+
+            var cargoId = resultadoCargo[0].id;
+
+            usuarioModel.editar(id, nome, telefone, email, cpf, senha, empresaId, cargoId)
+                .then(function (resultadoEdicao) {
+                    if (resultadoEdicao.affectedRows === 0) {
+                        return res.status(404).send("Usuário não encontrado.");
+                    }
+                    res.status(200).json(resultadoEdicao);
+                })
+                .catch(function (erroEdicao) {
+                    console.log(erroEdicao);
+                    if (erroEdicao.code === "ER_DUP_ENTRY") {
+                        return res.status(409).send("E-mail ou CPF já cadastrado.");
+                    }
+                    res.status(500).json(erroEdicao.sqlMessage);
+                });
+        })
+        .catch(function (erroCargo) {
+            console.log(erroCargo);
+            res.status(500).json(erroCargo.sqlMessage);
+        });
+}
+
+function deletar(req, res) {
+    var id = Number(req.params.id);
+    var empresaId = Number(req.params.empresaId);
+
+    if (!id || id <= 0) {
+        return res.status(400).send("O id do usuário é inválido!");
+    }
+    if (!empresaId || empresaId <= 0) {
+        return res.status(400).send("A empresa não foi informada!");
+    }
+
+    usuarioModel.deletar(id, empresaId)
+        .then(function (resultadoExclusao) {
+            if (resultadoExclusao.affectedRows === 0) {
+                return res.status(404).send("Usuário não encontrado.");
+            }
+            res.status(200).json(resultadoExclusao);
+        })
+        .catch(function (erroExclusao) {
+            console.log(erroExclusao);
+            res.status(500).json(erroExclusao.sqlMessage);
+        });
+}
+
 module.exports = {
     autenticar,
     instalar,
     cadastrar,
-    listarPorEmpresa
+    listarPorEmpresa,
+    editar,
+    deletar
 };
