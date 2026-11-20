@@ -34,8 +34,6 @@ SET @maquina_cgh = LAST_INSERT_ID();
 SET @cpu = (SELECT id FROM componentes WHERE nome = 'CPU');
 SET @memoria = (SELECT id FROM componentes WHERE nome = 'Memória');
 SET @disco = (SELECT id FROM componentes WHERE nome = 'Disco');
-SET @alerta = (SELECT id FROM discretizacao WHERE nivel_alerta = 'ALERTA');
-SET @critico = (SELECT id FROM discretizacao WHERE nivel_alerta = 'CRÍTICO');
 
 INSERT INTO configuracao_maquina (disponibilidade, maquina_captura_id, componentes_id)
 VALUES (1, @maquina_gru, @cpu);
@@ -46,6 +44,19 @@ SET @config_memoria = LAST_INSERT_ID();
 INSERT INTO configuracao_maquina (disponibilidade, maquina_captura_id, componentes_id)
 VALUES (1, @maquina_cgh, @disco);
 SET @config_disco = LAST_INSERT_ID();
+
+INSERT INTO discretizacao (empresa_id, config_maquina_id, limite, nivel_alerta) VALUES
+(@gru, @config_cpu, 80, 'ALERTA'),
+(@gru, @config_cpu, 90, 'CRÍTICO'),
+(@gru, @config_memoria, 80, 'ALERTA'),
+(@gru, @config_memoria, 90, 'CRÍTICO'),
+(@cgh, @config_disco, 80, 'ALERTA'),
+(@cgh, @config_disco, 90, 'CRÍTICO');
+
+SET @alerta_cpu = (SELECT id FROM discretizacao
+    WHERE config_maquina_id = @config_cpu AND nivel_alerta = 'ALERTA');
+SET @critico_memoria = (SELECT id FROM discretizacao
+    WHERE config_maquina_id = @config_memoria AND nivel_alerta = 'CRÍTICO');
 
 INSERT INTO captura (tipo, valor, unidade_medida, maquina_id, componentes_id,
     configuracao_maquina_maquina_id, configuracao_maquina_componentes_id)
@@ -60,5 +71,5 @@ INSERT INTO captura (tipo, valor, unidade_medida, maquina_id, componentes_id,
 VALUES ('Uso Disco', 45.0, '%', @maquina_cgh, @disco, @config_disco, @config_disco);
 
 INSERT INTO historico_alerta (maquina_captura_id, componentes_captura_id, discretizacao_id) VALUES
-(@captura_cpu, @captura_cpu, @alerta),
-(@captura_memoria, @captura_memoria, @critico);
+(@captura_cpu, @captura_cpu, @alerta_cpu),
+(@captura_memoria, @captura_memoria, @critico_memoria);
