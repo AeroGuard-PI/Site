@@ -16,20 +16,30 @@
   let usuarios = [];
   let cargos = [];
 
-  const formatarTelefone = (v) =>
-    String(v || "").replace(/\D/g, "").replace(/^(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3");
+  function formatarTelefone(valor) {
+    return String(valor || "")
+      .replace(/\D/g, "")
+      .replace(/^(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3");
+  }
 
-  const formatarCpf = (v) =>
-    String(v || "").replace(/\D/g, "").replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+  function formatarCpf(valor) {
+    return String(valor || "")
+      .replace(/\D/g, "")
+      .replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+  }
 
-  const mostrarFeedbackModal = (mensagem, sucesso = false) => {
+  function mostrarFeedbackModal(mensagem, sucesso = false) {
     if (!modalFeedback) return;
     modalFeedback.textContent = mensagem;
     modalFeedback.classList.toggle("is-visible", Boolean(mensagem));
-    modalFeedback.style.color = sucesso ? "#4ade80" : "#f87171";
-  };
+    if (sucesso) {
+      modalFeedback.style.color = "#4ade80";
+    } else {
+      modalFeedback.style.color = "#f87171";
+    }
+  }
 
-  const abrirModal = (usuario = null) => {
+  function abrirModal(usuario = null) {
     const editando = Boolean(usuario);
     form.reset();
     mostrarFeedbackModal("");
@@ -42,30 +52,37 @@
       btn.setAttribute("aria-label", "Mostrar senha");
     });
 
-    form.elements.id.value = editando ? String(usuario.id) : "";
     if (editando) {
+      form.elements.id.value = String(usuario.id);
       form.elements.nome.value = usuario.nome;
       form.elements.cargo.value = usuario.cargo;
       form.elements.telefone.value = formatarTelefone(usuario.telefone);
       form.elements.cpf.value = formatarCpf(usuario.cpf);
       form.elements.email.value = usuario.email;
+
+      form.elements.senha.placeholder = "Deixe em branco para manter";
+      form.elements.confirmar_senha.placeholder = "Repita apenas se alterar";
+      document.querySelector("#user-modal-title").textContent = "Editar usuário";
+      document.querySelector("#user-modal-subtitle").textContent =
+        "Atualize os dados ou o cargo do colaborador selecionado.";
+      document.querySelector("#user-modal-hint").textContent =
+        "Deixe os campos de senha em branco para manter a senha atual.";
+      submitBtn.innerHTML = 'Salvar alterações <span aria-hidden="true">↗</span>';
+    } else {
+      form.elements.id.value = "";
+      form.elements.senha.placeholder = "Mínimo de 8 caracteres";
+      form.elements.confirmar_senha.placeholder = "Repita a senha do funcionário";
+      document.querySelector("#user-modal-title").textContent = "Cadastrar funcionário";
+      document.querySelector("#user-modal-subtitle").textContent =
+        "Preencha os dados do colaborador para liberar o acesso à plataforma.";
+      document.querySelector("#user-modal-hint").textContent =
+        "O colaborador será vinculado automaticamente à empresa do gestor autenticado.";
+      submitBtn.innerHTML = 'Cadastrar usuário <span aria-hidden="true">↗</span>';
     }
-
-    form.elements.senha.placeholder = editando ? "Deixe em branco para manter" : "Mínimo de 8 caracteres";
-    form.elements.confirmar_senha.placeholder = editando ? "Repita apenas se alterar" : "Repita a senha do funcionário";
-
-    document.querySelector("#user-modal-title").textContent = editando ? "Editar usuário" : "Cadastrar funcionário";
-    document.querySelector("#user-modal-subtitle").textContent = editando
-      ? "Atualize os dados ou o cargo do colaborador selecionado."
-      : "Preencha os dados do colaborador para liberar o acesso à plataforma.";
-    document.querySelector("#user-modal-hint").textContent = editando
-      ? "Deixe os campos de senha em branco para manter a senha atual."
-      : "O colaborador será vinculado automaticamente à empresa do gestor autenticado.";
-    submitBtn.innerHTML = (editando ? "Salvar alterações" : "Cadastrar usuário") + ' <span aria-hidden="true">↗</span>';
 
     modal.showModal();
     form.elements.nome.focus();
-  };
+  }
 
   const fecharModal = () => {
     if (modal.open) modal.close();
@@ -73,13 +90,18 @@
     mostrarFeedbackModal("");
   };
 
-  const renderizarTabela = () => {
+  function renderizarTabela() {
     const total = usuarios.length;
-    const admins = usuarios.filter((u) => Boolean(u.isAdmin)).length;
+    const admins = usuarios.filter((usuario) => Boolean(usuario.isAdmin)).length;
     document.querySelector("[data-kpi-total]").textContent = String(total);
     document.querySelector("[data-kpi-admins]").textContent = String(admins);
     document.querySelector("[data-kpi-ops]").textContent = String(total - admins);
-    document.querySelector("#user-count").textContent = `${total} ${total === 1 ? "usuário" : "usuários"}`;
+
+    let textoQuantidade = "usuários";
+    if (total === 1) {
+      textoQuantidade = "usuário";
+    }
+    document.querySelector("#user-count").textContent = `${total} ${textoQuantidade}`;
 
     if (!total) {
       lista.innerHTML = '<tr><td colspan="6">Nenhum usuário cadastrado.</td></tr>';
@@ -87,30 +109,35 @@
     }
 
     lista.replaceChildren();
-    usuarios.forEach((u) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
+    usuarios.forEach((usuario) => {
+      let classeCargo = "badge--neutral";
+      if (usuario.isAdmin) {
+        classeCargo = "badge--admin";
+      }
+
+      const linha = document.createElement("tr");
+      linha.innerHTML = `
         <td class="users-table__name"></td>
-        <td><span class="badge ${u.isAdmin ? "badge--admin" : "badge--neutral"}"></span></td>
+        <td><span class="badge ${classeCargo}"></span></td>
         <td class="users-table__muted"></td>
         <td class="users-table__muted"></td>
         <td class="users-table__muted"></td>
         <td>
           <div class="users-table-actions">
-            <button type="button" class="btn btn--secondary btn--sm" data-action="edit" data-id="${u.id}">Editar</button>
-            <button type="button" class="btn btn--danger btn--sm" data-action="delete" data-id="${u.id}">Excluir</button>
+            <button type="button" class="btn btn--secondary btn--sm" data-action="edit" data-id="${usuario.id}">Editar</button>
+            <button type="button" class="btn btn--danger btn--sm" data-action="delete" data-id="${usuario.id}">Excluir</button>
           </div>
         </td>
       `;
-      const td = tr.querySelectorAll("td");
-      td[0].textContent = u.nome;
-      td[1].querySelector("span").textContent = u.cargo;
-      td[2].textContent = u.email;
-      td[3].textContent = formatarTelefone(u.telefone);
-      td[4].textContent = formatarCpf(u.cpf);
-      lista.append(tr);
+      const celulas = linha.querySelectorAll("td");
+      celulas[0].textContent = usuario.nome;
+      celulas[1].querySelector("span").textContent = usuario.cargo;
+      celulas[2].textContent = usuario.email;
+      celulas[3].textContent = formatarTelefone(usuario.telefone);
+      celulas[4].textContent = formatarCpf(usuario.cpf);
+      lista.append(linha);
     });
-  };
+  }
 
   const carregarUsuarios = async () => {
     const empresaId = sessionStorage.EMPRESA_ID;
@@ -139,10 +166,10 @@
       if (!resposta.ok) return;
       cargos = await resposta.json();
       select.innerHTML = '<option value="" disabled selected>Selecione o cargo do funcionário</option>';
-      cargos.forEach((c) => {
+      cargos.forEach((cargoItem) => {
         const option = document.createElement("option");
-        option.value = c.nome;
-        option.textContent = c.nome;
+        option.value = cargoItem.nome;
+        option.textContent = cargoItem.nome;
         select.append(option);
       });
     } catch {
@@ -150,7 +177,12 @@
     }
   };
 
-  document.querySelector("#open-user-modal")?.addEventListener("click", () => abrirModal());
+  const botaoAbrirModal = document.querySelector("#open-user-modal");
+  if (botaoAbrirModal) {
+    botaoAbrirModal.addEventListener("click", () => {
+      abrirModal();
+    });
+  }
   document.querySelectorAll("[data-close-user-modal]").forEach((btn) => btn.addEventListener("click", fecharModal));
   modal.addEventListener("click", (event) => {
     if (event.target === modal) fecharModal();
@@ -203,22 +235,36 @@
       return mostrarFeedbackModal("CPF inválido. Digite os 11 dígitos do documento.");
     }
 
-    const validarSenha = !idEdicao || Boolean(senha) || Boolean(confirmarSenha);
-    if (validarSenha && senha.length < 8) {
+    let precisaValidarSenha = false;
+    if (!idEdicao || senha !== "" || confirmarSenha !== "") {
+      precisaValidarSenha = true;
+    }
+
+    if (precisaValidarSenha && senha.length < 8) {
       return mostrarFeedbackModal("A senha deve conter no mínimo 8 caracteres.");
     }
-    if (validarSenha && senha !== confirmarSenha) {
+    if (precisaValidarSenha && senha !== confirmarSenha) {
       return mostrarFeedbackModal("As senhas não coincidem.");
     }
 
     if (idEdicao) {
       // shortcut: edição apenas em memória até implementar PUT no backend.
-      const cargoEncontrado = cargos.find((c) => c.nome === cargo);
-      usuarios = usuarios.map((u) =>
-        u.id === idEdicao
-          ? { ...u, nome, cargo, email, telefone, cpf, isAdmin: cargoEncontrado ? cargoEncontrado.is_admin : u.isAdmin }
-          : u
-      );
+      const cargoEncontrado = cargos.find((item) => item.nome === cargo);
+
+      for (let i = 0; i < usuarios.length; i++) {
+        if (usuarios[i].id === idEdicao) {
+          usuarios[i].nome = nome;
+          usuarios[i].cargo = cargo;
+          usuarios[i].email = email;
+          usuarios[i].telefone = telefone;
+          usuarios[i].cpf = cpf;
+          if (cargoEncontrado) {
+            usuarios[i].isAdmin = cargoEncontrado.is_admin;
+          }
+          break;
+        }
+      }
+
       fecharModal();
       renderizarTabela();
       pageFeedback.textContent = `Usuário "${nome}" atualizado na listagem.`;
@@ -250,7 +296,13 @@
       });
 
       if (!resposta.ok) {
-        return mostrarFeedbackModal((await resposta.text()) || "Não foi possível cadastrar o funcionário.");
+        const mensagemErro = await resposta.text();
+        if (mensagemErro) {
+          mostrarFeedbackModal(mensagemErro);
+        } else {
+          mostrarFeedbackModal("Não foi possível cadastrar o funcionário.");
+        }
+        return;
       }
 
       fecharModal();

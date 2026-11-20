@@ -12,7 +12,11 @@
         if (!feedback) return;
         feedback.textContent = mensagem;
         feedback.classList.add("is-visible");
-        feedback.style.color = sucesso ? "#4ade80" : "#f87171";
+        if (sucesso) {
+          feedback.style.color = "#4ade80";
+        } else {
+          feedback.style.color = "#f87171";
+        }
       };
 
       const email = formLogin.querySelector('[name="email"]').value.trim();
@@ -44,7 +48,11 @@
               sessionStorage.EMPRESA_ID = dados.empresaId;
               sessionStorage.CARGO_ID = dados.cargoId;
               sessionStorage.CARGO_NOME = dados.cargoNome || "";
-              sessionStorage.IS_ADMIN = dados.isAdmin ? "1" : "0";
+              if (dados.isAdmin) {
+                sessionStorage.IS_ADMIN = "1";
+              } else {
+                sessionStorage.IS_ADMIN = "0";
+              }
 
               exibirFeedback("Login realizado com sucesso! Entrando...", true);
               setTimeout(() => {
@@ -69,7 +77,11 @@
   });
 
   if (window.location.pathname.endsWith("cadastro-funcionarios.html") && sessionStorage.IS_ADMIN !== "1") {
-    window.location.href = sessionStorage.ID_USUARIO ? "dashboard.html" : "login.html";
+    if (sessionStorage.ID_USUARIO) {
+      window.location.href = "dashboard.html";
+    } else {
+      window.location.href = "login.html";
+    }
     return;
   }
 
@@ -79,17 +91,20 @@
 
   document.querySelectorAll("[data-toggle-password]").forEach((button) => {
     button.addEventListener("click", () => {
-      const input = button
-        .closest(".field__control")
-        ?.querySelector("[data-password]");
+      const campoControle = button.closest(".field__control");
+      if (!campoControle) return;
+      const input = campoControle.querySelector("[data-password]");
       if (!input) return;
-      const show = input.type === "password";
-      input.type = show ? "text" : "password";
-      button.textContent = show ? "Ocultar" : "Mostrar";
-      button.setAttribute(
-        "aria-label",
-        show ? "Ocultar senha" : "Mostrar senha",
-      );
+
+      if (input.type === "password") {
+        input.type = "text";
+        button.textContent = "Ocultar";
+        button.setAttribute("aria-label", "Ocultar senha");
+      } else {
+        input.type = "password";
+        button.textContent = "Mostrar";
+        button.setAttribute("aria-label", "Mostrar senha");
+      }
     });
   });
 
