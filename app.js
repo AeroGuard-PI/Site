@@ -20,6 +20,11 @@ var monitoramentoRouter = require("./src/routes/monitoramento");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use("/assets/css", express.static(path.join(__dirname, "public", "assets", "css"), {
+    setHeaders: function (res) {
+        res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    }
+}));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cors());

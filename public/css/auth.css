@@ -32,7 +32,7 @@
         rgba(5, 7, 9, 0.8) 40%,
         rgba(5, 7, 9, 0) 60%
     ),
-    url("/assets/images/runway-night.png") center / cover no-repeat;
+    url("/assets/images/control-room.jpg") center / cover no-repeat;
     overflow: hidden;
   border-right: 1px solid var(--border, rgb(184 194 204 / 0.12));
 }

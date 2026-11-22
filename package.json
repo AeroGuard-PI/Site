@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon --exec node app.js"
+    "dev": "nodemon --exec node app.js",
+    "build:css": "node scripts/build-css.js",
+    "build": "npm run build:css"
   },
   "author": "Feito pelos desenvolvedores @ São Paulo Tech School / Bandtec Digital School",
   "license": "MIT",
@@ -16,5 +18,8 @@
     "mysql2": "^3.9.4",
     "nodemon": "^2.0.7",
     "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.12"
   }
 }
