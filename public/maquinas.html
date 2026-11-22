@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="css/maquinas.css" />
     <script src="js/auth.js" defer></script>
     <script src="js/maquinas.js" defer></script>
+    <script src="js/discretizacao.js" defer></script>
   </head>
   <body class="dashboard-page">
     <svg xmlns="http://www.w3.org/2000/svg" class="icon-library">
@@ -145,6 +146,32 @@
             </table>
           </div>
         </section>
+        <section class="panel discretizacao-panel" aria-labelledby="discretizacao-title">
+          <div class="panel__head">
+            <h2 class="panel__title" id="discretizacao-title">Discretização</h2>
+            <span class="panel__meta">Limites por componente</span>
+          </div>
+          <p class="discretizacao-description">Configure limites percentuais de alerta e crítico para cada componente monitorado. O coletor atual só consome sua configuração global; estes limites individuais ainda não são lidos por ele.</p>
+          <label class="discretizacao-machine-label" for="discretizacao-machine">Máquina</label>
+          <select id="discretizacao-machine" class="discretizacao-machine-select" disabled>
+            <option value="">Selecione uma máquina</option>
+          </select>
+          <p class="form-feedback discretizacao-feedback" data-discretizacao-feedback aria-live="polite"></p>
+          <div id="discretizacao-content" class="discretizacao-content" aria-live="polite">
+            <p>Selecione uma máquina para consultar seus componentes.</p>
+          </div>
+        </section>
+        <dialog class="discretizacao-dialog" id="discretizacao-reset-dialog" aria-labelledby="discretizacao-reset-title" aria-describedby="discretizacao-reset-description">
+          <div class="discretizacao-dialog__content">
+            <p class="mono-label">CONFIRMAÇÃO</p>
+            <h2 class="discretizacao-dialog__title" id="discretizacao-reset-title">Restaurar limites padrão?</h2>
+            <p id="discretizacao-reset-description">Os limites deste componente voltarão para ALERTA 80% e CRÍTICO 90%.</p>
+            <div class="discretizacao-dialog__actions">
+              <button class="btn btn--secondary" type="button" data-cancel-reset>Cancelar</button>
+              <button class="btn btn--filled" type="button" data-confirm-reset>Restaurar padrão</button>
+            </div>
+          </div>
+        </dialog>
         <section class="panel machine-form-panel slack-panel">
           <div class="panel__head">
             <h2 class="panel__title">Notificações no Slack</h2>
