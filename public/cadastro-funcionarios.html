@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151c26">
+  <meta name="color-scheme" content="dark">
+  <title>Usuários | AeroGuard</title>
+  <link rel="icon" href="assets/brand/aeroguard-vertical.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/usuarios.css">
+  <script src="js/auth.js" defer></script>
+  <script src="js/usuarios.js" defer></script>
+</head>
+<body class="dashboard-page">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon-library" aria-hidden="true">
+    <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01M11 6.5h6M11 17.5h6"/></symbol>
+    <symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></symbol>
+  </svg>
+
+  <div class="dashboard-layout">
+    <aside class="dash__sidebar" id="menu-lateral" aria-label="Menu principal">
+      <div class="sidebar__top">
+        <a class="dashboard-brand" href="index.html" aria-label="AeroGuard — página inicial">
+          <img src="assets/brand/aeroguard-vertical.svg" alt="AeroGuard" width="887" height="887">
+        </a>
+        <span class="dash__espacador" aria-hidden="true"></span>
+        <nav class="dashboard-nav" aria-label="Navegação da dashboard">
+          <a href="dashboard.html" class="dash__nav-item">
+            <svg class="icon icon--20" aria-hidden="true"><use href="#i-server"/></svg>
+            <span>Visão Geral</span>
+          </a>
+          <a href="maquinas.html" class="dash__nav-item">
+            <svg class="icon icon--20" aria-hidden="true"><use href="assets/icons.svg#i-settings"/></svg>
+            <span>Máquinas</span>
+          </a>
+          <a href="cadastro-funcionarios.html" class="dash__nav-item is-active" aria-current="page" data-admin-only hidden>
+            <svg class="icon icon--20" aria-hidden="true"><use href="#i-user-plus"/></svg>
+            <span>Usuários</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="sidebar__bottom">
+        <span class="dash__espacador" aria-hidden="true"></span>
+        <div class="sidebar-user">
+          <div class="sidebar-user__info">
+            <span class="sidebar-user__role">Logado como:</span>
+            <span class="sidebar-user__name" data-user-name>Usuário</span>
+          </div>
+        </div>
+        <a href="index.html" class="btn btn--secondary btn--logout">Sair</a>
+        <p>© AeroGuard - 2026</p>
+      </div>
+    </aside>
+
+    <main class="dashboard-main" id="conteudo">
+      <header class="dashboard-header users-header">
+        <div class="dashboard-header__host">
+          <p class="mono-label">ADMINISTRAÇÃO</p>
+          <h1>Gerenciamento de Usuários</h1>
+          <p>Gerencie os colaboradores e permissões de acesso da sua empresa.</p>
+        </div>
+        <button class="btn btn--filled" type="button" id="open-user-modal">
+          + Cadastrar usuário
+        </button>
+      </header>
+
+      <section class="users-kpis" aria-label="Resumo de usuários">
+        <dl class="kpis">
+          <div class="kpi">
+            <dt class="kpi__label">Total de usuários</dt>
+            <dd class="kpi__value" data-kpi-total>—</dd>
+            <dd class="kpi__delta">Colaboradores na listagem</dd>
+          </div>
+          <div class="kpi">
+            <dt class="kpi__label">Gestores (Admin)</dt>
+            <dd class="kpi__value" data-kpi-admins>—</dd>
+            <dd class="kpi__delta">Acesso administrativo</dd>
+          </div>
+          <div class="kpi">
+            <dt class="kpi__label">Operação</dt>
+            <dd class="kpi__value" data-kpi-ops>—</dd>
+            <dd class="kpi__delta">Analistas e técnicos</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="panel users-panel">
+        <div class="panel__head">
+          <h2 class="panel__title">Usuários cadastrados</h2>
+          <span class="panel__meta" id="user-count">—</span>
+        </div>
+
+        <p class="users-feedback" role="status" aria-live="polite" data-users-feedback hidden></p>
+
+        <div class="users-table-wrap">
+          <table class="users-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Cargo</th>
+                <th>E-mail</th>
+                <th>Telefone</th>
+                <th>CPF</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="user-list">
+              <tr>
+                <td colspan="6">Carregando usuários...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="user-modal" class="users-modal" aria-labelledby="user-modal-title">
+    <div class="users-modal__head">
+      <div>
+        <p class="auth-kicker">ADMINISTRAÇÃO <span>/ USUÁRIO</span></p>
+        <h2 id="user-modal-title" class="users-modal__title">Cadastrar funcionário</h2>
+        <p id="user-modal-subtitle" class="users-modal__subtitle">
+          Preencha os dados do colaborador para liberar o acesso à plataforma.
+        </p>
+      </div>
+      <button type="button" class="users-modal__close" data-close-user-modal aria-label="Fechar">×</button>
+    </div>
+
+    <form id="user-crud-form" class="auth-form" novalidate>
+      <input type="hidden" name="id">
+      <div class="form-grid">
+        <label class="field">
+          <span>Nome completo</span>
+          <input type="text" name="nome" placeholder="Nome completo do funcionário" maxlength="100" required id="nome_input">
+        </label>
+        <label class="field">
+          <span>Cargo</span>
+          <select name="cargo" id="cargo_input" required>
+            <option value="" disabled selected>Selecione o cargo do funcionário</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Telefone</span>
+          <input type="tel" name="telefone" placeholder="(11) 99999-9999" inputmode="tel" data-phone required id="telefone_input">
+        </label>
+        <label class="field">
+          <span>CPF</span>
+          <input type="text" name="cpf" placeholder="000.000.000-00" inputmode="numeric" maxlength="14" data-cpf required id="cpf_input">
+        </label>
+        <label class="field field--full">
+          <span>E-mail corporativo</span>
+          <input type="email" name="email" placeholder="funcionario@empresa.com.br" maxlength="100" required id="email_input">
+        </label>
+        <label class="field">
+          <span>Senha inicial</span>
+          <span class="field__control">
+            <input type="password" name="senha" placeholder="Mínimo de 8 caracteres" autocomplete="new-password" minlength="8" data-password required id="senha_input">
+            <button class="password-toggle" type="button" data-toggle-password aria-label="Mostrar senha">Mostrar</button>
+          </span>
+        </label>
+        <label class="field">
+          <span>Confirmar senha</span>
+          <span class="field__control">
+            <input type="password" name="confirmar_senha" placeholder="Repita a senha do funcionário" autocomplete="new-password" minlength="8" data-password required id="confirmar_senha_input">
+            <button class="password-toggle" type="button" data-toggle-password aria-label="Mostrar senha">Mostrar</button>
+          </span>
+        </label>
+      </div>
+
+      <p class="form-hint">
+        <span aria-hidden="true">ⓘ</span>
+        <span id="user-modal-hint">O colaborador será vinculado automaticamente à empresa do gestor autenticado.</span>
+      </p>
+      <p class="form-feedback" role="status" aria-live="polite" data-modal-feedback></p>
+
+      <div class="users-modal__actions">
+        <button class="btn btn--secondary" type="button" data-close-user-modal>Cancelar</button>
+        <button class="btn btn--filled" type="submit" id="save-user-btn">Cadastrar usuário <span aria-hidden="true">↗</span></button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

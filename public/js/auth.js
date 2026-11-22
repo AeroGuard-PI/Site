@@ -12,7 +12,11 @@
         if (!feedback) return;
         feedback.textContent = mensagem;
         feedback.classList.add("is-visible");
-        feedback.style.color = sucesso ? "#4ade80" : "#f87171";
+        if (sucesso) {
+          feedback.style.color = "#4ade80";
+        } else {
+          feedback.style.color = "#f87171";
+        }
       };
 
       const email = formLogin.querySelector('[name="email"]').value.trim();
@@ -43,6 +47,12 @@
               sessionStorage.EMAIL_USUARIO = dados.email;
               sessionStorage.EMPRESA_ID = dados.empresaId;
               sessionStorage.CARGO_ID = dados.cargoId;
+              sessionStorage.CARGO_NOME = dados.cargoNome || "";
+              if (dados.isAdmin) {
+                sessionStorage.IS_ADMIN = "1";
+              } else {
+                sessionStorage.IS_ADMIN = "0";
+              }
 
               exibirFeedback("Login realizado com sucesso! Entrando...", true);
               setTimeout(() => {
@@ -62,119 +72,39 @@
     });
   }
 
-  const formCadastro = document.querySelector("#register-form");
+  document.querySelectorAll("[data-admin-only]").forEach((elemento) => {
+    elemento.hidden = sessionStorage.IS_ADMIN !== "1";
+  });
 
-  if (formCadastro) {
-    const selectCargo = formCadastro.querySelector("#cargo_input");
-    if (selectCargo) {
-      fetch("/cargos/listar")
-        .then((resposta) => resposta.json())
-        .then((cargos) => {
-          cargos.forEach((c) => {
-            const option = document.createElement("option");
-            option.value = c.nome;
-            option.textContent = c.nome;
-            selectCargo.appendChild(option);
-          });
-        })
-        .catch((erro) => console.error("Erro ao listar cargos:", erro));
+  if (window.location.pathname.endsWith("cadastro-funcionarios.html") && sessionStorage.IS_ADMIN !== "1") {
+    if (sessionStorage.ID_USUARIO) {
+      window.location.href = "dashboard.html";
+    } else {
+      window.location.href = "login.html";
     }
-
-    formCadastro.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      const feedback = formCadastro.querySelector("[data-form-feedback]");
-      const exibirFeedback = (mensagem, sucesso = false) => {
-        if (!feedback) return;
-        feedback.textContent = mensagem;
-        feedback.classList.add("is-visible");
-        feedback.style.color = sucesso ? "#4ade80" : "#f87171";
-      };
-
-      const nome = formCadastro.querySelector('[name="nome"]').value.trim();
-      const cargo = formCadastro.querySelector('[name="cargo"]').value.trim();
-      const telefone = formCadastro.querySelector('[name="telefone"]').value.replace(/\D/g, "");
-      const cpf = formCadastro.querySelector('[name="cpf"]').value.replace(/\D/g, "");
-      const email = formCadastro.querySelector('[name="email"]').value.trim();
-      const senha = formCadastro.querySelector('[name="senha"]').value;
-      const confirmarSenha = formCadastro.querySelector('[name="confirmar_senha"]').value;
-      const codigoEmpresa = formCadastro.querySelector('[name="codigo_empresa"]').value.trim();
-
-      if (!nome || !cargo || !telefone || !cpf || !email || !senha || !confirmarSenha || !codigoEmpresa) {
-        exibirFeedback("Preencha todos os campos obrigatórios.");
-        return;
-      }
-
-      if (telefone.length < 10 || telefone.length > 11) {
-        exibirFeedback("Telefone inválido. Digite DDD + número completo.");
-        return;
-      }
-
-      if (cpf.length !== 11) {
-        exibirFeedback("CPF inválido. Digite os 11 dígitos do documento.");
-        return;
-      }
-
-      if (senha.length < 8) {
-        exibirFeedback("A senha deve conter no mínimo 8 caracteres.");
-        return;
-      }
-
-      if (senha !== confirmarSenha) {
-        exibirFeedback("As senhas não coincidem.");
-        return;
-      }
-
-      exibirFeedback("Processando solicitação...");
-
-      fetch("/usuarios/cadastrar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nomeServer: nome,
-          telefoneServer: telefone,
-          cpfServer: cpf,
-          emailServer: email,
-          senhaServer: senha,
-          codigoEmpresaServer: codigoEmpresa,
-          cargoServer: cargo,
-        }),
-      })
-        .then((resposta) => {
-          if (resposta.ok) {
-            exibirFeedback("Cadastro realizado com sucesso! Redirecionando...", true);
-            formCadastro.reset();
-            setTimeout(() => {
-              window.location.href = "login.html";
-            }, 2000);
-          } else {
-            resposta.text().then((textoErro) => {
-              exibirFeedback(textoErro || "Houve um erro ao realizar o cadastro.");
-            });
-          }
-        })
-        .catch((erro) => {
-          console.error("Erro no cadastro:", erro);
-          exibirFeedback("Não foi possível conectar ao servidor. Tente novamente mais tarde.");
-        });
-    });
+    return;
   }
+
+  document.querySelectorAll("[data-user-name]").forEach((elemento) => {
+    elemento.textContent = sessionStorage.NOME_USUARIO || "Usuário";
+  });
 
   document.querySelectorAll("[data-toggle-password]").forEach((button) => {
     button.addEventListener("click", () => {
-      const input = button
-        .closest(".field__control")
-        ?.querySelector("[data-password]");
+      const campoControle = button.closest(".field__control");
+      if (!campoControle) return;
+      const input = campoControle.querySelector("[data-password]");
       if (!input) return;
-      const show = input.type === "password";
-      input.type = show ? "text" : "password";
-      button.textContent = show ? "Ocultar" : "Mostrar";
-      button.setAttribute(
-        "aria-label",
-        show ? "Ocultar senha" : "Mostrar senha",
-      );
+
+      if (input.type === "password") {
+        input.type = "text";
+        button.textContent = "Ocultar";
+        button.setAttribute("aria-label", "Ocultar senha");
+      } else {
+        input.type = "password";
+        button.textContent = "Mostrar";
+        button.setAttribute("aria-label", "Mostrar senha");
+      }
     });
   });
 
@@ -201,19 +131,6 @@
         input.value = digits
           .replace(/^(\d{2})(\d)/, "($1) $2")
           .replace(/(\d{5})(\d)/, "$1-$2");
-      }
-    });
-  });
-
-  document.querySelectorAll("[data-demo-form]").forEach((form) => {
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      if (!form.reportValidity()) return;
-      const feedback = form.querySelector("[data-form-feedback]");
-      if (feedback) {
-        feedback.textContent =
-          "Interface pronta. Para autenticar ou registrar usuários, conecte este formulário ao backend da AeroGuard.";
-        feedback.classList.add("is-visible");
       }
     });
   });

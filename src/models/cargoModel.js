@@ -1,19 +1,28 @@
 var database = require("../database/config");
 
 function buscarPorNome(nomeCargo) {
-    var instrucaoSql = `SELECT id, nome FROM cargo WHERE nome = '${nomeCargo}' LIMIT 1;`;
-    return database.executar(instrucaoSql);
+    var instrucaoSql = `SELECT id, nome FROM cargo WHERE nome = ? LIMIT 1;`;
+    return database.executar(instrucaoSql, [nomeCargo]);
 }
 
 function buscarPorIdOuNome(identificador) {
-    var instrucaoSql = !isNaN(identificador)
-        ? `SELECT id, nome FROM cargo WHERE id = ${identificador} LIMIT 1;`
-        : `SELECT id, nome FROM cargo WHERE nome = '${identificador}' LIMIT 1;`;
-    return database.executar(instrucaoSql);
+    var ehNumero = /^\d+$/.test(String(identificador).trim());
+    var instrucaoSql;
+    var valor;
+
+    if (ehNumero) {
+        instrucaoSql = `SELECT id, nome FROM cargo WHERE id = ? LIMIT 1;`;
+        valor = Number(identificador);
+    } else {
+        instrucaoSql = `SELECT id, nome FROM cargo WHERE nome = ? LIMIT 1;`;
+        valor = identificador;
+    }
+
+    return database.executar(instrucaoSql, [valor]);
 }
 
 function listar() {
-    var instrucaoSql = `SELECT id, nome FROM cargo;`;
+    var instrucaoSql = `SELECT id, nome, is_admin FROM cargo;`;
     return database.executar(instrucaoSql);
 }
 

@@ -97,6 +97,10 @@
     color 0.2s;
 }
 
+.dashboard-page .dash__nav-item[hidden] {
+  display: none;
+}
+
 /* Hover */
 .dashboard-page .dash__nav-item:hover {
   color: var(--fg);

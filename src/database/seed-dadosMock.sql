@@ -7,10 +7,12 @@ SET @local_gru = LAST_INSERT_ID();
 INSERT INTO localizacao (estado, cidade, cep, numero) VALUES ('SP', 'São Paulo', '04626911', 'S/N');
 SET @local_cgh = LAST_INSERT_ID();
 
-INSERT INTO cargo (nome) VALUES ('Analista de Sistemas');
+INSERT INTO cargo (nome, is_admin) VALUES ('Analista de Sistemas', 0);
 SET @analista = LAST_INSERT_ID();
-INSERT INTO cargo (nome) VALUES ('Técnico de Infraestrutura');
+INSERT INTO cargo (nome, is_admin) VALUES ('Técnico de Infraestrutura', 0);
 SET @tecnico = LAST_INSERT_ID();
+INSERT INTO cargo (nome, is_admin) VALUES ('Gestor', 1);
+SET @gestor = LAST_INSERT_ID();
 
 INSERT INTO empresa (cnpj, razao_social, codigoIATA, codigoAutenticacao, fkLocalizacao)
 VALUES ('02575686000148', 'Aeroporto de Guarulhos', 'GRU', 'A0001', @local_gru);
@@ -21,7 +23,8 @@ SET @cgh = LAST_INSERT_ID();
 
 INSERT INTO usuario (nome, telefone, email, cpf, senha, empresa_id, cargo_id) VALUES
 ('João Silva', '11982273526', 'joao.silva@email.com', '38433829392', 'SenhaSegura123', @gru, @analista),
-('Maria Oliveira', '11977665544', 'maria.oliveira@email.com', '12345678901', 'SenhaSegura456', @cgh, @tecnico);
+('Maria Oliveira', '11977665544', 'maria.oliveira@email.com', '12345678901', 'SenhaSegura456', @cgh, @tecnico),
+('Luiz', '11966554433', 'luiz@aeroguard.com', '98765432100', '123456', @gru, @gestor);
 
 INSERT INTO maquina (hostname, so, macAddress, fkEmpresa)
 VALUES ('DESKTOP-OP-01', 'Windows 11 Pro', '00:1a:3f:f1:4c:c6', @gru);
@@ -33,8 +36,6 @@ SET @maquina_cgh = LAST_INSERT_ID();
 SET @cpu = (SELECT id FROM componentes WHERE nome = 'CPU');
 SET @memoria = (SELECT id FROM componentes WHERE nome = 'Memória');
 SET @disco = (SELECT id FROM componentes WHERE nome = 'Disco');
-SET @alerta = (SELECT id FROM discretizacao WHERE nivel_alerta = 'ALERTA');
-SET @critico = (SELECT id FROM discretizacao WHERE nivel_alerta = 'CRÍTICO');
 
 INSERT INTO configuracao_maquina (disponibilidade, maquina_captura_id, componentes_id)
 VALUES (1, @maquina_gru, @cpu);
@@ -45,6 +46,19 @@ SET @config_memoria = LAST_INSERT_ID();
 INSERT INTO configuracao_maquina (disponibilidade, maquina_captura_id, componentes_id)
 VALUES (1, @maquina_cgh, @disco);
 SET @config_disco = LAST_INSERT_ID();
+
+INSERT INTO discretizacao (empresa_id, config_maquina_id, limite, nivel_alerta) VALUES
+(@gru, @config_cpu, 80, 'ALERTA'),
+(@gru, @config_cpu, 90, 'CRÍTICO'),
+(@gru, @config_memoria, 80, 'ALERTA'),
+(@gru, @config_memoria, 90, 'CRÍTICO'),
+(@cgh, @config_disco, 80, 'ALERTA'),
+(@cgh, @config_disco, 90, 'CRÍTICO');
+
+SET @alerta_cpu = (SELECT id FROM discretizacao
+    WHERE config_maquina_id = @config_cpu AND nivel_alerta = 'ALERTA');
+SET @critico_memoria = (SELECT id FROM discretizacao
+    WHERE config_maquina_id = @config_memoria AND nivel_alerta = 'CRÍTICO');
 
 INSERT INTO captura (tipo, valor, unidade_medida, maquina_id, componentes_id,
     configuracao_maquina_maquina_id, configuracao_maquina_componentes_id)
@@ -59,5 +73,5 @@ INSERT INTO captura (tipo, valor, unidade_medida, maquina_id, componentes_id,
 VALUES ('Uso Disco', 45.0, '%', @maquina_cgh, @disco, @config_disco, @config_disco);
 
 INSERT INTO historico_alerta (maquina_captura_id, componentes_captura_id, discretizacao_id) VALUES
-(@captura_cpu, @captura_cpu, @alerta),
-(@captura_memoria, @captura_memoria, @critico);
+(@captura_cpu, @captura_cpu, @alerta_cpu),
+(@captura_memoria, @captura_memoria, @critico_memoria);
