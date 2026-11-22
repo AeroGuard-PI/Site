@@ -6,9 +6,14 @@
   const feedback = document.querySelector("#feedback");
   const history = document.querySelector("#alert-history");
   const showMoreAlerts = document.querySelector("#show-more-alerts");
+  const chaveMaquinaSelecionada = `aeroguard.dashboard.maquina.${empresaId}`;
   let chart;
   let periodo = "6h";
   let mostrarTodasOcorrencias = false;
+  let maquinaSelecionada = maquinaSalva();
+  let carregando = false;
+  let recarregamentoPendente = false;
+  let dadosCarregados = false;
 
   const formatarData = valor => new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(valor));
   const formatarDataExata = valor => new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "medium" }).format(new Date(valor));
@@ -24,11 +29,25 @@
     return valores[Math.ceil(valores.length * .95) - 1];
   };
 
+  function maquinaSalva() {
+    try { return localStorage.getItem(chaveMaquinaSelecionada) || ""; } catch (_) { return ""; }
+  }
+
+  function salvarMaquinaSelecionada(maquinaId) {
+    try {
+      if (maquinaId) localStorage.setItem(chaveMaquinaSelecionada, maquinaId);
+      else localStorage.removeItem(chaveMaquinaSelecionada);
+    } catch (_) { /* A análise permanece utilizável quando o armazenamento não estiver disponível. */ }
+  }
+
   function preencherMaquinas(maquinas) {
-    const selecionada = select.value;
     select.replaceChildren();
     maquinas.forEach(maquina => select.add(new Option(maquina.hostname, maquina.id)));
-    select.value = maquinas.some(maquina => String(maquina.id) === selecionada) ? selecionada : (maquinas[0] ? String(maquinas[0].id) : "");
+    maquinaSelecionada = maquinas.some(maquina => String(maquina.id) === maquinaSelecionada)
+      ? maquinaSelecionada
+      : (maquinas[0] ? String(maquinas[0].id) : "");
+    select.value = maquinaSelecionada;
+    salvarMaquinaSelecionada(maquinaSelecionada);
     document.querySelector("[data-machine-title]").textContent = select.value ? select.selectedOptions[0].textContent : "Nenhum servidor disponível";
   }
 
@@ -53,15 +72,30 @@
   }
 
   function renderizarGrafico(serie, limites) {
-    if (chart) chart.destroy();
-    if (!serie.length) { document.querySelector("#chart-meta").textContent = "Sem dados"; return; }
+    if (!serie.length) {
+      if (chart) {
+        chart.data.labels = [];
+        chart.data.datasets = [];
+        chart.update("none");
+      }
+      document.querySelector("#chart-meta").textContent = "Sem dados";
+      return;
+    }
     const dadosLimite = (valor, rotulo, cor) => valor == null ? null : ({ label: rotulo, data: serie.map(() => valor), borderColor: cor, borderDash: [6, 5], borderWidth: 1.5, pointRadius: 0, tension: 0 });
     const datasets = [{ label: "Utilização da CPU", data: serie.map(item => Number(item.valor)), borderColor: "#00aeef", backgroundColor: "rgba(0,174,239,.16)", fill: true, tension: .2, borderWidth: 2, pointRadius: 0 }];
     const referencias = [dadosLimite(limites.alerta, "Limite de atenção", "#f2b84b"), dadosLimite(limites.critico, "Limite crítico", "#bc0707")].filter(Boolean);
-    chart = new Chart(document.querySelector("#cpu-chart"), {
-      type: "line", data: { labels: serie.map(item => formatarLabelEixo(item.data_hora)), datasets: datasets.concat(referencias) },
-      options: { responsive: true, maintainAspectRatio: false, interaction: { mode: "index", intersect: false }, plugins: { legend: { display: false }, tooltip: { callbacks: { title: contextos => formatarDataExata(serie[contextos[0].dataIndex].data_hora), label: contexto => `${contexto.dataset.label}: ${percentual(contexto.parsed.y)}` } } }, scales: { x: { grid: { display: false }, ticks: { color: "rgba(184,194,204,.65)", autoSkip: true, autoSkipPadding: 12, includeBounds: true, maxTicksLimit: 7, maxRotation: 0 } }, y: { min: 0, suggestedMax: 100, grid: { color: "rgba(184,194,204,.07)" }, ticks: { color: "rgba(184,194,204,.65)", callback: valor => `${valor} %` } } } }
-    });
+    const labels = serie.map(item => formatarLabelEixo(item.data_hora));
+    if (!chart) {
+      chart = new Chart(document.querySelector("#cpu-chart"), {
+        type: "line", data: { labels: labels, datasets: datasets.concat(referencias) },
+        options: { responsive: true, maintainAspectRatio: false, interaction: { mode: "index", intersect: false }, plugins: { legend: { display: false }, tooltip: { callbacks: { title: contextos => formatarDataExata(chart.$serie[contextos[0].dataIndex].data_hora), label: contexto => `${contexto.dataset.label}: ${percentual(contexto.parsed.y)}` } } }, scales: { x: { grid: { display: false }, ticks: { color: "rgba(184,194,204,.65)", autoSkip: true, autoSkipPadding: 12, includeBounds: true, maxTicksLimit: 7, maxRotation: 0 } }, y: { min: 0, suggestedMax: 100, grid: { color: "rgba(184,194,204,.07)" }, ticks: { color: "rgba(184,194,204,.65)", callback: valor => `${valor} %` } } } }
+      });
+    } else {
+      chart.data.labels = labels;
+      chart.data.datasets = datasets.concat(referencias);
+      chart.update("none");
+    }
+    chart.$serie = serie;
     document.querySelector("#chart-meta").textContent = `${serie.length} amostras · ${serie[0].unidade}`;
   }
 
@@ -148,16 +182,22 @@
 
   async function carregar() {
     if (!empresaId) { feedback.textContent = "Faça login para consultar a análise de CPU."; return; }
-    feedback.textContent = "Carregando dados...";
+    if (carregando) { recarregamentoPendente = true; return; }
+    carregando = true;
+    const maquinaSolicitada = maquinaSelecionada;
+    const periodoSolicitado = periodo;
+    if (!dadosCarregados) feedback.textContent = "Carregando dados...";
     try {
       const parametros = new URLSearchParams({ periodo });
-      if (select.value) parametros.set("maquinaId", select.value);
+      if (maquinaSolicitada) parametros.set("maquinaId", maquinaSolicitada);
       const resposta = await fetch(`/monitoramento/cpu/${encodeURIComponent(empresaId)}?${parametros}`);
       const dados = await resposta.json();
       if (!resposta.ok) throw new Error(dados.mensagem || "Não foi possível carregar a análise.");
-      const maquinaAntesDaResposta = select.value;
       preencherMaquinas(dados.maquinas);
-      if (!maquinaAntesDaResposta && select.value) { carregar(); return; }
+      if (periodo !== periodoSolicitado || maquinaSelecionada !== maquinaSolicitada) {
+        recarregamentoPendente = true;
+        return;
+      }
       const limites = limitesPorNivel(dados.limites);
       preencherKpis(dados.serie);
       renderizarGrafico(dados.serie, limites);
@@ -165,14 +205,23 @@
       renderizarInsights(dados.serie, dados.serieAnterior, limites, sobrecarga);
       renderizarHistorico(dados.alertas);
       feedback.textContent = dados.serie.length ? "Dados reais atualizados conforme os filtros." : "Não há capturas de CPU para os filtros selecionados.";
+      dadosCarregados = true;
     } catch (erro) {
       feedback.textContent = erro.message;
-      history.innerHTML = `<tr><td colspan="4">${erro.message}</td></tr>`;
+      if (!dadosCarregados) history.innerHTML = `<tr><td colspan="4">${erro.message}</td></tr>`;
+    } finally {
+      carregando = false;
+      if (recarregamentoPendente) {
+        recarregamentoPendente = false;
+        carregar();
+      }
     }
   }
 
   document.querySelectorAll("[data-user-name]").forEach(elemento => elemento.textContent = sessionStorage.NOME_USUARIO || "Usuário");
   select.addEventListener("change", () => {
+    maquinaSelecionada = select.value;
+    salvarMaquinaSelecionada(maquinaSelecionada);
     mostrarTodasOcorrencias = false;
     carregar();
   });
@@ -187,4 +236,5 @@
     carregar();
   });
   carregar();
+  window.setInterval(carregar, 15000);
 })();
