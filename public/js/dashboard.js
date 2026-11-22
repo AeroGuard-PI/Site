@@ -3,8 +3,13 @@
   const empresaId = sessionStorage.EMPRESA_ID;
   const select = document.querySelector("#machine-select");
   const feedback = document.querySelector("[data-chart-feedback]");
+  const chaveMaquinaSelecionada = `aeroguard.dashboard.maquina.${empresaId}`;
   let chart;
   let periodo = "6h";
+  let carregando = false;
+  let recarregamentoPendente = false;
+  let dadosCarregados = false;
+  let selecaoInicialResolvida = false;
 
   const formatarData = data => new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(data));
   const formatarValor = metrica => metrica ? `${Number(metrica.valor).toLocaleString("pt-BR", { maximumFractionDigits: 2 })} ${metrica.unidade}` : "—";
@@ -79,39 +84,74 @@
     feedback.textContent = `Dados reais · unidade: ${unidade}`;
   }
 
+  function maquinaSalva() {
+    try { return localStorage.getItem(chaveMaquinaSelecionada); } catch (_) { return null; }
+  }
+
+  function salvarMaquinaSelecionada(maquinaId) {
+    try {
+      if (maquinaId) localStorage.setItem(chaveMaquinaSelecionada, maquinaId);
+      else localStorage.removeItem(chaveMaquinaSelecionada);
+    } catch (_) { /* A dashboard permanece utilizável quando o armazenamento não estiver disponível. */ }
+  }
+
   function preencherMaquinas(maquinas) {
-    const selecionado = select.value;
+    const selecionado = selecaoInicialResolvida ? select.value : (maquinaSalva() || select.value);
     select.replaceChildren(new Option("Todas as máquinas", ""));
     maquinas.forEach(maquina => select.add(new Option(maquina.hostname, maquina.id)));
-    select.value = maquinas.some(maquina => String(maquina.id) === selecionado) ? selecionado : "";
+    const maquinaPadrao = maquinas[0] && String(maquinas[0].id);
+    select.value = selecaoInicialResolvida && !selecionado
+      ? ""
+      : (maquinas.some(maquina => String(maquina.id) === selecionado) ? selecionado : maquinaPadrao || "");
+    selecaoInicialResolvida = true;
+    salvarMaquinaSelecionada(select.value);
   }
 
   async function carregar() {
     if (!empresaId) { feedback.textContent = "Faça login para consultar o monitoramento."; return; }
-    feedback.textContent = "Carregando dados...";
+    if (carregando) { recarregamentoPendente = true; return; }
+    carregando = true;
+    const maquinaSolicitada = select.value;
+    const periodoSolicitado = periodo;
+    if (!dadosCarregados) feedback.textContent = "Carregando dados...";
     try {
       const parametros = new URLSearchParams({ periodo });
-      if (select.value) parametros.set("maquinaId", select.value);
+      if (maquinaSolicitada) parametros.set("maquinaId", maquinaSolicitada);
       const resposta = await fetch(`/monitoramento/dashboard/${encodeURIComponent(empresaId)}?${parametros}`);
       const dados = await resposta.json();
       if (!resposta.ok) throw new Error(dados.mensagem || "Não foi possível carregar os dados.");
       preencherMaquinas(dados.maquinas);
-      if (!select.value && dados.maquinaSelecionada) select.value = String(dados.maquinaSelecionada);
+      if (periodo !== periodoSolicitado || select.value !== maquinaSolicitada) {
+        recarregamentoPendente = true;
+        return;
+      }
       document.querySelector("[data-machine-title]").textContent = select.value ? select.selectedOptions[0].textContent : "Todas as máquinas";
       ["CPU", "Memória", "Disco", "Rede"].forEach(nome => renderizarKpi(dados.metricas, nome));
       renderizarServidores(dados.maquinas, dados.disponibilidade);
       renderizarAlertas(dados.alertas);
       renderizarDisco(dados.disco);
       renderizarGrafico(dados.cpu, dados.memoria);
+      dadosCarregados = true;
     } catch (erro) { feedback.textContent = erro.message; }
+    finally {
+      carregando = false;
+      if (recarregamentoPendente) {
+        recarregamentoPendente = false;
+        carregar();
+      }
+    }
   }
 
   document.querySelectorAll("[data-user-name]").forEach(elemento => elemento.textContent = sessionStorage.NOME_USUARIO || "Usuário");
-  select.addEventListener("change", carregar);
+  select.addEventListener("change", () => {
+    salvarMaquinaSelecionada(select.value);
+    carregar();
+  });
   document.querySelectorAll("[data-period]").forEach(botao => botao.addEventListener("click", () => {
     periodo = botao.dataset.period;
     document.querySelectorAll("[data-period]").forEach(item => { const ativo = item === botao; item.classList.toggle("is-active", ativo); item.setAttribute("aria-pressed", String(ativo)); });
     carregar();
   }));
   carregar();
+  window.setInterval(carregar, 15000);
 })();
