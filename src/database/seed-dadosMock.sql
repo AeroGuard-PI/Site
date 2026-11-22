@@ -1,3 +1,5 @@
+SET NAMES utf8mb4;
+
 USE AeroGuard;
 
 INSERT INTO localizacao (estado, cidade, cep, numero) VALUES ('SP', 'Guarulhos', '07141970', 'S/N');
