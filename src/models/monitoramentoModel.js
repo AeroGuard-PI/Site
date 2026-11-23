@@ -103,10 +103,18 @@ function serieCpu(empresaId, maquinaId, dataInicial, dataFinal) {
         ORDER BY cp.data_hora ASC, cp.id ASC`, parametros);
 }
 
-function limitesCpu() {
-    return database.executar(
-        "SELECT limite, nivel_alerta FROM discretizacao ORDER BY limite ASC, id ASC", []
-    );
+function limitesCpu(empresaId, maquinaId) {
+    var filtros = "m.fkEmpresa = ? AND c.nome = 'CPU'";
+    var parametros = [empresaId];
+    if (maquinaId) { filtros += " AND m.id = ?"; parametros.push(maquinaId); }
+    return database.executar(`
+        SELECT d.limite, d.nivel_alerta
+        FROM discretizacao d
+        JOIN configuracao_maquina cm ON cm.id = d.config_maquina_id
+        JOIN maquina m ON m.id = cm.maquina_captura_id
+        JOIN componentes c ON c.id = cm.componentes_id
+        WHERE ${filtros}
+        ORDER BY d.limite ASC, d.id ASC`, parametros);
 }
 
 function alertasCpu(empresaId, maquinaId, dataInicial, dataFinal) {

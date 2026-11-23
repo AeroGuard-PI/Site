@@ -73,7 +73,7 @@ function analiseCpu(req, res) {
         return Promise.all([
             monitoramentoModel.serieCpu(empresaId, maquinaId, janela.dataInicial, janela.dataFinal),
             monitoramentoModel.serieCpu(empresaId, maquinaId, janela.dataAnterior, janela.dataInicial),
-            monitoramentoModel.limitesCpu(),
+            monitoramentoModel.limitesCpu(empresaId, maquinaId),
             monitoramentoModel.alertasCpu(empresaId, maquinaId, janela.dataInicial, janela.dataFinal)
         ]).then(function (resultados) {
             res.json({

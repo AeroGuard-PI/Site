@@ -1,240 +1,85 @@
 (() => {
   "use strict";
+  const empresaId = sessionStorage.EMPRESA_ID, select = document.querySelector("#machine-select"), feedback = document.querySelector("#feedback"), history = document.querySelector("#alert-history"), more = document.querySelector("#show-more-alerts"), storageKey = `aeroguard.dashboard.maquina.${empresaId}`;
+  let periodo = "6h", maquina = localStorage.getItem(storageKey) || "", historyChart, distributionChart, loading = false, queued = false, loaded = false, allEpisodes = [], expanded = false;
+  const date = value => new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(value));
+  const exactDate = value => new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "medium" }).format(new Date(value));
+  const axisDate = value => new Intl.DateTimeFormat("pt-BR", periodo === "7d" ? { day: "2-digit", month: "2-digit" } : { hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(value));
+  const number = value => Number(value).toLocaleString("pt-BR", { maximumFractionDigits: 2 });
+  const percent = value => `${number(value)} %`;
+  const clamp = value => Math.max(0, Math.min(100, Number(value) || 0));
+  const median = values => { if (!values.length) return null; const ordered = values.map(Number).sort((a, b) => a - b), middle = Math.floor(ordered.length / 2); return ordered.length % 2 ? ordered[middle] : (ordered[middle - 1] + ordered[middle]) / 2; };
+  const duration = ms => { if (ms == null) return "Indisponível"; const min = Math.round(ms / 60000); return min < 60 ? `${min} min` : `${Math.floor(min / 60)}h ${min % 60}min`; };
+  const setFeedback = (message = "", visible = false) => { feedback.textContent = message; feedback.hidden = !visible; };
 
-  const empresaId = sessionStorage.EMPRESA_ID;
-  const select = document.querySelector("#machine-select");
-  const feedback = document.querySelector("#feedback");
-  const history = document.querySelector("#alert-history");
-  const showMoreAlerts = document.querySelector("#show-more-alerts");
-  const chaveMaquinaSelecionada = `aeroguard.dashboard.maquina.${empresaId}`;
-  let chart;
-  let periodo = "6h";
-  let mostrarTodasOcorrencias = false;
-  let maquinaSelecionada = maquinaSalva();
-  let carregando = false;
-  let recarregamentoPendente = false;
-  let dadosCarregados = false;
-
-  const formatarData = valor => new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(valor));
-  const formatarDataExata = valor => new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "medium" }).format(new Date(valor));
-  const formatarLabelEixo = valor => periodo === "7d"
-    ? new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit" }).format(new Date(valor))
-    : new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(valor));
-  const formatarNumero = valor => Number(valor).toLocaleString("pt-BR", { maximumFractionDigits: 2 });
-  const percentual = valor => `${formatarNumero(valor)} %`;
-  const media = itens => itens.length ? itens.reduce((soma, item) => soma + Number(item.valor), 0) / itens.length : null;
-  const p95 = itens => {
-    if (!itens.length) return null;
-    const valores = itens.map(item => Number(item.valor)).sort((a, b) => a - b);
-    return valores[Math.ceil(valores.length * .95) - 1];
-  };
-
-  function maquinaSalva() {
-    try { return localStorage.getItem(chaveMaquinaSelecionada) || ""; } catch (_) { return ""; }
+  function fillMachines(machines) {
+    select.replaceChildren(); machines.forEach(machine => select.add(new Option(machine.hostname, machine.id)));
+    maquina = machines.some(machine => String(machine.id) === maquina) ? maquina : (machines[0] ? String(machines[0].id) : "");
+    select.value = maquina; if (maquina) localStorage.setItem(storageKey, maquina);
+    document.querySelector("[data-machine-title]").textContent = maquina ? select.selectedOptions[0].textContent : "Nenhum servidor disponível";
   }
-
-  function salvarMaquinaSelecionada(maquinaId) {
-    try {
-      if (maquinaId) localStorage.setItem(chaveMaquinaSelecionada, maquinaId);
-      else localStorage.removeItem(chaveMaquinaSelecionada);
-    } catch (_) { /* A análise permanece utilizável quando o armazenamento não estiver disponível. */ }
+  function limits(rows) { const warning = rows.find(row => String(row.nivel_alerta).toUpperCase().includes("ALERTA")), critical = rows.find(row => String(row.nivel_alerta).toUpperCase().includes("CR")); return { warning: warning ? Number(warning.limite) : null, critical: critical ? Number(critical.limite) : null }; }
+  function intervals(series) {
+    const gaps = series.slice(1).map((item, index) => new Date(item.data_hora) - new Date(series[index].data_hora)).filter(value => value > 0), typical = median(gaps);
+    if (typical == null) return { values: [], gaps: 0 };
+    const maxGap = typical * 1.5; let omitted = 0;
+    const values = series.slice(1).flatMap((next, index) => { const current = series[index], ms = new Date(next.data_hora) - new Date(current.data_hora); if (ms > 0 && ms <= maxGap) return [{ current, next, ms }]; if (ms > maxGap) omitted += 1; return []; });
+    return { values, gaps: omitted };
   }
-
-  function preencherMaquinas(maquinas) {
-    select.replaceChildren();
-    maquinas.forEach(maquina => select.add(new Option(maquina.hostname, maquina.id)));
-    maquinaSelecionada = maquinas.some(maquina => String(maquina.id) === maquinaSelecionada)
-      ? maquinaSelecionada
-      : (maquinas[0] ? String(maquinas[0].id) : "");
-    select.value = maquinaSelecionada;
-    salvarMaquinaSelecionada(maquinaSelecionada);
-    document.querySelector("[data-machine-title]").textContent = select.value ? select.selectedOptions[0].textContent : "Nenhum servidor disponível";
+  function sustained(series) {
+    let best = null;
+    series.forEach((start, index) => { const startMs = new Date(start.data_hora).getTime(), window = series.slice(index).filter(item => new Date(item.data_hora).getTime() - startMs <= 300000); if (window.length > 1) { const value = median(window.map(item => item.valor)); if (!best || value > best.value) best = { value, start: window[0].data_hora, end: window.at(-1).data_hora, count: window.length }; } });
+    return best;
   }
-
-  function limitesPorNivel(limites) {
-    const alerta = limites.find(item => String(item.nivel_alerta).toUpperCase().includes("ALERTA"));
-    const critico = limites.find(item => String(item.nivel_alerta).toUpperCase().includes("CR"));
-    return { alerta: alerta && Number(alerta.limite), critico: critico && Number(critico.limite) };
+  function kpis(series) {
+    const current = series.at(-1), peak = series.length ? series.reduce((best, item) => Number(item.valor) > Number(best.valor) ? item : best) : null, sustain = sustained(series), values = { current: current && current.valor, median: median(series.map(item => item.valor)), peak: peak && peak.valor, sustained: sustain && sustain.value };
+    Object.entries(values).forEach(([name, value]) => { document.querySelector(`[data-kpi="${name}"]`).textContent = value == null ? "—" : percent(value); document.querySelector(`[data-kpi-bar="${name}"]`).style.width = `${clamp(value)}%`; });
+    document.querySelector('[data-kpi-info="current"]').textContent = current ? `${current.hostname} · ${date(current.data_hora)}` : "Sem dados";
+    document.querySelector('[data-kpi-info="median"]').textContent = series.length ? `${series.length} capturas no período` : "Sem dados";
+    document.querySelector('[data-kpi-info="peak"]').textContent = peak ? date(peak.data_hora) : "Sem dados";
+    document.querySelector('[data-kpi-info="sustained"]').textContent = sustain ? `${sustain.count} capturas · ${date(sustain.start)}–${date(sustain.end)}` : "São necessárias duas capturas em 5 minutos";
+    return { ...values, peak, sustain };
   }
-
-  function preencherKpis(serie) {
-    const atual = serie.at(-1);
-    const pico = serie.length ? serie.reduce((maior, item) => Number(item.valor) > Number(maior.valor) ? item : maior) : null;
-    const valores = { current: atual && Number(atual.valor), average: media(serie), peak: pico && Number(pico.valor), p95: p95(serie) };
-    Object.entries(valores).forEach(([nome, valor]) => {
-      document.querySelector(`[data-kpi="${nome}"]`).textContent = valor == null ? "—" : percentual(valor);
-    });
-    document.querySelector('[data-kpi-info="current"]').textContent = atual ? `${atual.hostname} · ${formatarData(atual.data_hora)}` : "Sem dados";
-    document.querySelector('[data-kpi-info="average"]').textContent = serie.length ? `${serie.length} captura${serie.length === 1 ? "" : "s"} no período` : "Sem dados";
-    document.querySelector('[data-kpi-info="peak"]').textContent = pico ? formatarData(pico.data_hora) : "Sem dados";
-    document.querySelector('[data-kpi-info="p95"]').textContent = serie.length ? "95% das amostras ficam neste valor ou abaixo" : "Sem dados";
-    return { atual, media: valores.average, pico, p95: valores.p95 };
+  function update(chart, canvas, config) { if (!chart) return new Chart(canvas, config); chart.data = config.data; chart.options = config.options; chart.update("none"); return chart; }
+  function historyGraph(series, threshold) {
+    const meta = document.querySelector("#chart-meta"); if (!series.length) { meta.textContent = "Sem dados"; return; }
+    const line = (value, label, color) => value == null ? null : { label, data: series.map(() => value), borderColor: color, borderDash: [6, 5], borderWidth: 1.5, pointRadius: 0 };
+    const datasets = [{ label: "Utilização da CPU", data: series.map(item => Number(item.valor)), borderColor: "#00aeef", backgroundColor: "rgba(0,174,239,.16)", fill: true, tension: .2, borderWidth: 2, pointRadius: 0 }, line(threshold.warning, "Limite de atenção", "#f2b84b"), line(threshold.critical, "Limite crítico", "#bc0707")].filter(Boolean);
+    historyChart = update(historyChart, document.querySelector("#cpu-chart"), { type: "line", data: { labels: series.map(item => axisDate(item.data_hora)), datasets }, options: { responsive: true, maintainAspectRatio: false, interaction: { mode: "index", intersect: false }, plugins: { legend: { display: false }, tooltip: { callbacks: { title: contexts => exactDate(series[contexts[0].dataIndex].data_hora), label: context => `${context.dataset.label}: ${percent(context.parsed.y)}` } } }, scales: { x: { grid: { display: false }, ticks: { color: "rgba(184,194,204,.65)", autoSkip: true, autoSkipPadding: 12, includeBounds: true, maxTicksLimit: 7, maxRotation: 0 } }, y: { min: 0, suggestedMax: 100, grid: { color: "rgba(184,194,204,.07)" }, ticks: { color: "rgba(184,194,204,.65)", callback: value => `${value}%` } } } } });
+    meta.textContent = `${series.length} amostras · ${series[0].unidade}`;
   }
-
-  function renderizarGrafico(serie, limites) {
-    if (!serie.length) {
-      if (chart) {
-        chart.data.labels = [];
-        chart.data.datasets = [];
-        chart.update("none");
-      }
-      document.querySelector("#chart-meta").textContent = "Sem dados";
-      return;
-    }
-    const dadosLimite = (valor, rotulo, cor) => valor == null ? null : ({ label: rotulo, data: serie.map(() => valor), borderColor: cor, borderDash: [6, 5], borderWidth: 1.5, pointRadius: 0, tension: 0 });
-    const datasets = [{ label: "Utilização da CPU", data: serie.map(item => Number(item.valor)), borderColor: "#00aeef", backgroundColor: "rgba(0,174,239,.16)", fill: true, tension: .2, borderWidth: 2, pointRadius: 0 }];
-    const referencias = [dadosLimite(limites.alerta, "Limite de atenção", "#f2b84b"), dadosLimite(limites.critico, "Limite crítico", "#bc0707")].filter(Boolean);
-    const labels = serie.map(item => formatarLabelEixo(item.data_hora));
-    if (!chart) {
-      chart = new Chart(document.querySelector("#cpu-chart"), {
-        type: "line", data: { labels: labels, datasets: datasets.concat(referencias) },
-        options: { responsive: true, maintainAspectRatio: false, interaction: { mode: "index", intersect: false }, plugins: { legend: { display: false }, tooltip: { callbacks: { title: contextos => formatarDataExata(chart.$serie[contextos[0].dataIndex].data_hora), label: contexto => `${contexto.dataset.label}: ${percentual(contexto.parsed.y)}` } } }, scales: { x: { grid: { display: false }, ticks: { color: "rgba(184,194,204,.65)", autoSkip: true, autoSkipPadding: 12, includeBounds: true, maxTicksLimit: 7, maxRotation: 0 } }, y: { min: 0, suggestedMax: 100, grid: { color: "rgba(184,194,204,.07)" }, ticks: { color: "rgba(184,194,204,.65)", callback: valor => `${valor} %` } } } }
-      });
-    } else {
-      chart.data.labels = labels;
-      chart.data.datasets = datasets.concat(referencias);
-      chart.update("none");
-    }
-    chart.$serie = serie;
-    document.querySelector("#chart-meta").textContent = `${serie.length} amostras · ${serie[0].unidade}`;
+  function distribution(series, threshold) {
+    const samples = intervals(series); if (!samples.values.length || threshold.warning == null || threshold.critical == null) return { ...samples, bands: [], total: 0 };
+    const ends = [20, 40, 60, threshold.warning, threshold.critical, 100], bands = ends.map((end, index) => ({ start: index ? ends[index - 1] : 0, end, ms: 0 }));
+    samples.values.forEach(({ current, ms }) => { const value = clamp(current.valor), index = bands.findIndex((band, position) => value < band.end || position === bands.length - 1); bands[index].ms += ms; });
+    return { ...samples, bands, total: bands.reduce((sum, band) => sum + band.ms, 0) };
   }
-
-  function intervaloTipico(serie) {
-    const intervalos = serie.slice(1).map((item, indice) => new Date(item.data_hora) - new Date(serie[indice].data_hora)).filter(valor => valor > 0).sort((a, b) => a - b);
-    return intervalos.length ? intervalos[Math.floor(intervalos.length / 2)] : null;
+  function distributionGraph(result) {
+    const meta = document.querySelector("#distribution-meta"), message = document.querySelector("#distribution-feedback");
+    if (!result.total) { message.hidden = false; message.textContent = "São necessárias duas capturas consecutivas, sem lacunas, para calcular a distribuição."; meta.textContent = "Sem dados suficientes"; return; }
+    message.hidden = true; const names = ["Baixa", "Moderada", "Intermediária", "Elevada", "Atenção", "Criticidade"], values = result.bands.map(band => band.ms * 100 / result.total);
+    distributionChart = update(distributionChart, document.querySelector("#distribution-chart"), { type: "bar", data: { labels: result.bands.map((band, index) => `${band.start}–${band.end}% · ${names[index]}`), datasets: [{ label: "Tempo observado", data: values, backgroundColor: ["#00aeef", "#5b8def", "#007dc5", "#f2b84b", "#f2b84b", "#bc0707"], borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: context => `${number(context.parsed.y)}% do tempo observado` } } }, scales: { x: { grid: { display: false }, ticks: { color: "rgba(184,194,204,.65)", font: { size: 10 }, maxRotation: 45, minRotation: 45 } }, y: { beginAtZero: true, max: 100, grid: { color: "rgba(184,194,204,.07)" }, ticks: { color: "rgba(184,194,204,.65)", callback: value => `${value}%` } } } } });
+    meta.textContent = `${duration(result.total)} observados`;
   }
-
-  function calcularSobrecarga(serie, limite) {
-    if (limite == null || !serie.length) return { episodios: 0, duracao: null, lacunas: false };
-    const intervalo = intervaloTipico(serie);
-    const maximoSeguro = intervalo && intervalo * 1.5;
-    let episodios = 0, duracao = 0, anteriorEmAlerta = false, lacunas = false;
-    serie.forEach((item, indice) => {
-      const emAlerta = Number(item.valor) >= limite;
-      const anterior = serie[indice - 1];
-      const diferenca = anterior ? new Date(item.data_hora) - new Date(anterior.data_hora) : null;
-      const continuo = emAlerta && anteriorEmAlerta && diferenca != null && maximoSeguro != null && diferenca <= maximoSeguro;
-      if (emAlerta && !continuo) episodios += 1;
-      if (continuo) duracao += diferenca;
-      if (emAlerta && anteriorEmAlerta && (maximoSeguro == null || diferenca > maximoSeguro)) lacunas = true;
-      anteriorEmAlerta = emAlerta;
-    });
-    return { episodios, duracao: intervalo == null ? null : duracao, lacunas };
+  function episodes(series, threshold, sampleIntervals) {
+    if (threshold.warning == null || threshold.critical == null) return { list: [], attention: null, critical: null, longest: null, gaps: sampleIntervals.gaps };
+    const byId = new Map(sampleIntervals.values.map(item => [item.current.id, item])); let active, attention = 0, critical = 0; const list = [];
+    series.forEach((item, index) => { const over = Number(item.valor) >= threshold.warning, previous = series[index - 1], contiguous = active && previous && Number(previous.valor) >= threshold.warning && byId.has(previous.id);
+      if (over && !contiguous) { if (active) list.push(active); active = { start: item.data_hora, end: item.data_hora, ms: 0, peak: Number(item.valor), critical: Number(item.valor) >= threshold.critical }; }
+      if (!over && active) { list.push(active); active = null; }
+      if (active && over) { active.end = item.data_hora; active.peak = Math.max(active.peak, Number(item.valor)); active.critical ||= Number(item.valor) >= threshold.critical; }
+      const interval = byId.get(item.id); if (interval) { if (Number(item.valor) >= threshold.critical) critical += interval.ms; else if (over) attention += interval.ms; if (active && over) active.ms += interval.ms; }
+    }); if (active) list.push(active);
+    return { list, attention, critical, longest: list.length ? Math.max(...list.map(item => item.ms)) : 0, gaps: sampleIntervals.gaps };
   }
-
-  function formatarDuracao(ms) {
-    if (ms == null) return "Indisponível";
-    const minutos = Math.round(ms / 60000);
-    if (minutos < 60) return `${minutos} min`;
-    return `${Math.floor(minutos / 60)}h ${minutos % 60}min`;
-  }
-
-  function renderizarSobrecarga(serie, limites, alertas) {
-    const resultado = calcularSobrecarga(serie, limites.alerta);
-    const criticos = alertas.filter(alerta => String(alerta.nivel_alerta).toUpperCase().includes("CR")).length;
-    document.querySelector("#overload-duration").textContent = formatarDuracao(resultado.duracao);
-    document.querySelector("#overload-episodes").textContent = resultado.episodios;
-    document.querySelector("#critical-occurrences").textContent = criticos;
-    document.querySelector("#overload-note").textContent = resultado.duracao == null
-      ? "São necessárias ao menos duas capturas para estimar duração."
-      : resultado.lacunas ? "A duração soma apenas intervalos consecutivos; lacunas entre capturas não são consideradas." : "Estimativa baseada em intervalos consecutivos entre capturas.";
-    return resultado;
-  }
-
-  function renderizarInsights(serie, serieAnterior, limites, sobrecarga) {
-    const atual = media(serie), anterior = media(serieAnterior);
-    const itens = [];
-    if (atual == null) itens.push("Não há capturas de CPU suficientes no período selecionado.");
-    else {
-      if (anterior != null) {
-        const variacao = atual - anterior;
-        if (Math.abs(variacao) < 2) itens.push("A utilização média permaneceu estável em comparação ao período anterior.");
-        else itens.push(`A utilização média ${variacao > 0 ? "aumentou" : "reduziu"} ${formatarNumero(Math.abs(variacao))} p.p. em comparação ao período anterior.`);
-      } else itens.push("Não há dados do período anterior para comparação.");
-      if (sobrecarga.episodios > 1) itens.push("Foram identificados episódios recorrentes de sobrecarga.");
-      if (limites.critico != null && serie.some(item => Number(item.valor) >= limites.critico)) itens.push("A utilização permaneceu acima do limite crítico em determinados períodos.");
-      if (!sobrecarga.episodios && (limites.alerta == null || atual < limites.alerta)) itens.push("O comportamento da CPU permanece estável no intervalo analisado.");
-    }
-    const lista = document.querySelector("#insights");
-    lista.replaceChildren();
-    itens.forEach(texto => { const item = document.createElement("li"); item.className = "alert"; item.innerHTML = '<span class="alert__icon alert__icon--info" aria-hidden="true">i</span><div class="alert__text"></div>'; item.querySelector(".alert__text").textContent = texto; lista.append(item); });
-  }
-
-  function renderizarHistorico(alertas) {
-    history.replaceChildren();
-    const exibidos = mostrarTodasOcorrencias ? alertas : alertas.slice(0, 5);
-    document.querySelector("#alert-count").textContent = `${exibidos.length} de ${alertas.length} ocorrência${alertas.length === 1 ? "" : "s"}`;
-    showMoreAlerts.hidden = alertas.length <= 5;
-    if (!showMoreAlerts.hidden) showMoreAlerts.textContent = mostrarTodasOcorrencias ? "Ver menos" : "Ver mais";
-    if (!alertas.length) { history.innerHTML = '<tr><td colspan="4">Nenhuma ocorrência registrada no período.</td></tr>'; return; }
-    exibidos.forEach(alerta => {
-      const linha = document.createElement("tr");
-      const critico = String(alerta.nivel_alerta).toUpperCase().includes("CR");
-      linha.innerHTML = `<td></td><td></td><td><span class="cpu-level ${critico ? "cpu-level--critical" : "cpu-level--warning"}"></span></td><td></td>`;
-      const celulas = linha.querySelectorAll("td");
-      celulas[0].textContent = formatarData(alerta.data_hora);
-      celulas[1].textContent = alerta.hostname;
-      celulas[2].firstElementChild.textContent = alerta.nivel_alerta;
-      celulas[3].textContent = percentual(alerta.valor);
-      history.append(linha);
-    });
-  }
-
-  async function carregar() {
-    if (!empresaId) { feedback.textContent = "Faça login para consultar a análise de CPU."; return; }
-    if (carregando) { recarregamentoPendente = true; return; }
-    carregando = true;
-    const maquinaSolicitada = maquinaSelecionada;
-    const periodoSolicitado = periodo;
-    if (!dadosCarregados) feedback.textContent = "Carregando dados...";
-    try {
-      const parametros = new URLSearchParams({ periodo });
-      if (maquinaSolicitada) parametros.set("maquinaId", maquinaSolicitada);
-      const resposta = await fetch(`/monitoramento/cpu/${encodeURIComponent(empresaId)}?${parametros}`);
-      const dados = await resposta.json();
-      if (!resposta.ok) throw new Error(dados.mensagem || "Não foi possível carregar a análise.");
-      preencherMaquinas(dados.maquinas);
-      if (periodo !== periodoSolicitado || maquinaSelecionada !== maquinaSolicitada) {
-        recarregamentoPendente = true;
-        return;
-      }
-      const limites = limitesPorNivel(dados.limites);
-      preencherKpis(dados.serie);
-      renderizarGrafico(dados.serie, limites);
-      const sobrecarga = renderizarSobrecarga(dados.serie, limites, dados.alertas);
-      renderizarInsights(dados.serie, dados.serieAnterior, limites, sobrecarga);
-      renderizarHistorico(dados.alertas);
-      feedback.textContent = dados.serie.length ? "Dados reais atualizados conforme os filtros." : "Não há capturas de CPU para os filtros selecionados.";
-      dadosCarregados = true;
-    } catch (erro) {
-      feedback.textContent = erro.message;
-      if (!dadosCarregados) history.innerHTML = `<tr><td colspan="4">${erro.message}</td></tr>`;
-    } finally {
-      carregando = false;
-      if (recarregamentoPendente) {
-        recarregamentoPendente = false;
-        carregar();
-      }
-    }
-  }
-
-  document.querySelectorAll("[data-user-name]").forEach(elemento => elemento.textContent = sessionStorage.NOME_USUARIO || "Usuário");
-  select.addEventListener("change", () => {
-    maquinaSelecionada = select.value;
-    salvarMaquinaSelecionada(maquinaSelecionada);
-    mostrarTodasOcorrencias = false;
-    carregar();
-  });
-  document.querySelectorAll("[data-period]").forEach(botao => botao.addEventListener("click", () => {
-    periodo = botao.dataset.period;
-    mostrarTodasOcorrencias = false;
-    document.querySelectorAll("[data-period]").forEach(item => { const ativo = item === botao; item.classList.toggle("is-active", ativo); item.setAttribute("aria-pressed", String(ativo)); });
-    carregar();
-  }));
-  showMoreAlerts.addEventListener("click", () => {
-    mostrarTodasOcorrencias = !mostrarTodasOcorrencias;
-    carregar();
-  });
-  carregar();
-  window.setInterval(carregar, 15000);
+  function overload(result) { document.querySelector("#attention-duration").textContent = duration(result.attention); document.querySelector("#critical-duration").textContent = duration(result.critical); document.querySelector("#overload-episodes").textContent = result.list.length; document.querySelector("#episode-duration").textContent = duration(result.longest); document.querySelector("#overload-note").textContent = result.attention == null ? "São necessárias capturas consecutivas para estimar duração." : result.gaps ? "Lacunas entre capturas foram desconsideradas nas durações." : "Durações estimadas somente entre capturas consecutivas."; }
+  function insight(list, title, text, variant = "info") { const item = document.createElement("li"); item.className = "alert"; item.innerHTML = `<span class="alert__icon alert__icon--${variant}" aria-hidden="true">i</span><div class="alert__text"><strong></strong><p></p></div>`; item.querySelector("strong").textContent = title; item.querySelector("p").textContent = text; list.append(item); }
+  function diagnosis(data, previous, dist, overloads) { const list = document.querySelector("#insights"); list.replaceChildren(); if (data.median == null) { insight(list, "Sem dados suficientes", "Não há capturas suficientes para gerar diagnóstico."); return; } const behavior = !dist.total ? "Sem dados suficientes" : !overloads.list.length ? "Estável" : overloads.list.some(item => item.ms >= 300000) ? "Sobrecarga sustentada" : overloads.list.length >= 3 ? "Pressão recorrente" : "Picos isolados"; insight(list, "Padrão de comportamento", `${behavior}. Mediana de ${percent(data.median)} e pico de ${data.peak ? percent(data.peak.valor) : "—"}.`, behavior === "Estável" ? "success" : "warning"); if (data.sustain) insight(list, "Maior carga sustentada", `Mediana de ${percent(data.sustain.value)} em janela móvel de 5 minutos (${data.sustain.count} capturas).`); const previousMedian = median(previous.map(item => item.valor)); if (previousMedian == null) insight(list, "Evolução", "Não há dados suficientes do período anterior para comparação."); else { const delta = data.median - previousMedian, status = Math.abs(delta) < 2 ? "estável" : delta > 0 ? "em crescimento" : "em redução"; insight(list, "Evolução", `Utilização ${status}: ${number(delta)} p.p. em relação à mediana anterior.`); } const recommendation = behavior === "Picos isolados" ? "Acompanhe o comportamento; não há evidência para aumento imediato de capacidade." : behavior === "Pressão recorrente" ? "Investigue horários de maior processamento e a carga das aplicações durante os episódios." : behavior === "Sobrecarga sustentada" ? "Avalie otimização das aplicações e o dimensionamento de vCPUs com base nos episódios sustentados." : "Mantenha o acompanhamento periódico da utilização da CPU."; insight(list, "Recomendação", recommendation, behavior === "Estável" || behavior === "Picos isolados" ? "success" : "warning"); }
+  function episodeHistory(episodes) { history.replaceChildren(); const shown = expanded ? episodes : episodes.slice(0, 5); document.querySelector("#alert-count").textContent = `${shown.length} de ${episodes.length} episódio${episodes.length === 1 ? "" : "s"}`; more.hidden = episodes.length <= 5; if (!more.hidden) more.textContent = expanded ? "Ver menos" : "Ver mais"; if (!episodes.length) { history.innerHTML = '<tr><td colspan="5">Nenhum episódio de sobrecarga identificado no período.</td></tr>'; return; } shown.forEach(episode => { const row = document.createElement("tr"); row.innerHTML = '<td></td><td></td><td><span class="cpu-level"></span></td><td></td><td></td>'; const cells = row.querySelectorAll("td"); cells[0].textContent = date(episode.start); cells[1].textContent = date(episode.end); cells[2].firstElementChild.classList.add(episode.critical ? "cpu-level--critical" : "cpu-level--warning"); cells[2].firstElementChild.textContent = episode.critical ? "Crítico" : "Atenção"; cells[3].textContent = percent(episode.peak); cells[4].textContent = duration(episode.ms); history.append(row); }); }
+  async function load() { if (!empresaId) { setFeedback("Faça login para consultar a análise de CPU.", true); return; } if (loading) { queued = true; return; } loading = true; const requestedMachine = maquina, requestedPeriod = periodo; try { const params = new URLSearchParams({ periodo }); if (requestedMachine) params.set("maquinaId", requestedMachine); const response = await fetch(`/monitoramento/cpu/${encodeURIComponent(empresaId)}?${params}`), data = await response.json(); if (!response.ok) throw new Error(data.mensagem || "Não foi possível carregar a análise."); fillMachines(data.maquinas); if (periodo !== requestedPeriod || maquina !== requestedMachine) { queued = true; return; } const threshold = limits(data.limites), indicator = kpis(data.serie), dist = distribution(data.serie, threshold), overloads = episodes(data.serie, threshold, dist); historyGraph(data.serie, threshold); distributionGraph(dist); overload(overloads); diagnosis(indicator, data.serieAnterior, dist, overloads); allEpisodes = overloads.list; episodeHistory(allEpisodes); setFeedback(); loaded = true; } catch (error) { setFeedback(error.message, true); if (!loaded) history.innerHTML = `<tr><td colspan="5">${error.message}</td></tr>`; } finally { loading = false; if (queued) { queued = false; load(); } } }
+  document.querySelectorAll("[data-user-name]").forEach(element => element.textContent = sessionStorage.NOME_USUARIO || "Usuário");
+  select.addEventListener("change", () => { maquina = select.value; localStorage.setItem(storageKey, maquina); expanded = false; load(); });
+  document.querySelectorAll("[data-period]").forEach(button => button.addEventListener("click", () => { periodo = button.dataset.period; expanded = false; document.querySelectorAll("[data-period]").forEach(item => { const active = item === button; item.classList.toggle("is-active", active); item.setAttribute("aria-pressed", String(active)); }); load(); }));
+  more.addEventListener("click", () => { expanded = !expanded; episodeHistory(allEpisodes); });
+  load(); window.setInterval(load, 15000);
 })();
