@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151c26">
+  <meta name="color-scheme" content="dark">
+  <title>Análise de rede | AeroGuard</title>
+  <link rel="icon" href="assets/brand/aeroguard-vertical.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/maquinas.css">
+  <link rel="stylesheet" href="css/redes.css">
+  <script src="assets/vendor/chart.umd.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/redes.js" defer></script>
+</head>
+<body class="dashboard-page">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon-library" aria-hidden="true">
+    <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01M11 6.5h6M11 17.5h6"/></symbol>
+    <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6v6H9zM9 1v4m6-4v4M9 19v4M15 19v4M1 9h4m-4 6h4m14-6h4m-4 6h4"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6h.01A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v.01A1.65 1.65 0 0 0 20.91 10H21a2 2 0 1 1 0 4h-.09A1.65 1.65 0 0 0 19.4 15Z"/></symbol>
+    <symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></symbol>
+  </svg>
+  <div class="dashboard-layout">
+    <aside class="dash__sidebar" aria-label="Menu principal">
+      <div class="sidebar__top">
+        <a class="dashboard-brand" href="index.html" aria-label="AeroGuard — página inicial"><img src="assets/brand/aeroguard-vertical.svg" alt="AeroGuard" width="887" height="887"></a>
+        <span class="dash__espacador" aria-hidden="true"></span>
+        <nav class="dashboard-nav" aria-label="Navegação da dashboard">
+          <a href="dashboard.html" class="dash__nav-item"><svg class="icon icon--20" aria-hidden="true"><use href="#i-server"/></svg><span>Visão Geral</span></a>
+          <a href="maquinas.html" class="dash__nav-item"><svg class="icon icon--20" aria-hidden="true"><use href="#i-settings"/></svg><span>Máquinas</span></a>
+          <a href="cpu.html" class="dash__nav-item"><svg class="icon icon--20" aria-hidden="true"><use href="#i-cpu"/></svg><span>Análise de CPU</span></a>
+          <a href="redes.html" class="dash__nav-item is-active" aria-current="page"><svg class="icon icon--20" aria-hidden="true" viewBox="0 0 24 24"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg><span>Análise de rede</span></a>
+          <a href="cadastro-funcionarios.html" class="dash__nav-item" data-admin-only hidden><svg class="icon icon--20" aria-hidden="true"><use href="#i-user-plus"/></svg><span>Usuários</span></a>
+        </nav>
+      </div>
+      <div class="sidebar__bottom">
+        <span class="dash__espacador" aria-hidden="true"></span>
+        <div class="sidebar-user"><div class="sidebar-user__info"><span class="sidebar-user__role">Logado como:</span><span class="sidebar-user__name" data-user-name>Usuário</span></div></div>
+        <a href="index.html" class="btn btn--secondary btn--logout">Sair</a>
+        <p>© AeroGuard - 2026</p>
+      </div>
+    </aside>
+    <main class="dashboard-main" id="conteudo">
+      <header class="dashboard-header">
+        <div class="dashboard-header__host"><p class="mono-label">Monitoramento</p><h1>Análise de rede</h1><p>Investigue o tráfego, os contadores locais e a atualidade das medições por interface.</p></div>
+      </header>
+      <section class="panel redes-filter-panel" aria-label="Filtros da análise">
+        <div class="redes-filters">
+          <label>Máquina<select id="machine-select"><option value="">Carregando máquinas...</option></select></label>
+          <label>Interface<select id="interface-select"><option value="">Selecione uma máquina</option></select></label>
+          <div class="redes-filter-actions"><button class="btn btn--secondary" id="refresh" type="button">Atualizar</button><button class="btn btn--secondary" id="pause" type="button" aria-pressed="false">Pausar atualização</button></div>
+        </div>
+        <div class="redes-context"><span id="source">Consultando medições...</span><span id="interface-state">Estado: —</span><span id="update-time">Atualização a cada 15 s</span></div>
+        <label class="redes-check"><input id="basic-history" type="checkbox"> Consultar histórico básico de Mbps</label>
+        <p class="panel__meta redes-feedback" id="feedback" aria-live="polite" hidden></p>
+      </section>
+      <section class="dashboard-kpis" aria-label="Indicadores de rede">
+        <dl class="kpis redes-kpis">
+          <div class="kpi"><dt class="kpi__label">Recepção atual · RX</dt><dd class="kpi__value redes-rx" id="rx-current">—</dd><dd class="kpi__delta" id="rx-peak">Maior taxa observada: —</dd></div>
+          <div class="kpi"><dt class="kpi__label">Transmissão atual · TX</dt><dd class="kpi__value redes-tx" id="tx-current">—</dd><dd class="kpi__delta" id="tx-peak">Maior taxa observada: —</dd></div>
+          <div class="kpi"><dt class="kpi__label">Integridade local no período</dt><dd class="redes-counters"><span>Erros RX <strong id="rx-errors">—</strong></span><span>Erros TX <strong id="tx-errors">—</strong></span><span>Descartes RX <strong id="rx-drops">—</strong></span></dd><dd class="kpi__delta" id="counter-note">Contadores locais, sem equivalência a perda de ponta a ponta</dd></div>
+          <div class="kpi"><dt class="kpi__label" id="freshness-label">Último registro recebido</dt><dd class="kpi__value" id="freshness">—</dd><dd class="kpi__delta" id="capture-time">Sem captura no período</dd></div>
+        </dl>
+      </section>
+      <section class="panel redes-traffic-panel">
+        <div class="panel__head"><h2 class="panel__title">Recepção e transmissão</h2><div class="segmented" role="group" aria-label="Período da análise"><button type="button" data-period="1h" aria-pressed="false">1h</button><button type="button" data-period="6h" class="is-active" aria-pressed="true">6h</button><button type="button" data-period="24h" aria-pressed="false">24h</button><button type="button" data-period="7d" aria-pressed="false">7d</button></div></div>
+        <p class="panel__meta redes-help" id="traffic-meta">As taxas representam o tráfego da interface selecionada, em Mbps.</p>
+        <div class="timeseries redes-timeseries"><canvas id="traffic-chart" aria-label="Histórico de recepção e transmissão em Mbps" role="img"></canvas></div>
+        <p class="redes-empty" id="traffic-empty" hidden>Não há taxas válidas nesta janela.</p>
+      </section>
+      <div class="dashboard-grid redes-analysis-grid">
+        <section class="panel"><div class="panel__head"><h2 class="panel__title">Erros e descartes locais</h2></div><p class="panel__meta redes-help" id="integrity-meta">Contagens por janela de tempo, separadas por categoria.</p><div class="timeseries redes-timeseries"><canvas id="integrity-chart" aria-label="Contadores locais de erros RX, erros TX e descartes RX" role="img"></canvas></div><p class="redes-empty" id="integrity-empty" hidden>Indisponível nesta versão do coletor.</p></section>
+        <section class="panel"><div class="panel__head"><h2 class="panel__title">Resumo da janela</h2></div><dl class="redes-summary"><div><dt>Média ponderada RX / TX</dt><dd id="weighted-average">—</dd></div><div><dt>Volume recebido / enviado</dt><dd id="volume">—</dd></div><div><dt>Cobertura da coleta</dt><dd id="coverage">—</dd></div><div><dt>Intervalos completos válidos</dt><dd id="valid-intervals">—</dd></div></dl><p class="panel__meta redes-help" id="coverage-note">Cobertura representa evidência de coleta, sem equivalência a disponibilidade da rede.</p><p class="panel__meta redes-help" id="covered-window">—</p></section>
+      </div>
+      <section class="panel redes-investigation-panel"><div class="panel__head"><h2 class="panel__title">Máquinas e interfaces</h2><span class="panel__meta">Selecione uma interface para investigar</span></div><div class="machine-table-wrap"><table class="machine-table"><thead><tr><th>Máquina</th><th>Interface</th><th>Estado reportado</th><th>Última coleta</th><th>Configuração</th><th>Ação</th></tr></thead><tbody id="interface-table"><tr><td colspan="6">Carregando interfaces...</td></tr></tbody></table></div></section>
+      <div class="dashboard-grid redes-analysis-grid">
+        <section class="panel"><div class="panel__head"><h2 class="panel__title">Evidências para investigação</h2></div><ul class="alerts redes-observations" id="observations"><li>Aguardando medições.</li></ul></section>
+        <section class="panel redes-report-panel"><div class="panel__head"><h2 class="panel__title">Relatório para encaminhamento</h2></div><p>Gere um PDF com a máquina, interface e período desta análise para compartilhar com a equipe de infraestrutura.</p><label class="redes-check"><input type="checkbox" id="send-slack"> Enviar também ao Slack</label><p class="panel__meta redes-help" id="slack-destination">Destino definido na configuração da empresa.</p><button class="btn btn--filled" id="generate-report" type="button" disabled>Gerar relatório PDF</button><p class="redes-report-feedback" id="report-feedback" role="status" aria-live="polite"></p><div class="redes-report-links"><a class="btn btn--secondary" id="report-download" hidden>Baixar PDF</a><a class="btn btn--secondary" id="report-slack" target="_blank" rel="noopener noreferrer" hidden>Abrir no Slack</a></div></section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
