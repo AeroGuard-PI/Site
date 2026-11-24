@@ -138,3 +138,67 @@ test("janela sustentada exige extensão próxima de cinco minutos", () => {
   assert.equal(cpu.sustentada(serie(Array.from({ length: 49 }, () => 85)), 1), null);
   assert.ok(cpu.sustentada(serie(Array.from({ length: 60 }, () => 85)), 1));
 });
+
+test("mínimo, mediana e máximo usam a mesma série normalizada", () => {
+  const dados = cpu.normalizar(serie([10, 40, 90]), 1), extremos = cpu.extremos(dados);
+  assert.equal(cpu.median(dados.map(item => item.valor)), 40);
+  assert.deepEqual(extremos, { minimo: 10, maximo: 90 });
+});
+
+test("extremos da maior carga sustentada pertencem somente à janela selecionada", () => {
+  const valores = [5].concat(Array.from({ length: 60 }, (_, indice) => 70 + indice % 21));
+  const carga = cpu.sustentada(serie(valores), 1);
+  assert.equal(carga.minimo, 70);
+  assert.equal(carga.maximo, 90);
+});
+
+test("ausência de dados válidos não inventa extremos", () => {
+  assert.deepEqual(cpu.extremos([]), { minimo: null, maximo: null });
+  assert.equal(cpu.sustentada([], 1), null);
+});
+
+test("arquivamento persiste e restauração remove somente o registro escolhido", () => {
+  const dados = new Map(), storage = { getItem: chave => dados.get(chave) || null, setItem: (chave, valor) => dados.set(chave, valor) }, chave = cpu.chaveArquivamento({ empresaId: 1, usuarioId: 2, maquinaId: 3 });
+  const registro = { id: "10,11", capturas: [10, 11] };
+  assert.equal(cpu.gravarArquivados(storage, chave, [registro]), true);
+  assert.deepEqual(cpu.lerArquivados(storage, chave), [registro]);
+  assert.equal(cpu.gravarArquivados(storage, chave, []), true);
+  assert.deepEqual(cpu.lerArquivados(storage, chave), []);
+});
+
+test("identificação do episódio permanece reconhecível entre filtros sobrepostos", () => {
+  const arquivado = [{ id: "10,11,12", capturas: [10, 11, 12] }];
+  assert.equal(cpu.episodioArquivado({ capturas: [11, 12] }, arquivado), true);
+  assert.equal(cpu.episodioArquivado({ capturas: [20, 21] }, arquivado), false);
+});
+
+test("arquivamento é isolado por empresa, usuário e máquina", () => {
+  const a = cpu.chaveArquivamento({ empresaId: 1, usuarioId: 2, maquinaId: 3 }), outroUsuario = cpu.chaveArquivamento({ empresaId: 1, usuarioId: 4, maquinaId: 3 }), outraMaquina = cpu.chaveArquivamento({ empresaId: 1, usuarioId: 2, maquinaId: 5 });
+  assert.notEqual(a, outroUsuario);
+  assert.notEqual(a, outraMaquina);
+});
+
+test("arquivamento não altera os resultados analíticos do episódio", () => {
+  const dados = serie(Array.from({ length: 61 }, () => 85)), antes = cpu.episodios(dados, limites, 1), registros = [{ id: antes.lista[0].idArquivamento, capturas: antes.lista[0].capturas }], depois = cpu.episodios(dados, limites, 1);
+  assert.equal(cpu.episodioArquivado(depois.lista[0], registros), true);
+  assert.equal(depois.atencao, antes.atencao);
+  assert.equal(depois.lista.length, antes.lista.length);
+});
+
+test("restauração encontra o registro original de um episódio recortado por outro filtro", () => {
+  const original = { id: "10,11,12", capturas: [10, 11, 12] }, distinto = { id: "20,21", capturas: [20, 21] }, recortado = { capturas: [11, 12] };
+  const registro = cpu.registroArquivado(recortado, [original, distinto]);
+  assert.equal(registro, original);
+  assert.deepEqual([original, distinto].filter(item => item !== registro), [distinto]);
+});
+
+test("extremos de séries extensas são calculados sem expansão de argumentos", () => {
+  const amostras = Array.from({ length: 200000 }, (_, indice) => ({ valor: indice === 777 ? -10 : indice === 199999 ? 120 : 50 }));
+  assert.deepEqual(cpu.extremos(amostras), { minimo: -10, maximo: 120 });
+});
+
+test("diagnóstico de evolução inclui extremos atual e anterior", () => {
+  const atual = analise([60, 70, 80]), anterior = cpu.intervalos(serie([20, 30, 40], 1, 5000, 1699999900000), 1), resultado = cpu.diagnostico(atual, anterior, { lista: [] });
+  assert.deepEqual(resultado.extremosAtuais, { minimo: 60, maximo: 80 });
+  assert.deepEqual(resultado.extremosAnteriores, { minimo: 20, maximo: 40 });
+});

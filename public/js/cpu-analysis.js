@@ -9,6 +9,13 @@
   const median = values => { const ordered = values.map(Number).filter(Number.isFinite).sort((a, b) => a - b); if (!ordered.length) return null; const middle = Math.floor(ordered.length / 2); return ordered.length % 2 ? ordered[middle] : (ordered[middle - 1] + ordered[middle]) / 2; };
   const options = value => ({ ...PADRAO, ...(value || {}) });
   const limitesValidos = limites => limites && ["alerta", "critico"].every(chave => limites[chave] !== null && limites[chave] !== undefined && limites[chave] !== "" && Number.isFinite(Number(limites[chave])) && Number(limites[chave]) >= 0 && Number(limites[chave]) <= 100) && Number(limites.alerta) < Number(limites.critico);
+  const extremos = amostras => { let minimo = null, maximo = null; amostras.forEach(amostra => { const valor = numero(amostra); if (!Number.isFinite(valor)) return; minimo = minimo == null || valor < minimo ? valor : minimo; maximo = maximo == null || valor > maximo ? valor : maximo; }); return { minimo, maximo }; };
+  const chaveArquivamento = ({ empresaId, usuarioId, maquinaId, componente = "cpu" }) => `aeroguard.cpu.arquivados.v1:${empresaId || "anon"}:${usuarioId || "anon"}:${maquinaId || "sem-maquina"}:${componente}`;
+  const lerArquivados = (storage, chave) => { try { const dados = JSON.parse(storage.getItem(chave) || "[]"); return Array.isArray(dados) ? dados : []; } catch (_) { return []; } };
+  const gravarArquivados = (storage, chave, registros) => { try { storage.setItem(chave, JSON.stringify(registros)); return true; } catch (_) { return false; } };
+  const idArquivamento = episodio => (episodio.capturas || []).map(String).sort().join(",");
+  const registroArquivado = (episodio, registros) => { const capturas = new Set((episodio.capturas || []).map(String)); let melhor = null, maiorIntersecao = 0; (registros || []).forEach(registro => { const intersecao = (registro.capturas || []).reduce((total, id) => total + Number(capturas.has(String(id))), 0); if (intersecao > maiorIntersecao) { melhor = registro; maiorIntersecao = intersecao; } }); return melhor; };
+  const episodioArquivado = (episodio, registros) => Boolean(registroArquivado(episodio, registros));
 
   function normalizar(serie = [], maquinaId) {
     const porHorario = new Map();
@@ -40,25 +47,25 @@
       let observado = 0, temLacuna = false;
       for (let indice = inicio; indice < ultimo; indice += 1) { const ms = timestamp(amostras[indice + 1]) - timestamp(amostras[indice]); if (ms > dados.limiteLacuna) { temLacuna = true; break; } observado += ms; }
       if (temLacuna || observado / janela < config.coberturaMinima) continue;
-      const valor = median(amostras.slice(inicio, ultimo + 1).map(numero)); if (!melhor || valor > melhor.valor) melhor = { valor, inicio: amostras[inicio].data_hora, fim: amostras[ultimo].data_hora, quantidade: ultimo - inicio + 1, cobertura: observado / janela };
+      const janelaAmostras = amostras.slice(inicio, ultimo + 1), valor = median(janelaAmostras.map(numero)); if (!melhor || valor > melhor.valor) melhor = { valor, inicio: amostras[inicio].data_hora, fim: amostras[ultimo].data_hora, quantidade: ultimo - inicio + 1, cobertura: observado / janela, ...extremos(janelaAmostras) };
     }
     return melhor;
   }
 
   function episodios(serie, limites, maquinaId, configuracao) {
     const config = options(configuracao), dados = intervalos(serie, maquinaId, configuracao), { amostras } = dados, lista = []; let ativo = null, atencao = 0, criticidade = 0;
-    const finalizar = () => { if (!ativo) return; ativo.duracao = ativo.duracaoAtencao + ativo.duracaoCriticidade; ativo.critica = ativo.duracaoCriticidade >= config.janelaSustentadaMs; ativo.picoCriticoIsolado = ativo.duracaoCriticidade > 0 && !ativo.critica; ativo.classificacao = ativo.critica ? "Criticidade sustentada" : ativo.duracao >= config.janelaSustentadaMs ? ativo.picoCriticoIsolado ? "Atenção sustentada com pico crítico isolado" : "Atenção sustentada" : ativo.duracaoCriticidade ? "Pico crítico isolado" : "Pico de atenção"; lista.push(ativo); ativo = null; };
+    const finalizar = emAndamento => { if (!ativo) return; ativo.duracao = ativo.duracaoAtencao + ativo.duracaoCriticidade; ativo.critica = ativo.duracaoCriticidade >= config.janelaSustentadaMs; ativo.picoCriticoIsolado = ativo.duracaoCriticidade > 0 && !ativo.critica; ativo.classificacao = ativo.critica ? "Criticidade sustentada" : ativo.duracao >= config.janelaSustentadaMs ? ativo.picoCriticoIsolado ? "Atenção sustentada com pico crítico isolado" : "Atenção sustentada" : ativo.duracaoCriticidade ? "Pico crítico isolado" : "Pico de atenção"; ativo.emAndamento = Boolean(emAndamento); ativo.idArquivamento = idArquivamento(ativo); lista.push(ativo); ativo = null; };
     if (!limitesValidos(limites)) return { lista, atencao: null, criticidade: null, maior: null, configuracaoSuficiente: false, ...dados };
     for (let indice = 0; indice < amostras.length - 1; indice += 1) {
       const atual = amostras[indice], proxima = amostras[indice + 1], valor = numero(atual), ms = timestamp(proxima) - timestamp(atual), valido = ms > 0 && ms <= dados.limiteLacuna, acima = valor >= limites.alerta;
-      if (!valido) { finalizar(); continue; }
+      if (!valido) { finalizar(false); continue; }
       const proximoAcima = numero(proxima) >= limites.alerta, tolerado = !acima && ativo && proximoAcima && ms <= dados.limiteLacuna;
-      if (!acima && !tolerado) { finalizar(); continue; }
-      if (acima && !ativo) ativo = { inicio: atual.data_hora, fim: proxima.data_hora, pico: valor, amostras: 0, duracaoAtencao: 0, duracaoCriticidade: 0 };
+      if (!acima && !tolerado) { finalizar(false); continue; }
+      if (acima && !ativo) ativo = { inicio: atual.data_hora, fim: proxima.data_hora, pico: valor, amostras: 0, duracaoAtencao: 0, duracaoCriticidade: 0, capturas: [] };
       if (!ativo) continue;
-      if (acima) { ativo.fim = proxima.data_hora; ativo.pico = Math.max(ativo.pico, valor); ativo.amostras += 1; if (valor >= limites.critico) { ativo.duracaoCriticidade += ms; criticidade += ms; } else { ativo.duracaoAtencao += ms; atencao += ms; } }
+      if (acima) { ativo.fim = proxima.data_hora; ativo.pico = Math.max(ativo.pico, valor); ativo.amostras += 1; ativo.capturas.push(atual.id); if (valor >= limites.critico) { ativo.duracaoCriticidade += ms; criticidade += ms; } else { ativo.duracaoAtencao += ms; atencao += ms; } }
     }
-    finalizar(); return { lista, atencao, criticidade, maior: lista.length ? Math.max(...lista.map(item => item.duracao)) : 0, configuracaoSuficiente: true, ...dados };
+    finalizar(Boolean(ativo && numero(amostras.at(-1)) >= limites.alerta)); return { lista, atencao, criticidade, maior: lista.length ? Math.max(...lista.map(item => item.duracao)) : 0, configuracaoSuficiente: true, ...dados };
   }
 
   function distribuicao(dados, limites) {
@@ -74,12 +81,12 @@
     if (episodios && episodios.configuracaoSuficiente === false) return { confiavel: false, eventosConfiaveis: false, configuracaoSuficiente: false, comportamento: "Configuração insuficiente", evolucao: null, diferenca: null, comparacaoConfiavel: false };
     const coberturaAtual = dadosAtuais.periodo ? dadosAtuais.coberturaPeriodo : dadosAtuais.cobertura;
     if (!amostras.length) return { confiavel: false, eventosConfiaveis: false, configuracaoSuficiente: true, comportamento: "Dados insuficientes", evolucao: null, diferenca: null, comparacaoConfiavel: false };
-    const lista = episodios && episodios.lista || [], comportamento = !lista.length ? "Operação normal" : lista.some(item => item.classificacao === "Criticidade sustentada") ? "Sobrecarga sustentada crítica" : lista.some(item => item.classificacao.startsWith("Atenção sustentada")) ? "Sobrecarga sustentada em atenção" : lista.length >= 3 ? "Pressão recorrente" : lista.length >= 2 ? "Sobrecarga intermitente" : "Picos isolados", medianaAtual = median(amostras.map(numero));
+    const lista = episodios && episodios.lista || [], comportamento = !lista.length ? "Operação normal" : lista.some(item => item.classificacao === "Criticidade sustentada") ? "Sobrecarga sustentada crítica" : lista.some(item => item.classificacao.startsWith("Atenção sustentada")) ? "Sobrecarga sustentada em atenção" : lista.length >= 3 ? "Pressão recorrente" : lista.length >= 2 ? "Sobrecarga intermitente" : "Picos isolados", medianaAtual = median(amostras.map(numero)), extremosAtuais = extremos(amostras);
     const coberturaAnterior = dadosAnteriores && (dadosAnteriores.periodo ? dadosAnteriores.coberturaPeriodo : dadosAnteriores.cobertura);
     const anteriorValido = dadosAnteriores && dadosAnteriores.amostras && dadosAnteriores.amostras.length >= 2 && coberturaAnterior >= config.coberturaMinima;
-    if (coberturaAtual < config.coberturaMinima || !anteriorValido) return { confiavel: coberturaAtual >= config.coberturaMinima, eventosConfiaveis: true, configuracaoSuficiente: true, comportamento, medianaAtual, medianaAnterior: null, diferenca: null, evolucao: null, comparacaoConfiavel: false, limitacaoDados: coberturaAtual < config.coberturaMinima ? "Cobertura do período atual insuficiente para avaliação global." : "Histórico anterior insuficiente para uma comparação confiável." };
-    const medianaAnterior = median(dadosAnteriores.amostras.map(numero)), diferenca = medianaAtual - medianaAnterior;
-    return { confiavel: true, eventosConfiaveis: true, configuracaoSuficiente: true, comportamento, medianaAtual, medianaAnterior, diferenca, evolucao: Math.abs(diferenca) < 2 ? "estável" : diferenca > 0 ? "crescimento" : "redução", comparacaoConfiavel: true };
+    if (coberturaAtual < config.coberturaMinima || !anteriorValido) return { confiavel: coberturaAtual >= config.coberturaMinima, eventosConfiaveis: true, configuracaoSuficiente: true, comportamento, medianaAtual, extremosAtuais, medianaAnterior: null, extremosAnteriores: { minimo: null, maximo: null }, diferenca: null, evolucao: null, comparacaoConfiavel: false, limitacaoDados: coberturaAtual < config.coberturaMinima ? "Cobertura do período atual insuficiente para avaliação global." : "Histórico anterior insuficiente para uma comparação confiável." };
+    const medianaAnterior = median(dadosAnteriores.amostras.map(numero)), extremosAnteriores = extremos(dadosAnteriores.amostras), diferenca = medianaAtual - medianaAnterior;
+    return { confiavel: true, eventosConfiaveis: true, configuracaoSuficiente: true, comportamento, medianaAtual, extremosAtuais, medianaAnterior, extremosAnteriores, diferenca, evolucao: Math.abs(diferenca) < 2 ? "estável" : diferenca > 0 ? "crescimento" : "redução", comparacaoConfiavel: true };
   }
-  return { median, normalizar, intervalos, sustentada, episodios, distribuicao, diagnostico, PADRAO };
+  return { median, extremos, normalizar, intervalos, sustentada, episodios, distribuicao, diagnostico, chaveArquivamento, lerArquivados, gravarArquivados, idArquivamento, registroArquivado, episodioArquivado, PADRAO };
 });
