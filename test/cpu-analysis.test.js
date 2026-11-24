@@ -202,3 +202,18 @@ test("diagnóstico de evolução inclui extremos atual e anterior", () => {
   assert.deepEqual(resultado.extremosAtuais, { minimo: 60, maximo: 80 });
   assert.deepEqual(resultado.extremosAnteriores, { minimo: 20, maximo: 40 });
 });
+
+test("episódio pontual de atenção não é classificado como pico isolado", () => {
+  const dados = serie(Array.from({ length: 37 }, () => 85).concat(30)), episodios = cpu.episodios(dados, limites, 1), intervalos = cpu.intervalos(dados, 1);
+  assert.equal(cpu.diagnostico(intervalos, intervalos, episodios).comportamento, "Episódio pontual de sobrecarga em atenção");
+});
+
+test("episódio pontual crítico é distinguido de sobrecarga sustentada", () => {
+  const dados = serie(Array.from({ length: 37 }, () => 95).concat(30)), episodios = cpu.episodios(dados, limites, 1), intervalos = cpu.intervalos(dados, 1);
+  assert.equal(cpu.diagnostico(intervalos, intervalos, episodios).comportamento, "Episódio pontual de sobrecarga crítica");
+});
+
+test("uma única captura de sobrecarga permanece pico isolado", () => {
+  const dados = serie([85, 30, 30]), episodios = cpu.episodios(dados, limites, 1), intervalos = cpu.intervalos(dados, 1);
+  assert.equal(cpu.diagnostico(intervalos, intervalos, episodios).comportamento, "Pico isolado");
+});

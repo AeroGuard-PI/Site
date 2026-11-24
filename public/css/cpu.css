@@ -13,12 +13,15 @@
 .dashboard-page .cpu-distribution-panel .timeseries { height: clamp(13rem, 24vw, 16rem); }
 .dashboard-page .cpu-empty-state { margin-top: .75rem; text-transform: none; letter-spacing: normal; }
 .dashboard-page .cpu-analysis-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.dashboard-page .cpu-overload { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; margin-top: 1rem; }
+.dashboard-page .cpu-analysis-grid { align-items:stretch; }
+.dashboard-page .cpu-analysis-grid > .panel { display:flex; flex-direction:column; min-height:0; }
+.dashboard-page .cpu-overload { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin-top: 1rem; }
 .dashboard-page .cpu-overload div { padding: .75rem; border-radius: .75rem; background: var(--surface-container); }
 .dashboard-page .cpu-overload dt { color: var(--muted); font-size: .75rem; }
 .dashboard-page .cpu-overload dd { margin-top: .35rem; font-family: var(--font-mono); font-size: 1.15rem; font-variant-numeric: tabular-nums; }
 .dashboard-page .cpu-analysis-grid .panel__meta { margin-top: 1rem; text-transform: none; letter-spacing: normal; }
-.dashboard-page .cpu-insights { min-height: 8rem; }
+.dashboard-page .cpu-insights { min-height:0; }
+.dashboard-page .cpu-diagnosis-note { margin-top:auto; padding-top:.75rem; color:var(--muted); font-size:.75rem; text-transform:none; letter-spacing:normal; }
 .dashboard-page .cpu-history-panel .machine-table { margin-top: .75rem; }
 .dashboard-page .cpu-show-more[hidden] { display: none; }
 .dashboard-page .cpu-show-more:not([hidden]) { display: block; margin: 1rem auto 0; }
