@@ -33,7 +33,7 @@
     document.querySelector('[data-kpi-info="peak"]').textContent = peak ? date(peak.data_hora) : "Sem dados";
     document.querySelector('[data-kpi-info="sustained"]').textContent = sustain ? `${sustain.quantidade} capturas · ${date(sustain.inicio)}–${date(sustain.fim)}` : "Cobertura insuficiente para uma janela de 5 minutos";
     [["median", range], ["sustained", sustain || { minimo: null, maximo: null }]].forEach(([name, extremos]) => { document.querySelector(`[data-kpi-min="${name}"]`).textContent = `Min: ${extremos.minimo == null ? "—" : percent(extremos.minimo)}`; document.querySelector(`[data-kpi-max="${name}"]`).textContent = `Max: ${extremos.maximo == null ? "—" : percent(extremos.maximo)}`; });
-    return { ...values, peak, sustain, serie, extremos: range };
+    return { ...values, peak, sustain, serie: series, extremos: range };
   }
   function update(chart, canvas, config) { if (!chart) return new Chart(canvas, config); chart.data = config.data; chart.options = config.options; chart.update("none"); return chart; }
   function historyGraph(series, threshold) {
