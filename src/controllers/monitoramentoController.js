@@ -13,6 +13,14 @@ function idMaquinaValido(valor) {
     return valor === undefined || valor === "" || (Number.isInteger(Number(valor)) && Number(valor) > 0);
 }
 
+function obterJanelaPeriodo(periodo) {
+    var horas = { "1h": 1, "6h": 6, "24h": 24, "7d": 168, "30d": 720 }[periodo] || 24;
+    var dataFinal = new Date();
+    var dataInicial = new Date(dataFinal.getTime() - horas * 60 * 60 * 1000);
+    var dataAnterior = new Date(dataInicial.getTime() - horas * 60 * 60 * 1000);
+    return { dataInicial: dataInicial, dataFinal: dataFinal, dataAnterior: dataAnterior };
+}
+
 function dashboard(req, res) {
     var empresaId = Number(req.params.empresaId);
     var maquinaId = req.query.maquinaId ? Number(req.query.maquinaId) : null;
@@ -53,4 +61,34 @@ function visaoGeral(req, res) {
     });
 }
 
-module.exports = { dashboard, visaoGeral };
+function analiseCpu(req, res) {
+    var empresaId = Number(req.params.empresaId);
+    var maquinaId = req.query.maquinaId ? Number(req.query.maquinaId) : null;
+    if (!empresaValida(empresaId) || !idMaquinaValido(req.query.maquinaId)) {
+        return res.status(400).json({ mensagem: "Identificador inválido." });
+    }
+
+    var janela = obterJanelaPeriodo(req.query.periodo);
+    monitoramentoModel.listarMaquinas(empresaId).then(function (maquinas) {
+        return Promise.all([
+            monitoramentoModel.serieCpu(empresaId, maquinaId, janela.dataInicial, janela.dataFinal),
+            monitoramentoModel.serieCpu(empresaId, maquinaId, janela.dataAnterior, janela.dataInicial),
+            monitoramentoModel.limitesCpu(empresaId, maquinaId),
+            monitoramentoModel.alertasCpu(empresaId, maquinaId, janela.dataInicial, janela.dataFinal)
+        ]).then(function (resultados) {
+            res.json({
+                maquinas: maquinas,
+                serie: resultados[0],
+                serieAnterior: resultados[1],
+                limites: resultados[2],
+                alertas: resultados[3],
+                periodo: { inicio: janela.dataInicial, fim: janela.dataFinal }
+            });
+        });
+    }).catch(function (erro) {
+        console.log(erro);
+        res.status(500).json({ mensagem: "Não foi possível consultar a análise de CPU." });
+    });
+}
+
+module.exports = { dashboard, visaoGeral, analiseCpu };

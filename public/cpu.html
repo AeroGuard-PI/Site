@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151c26">
+  <meta name="color-scheme" content="dark">
+  <title>Análise de CPU | AeroGuard</title>
+  <link rel="icon" href="assets/brand/aeroguard-vertical.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/maquinas.css">
+  <link rel="stylesheet" href="css/cpu.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/cpu-analysis.js" defer></script>
+  <script src="js/cpu.js" defer></script>
+</head>
+<body class="dashboard-page">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon-library" aria-hidden="true">
+    <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01M11 6.5h6M11 17.5h6"/></symbol>
+    <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6v6H9zM9 1v4m6-4v4M9 19v4M15 19v4M1 9h4m-4 6h4m14-6h4m-4 6h4"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6h.01A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v.01A1.65 1.65 0 0 0 20.91 10H21a2 2 0 1 1 0 4h-.09A1.65 1.65 0 0 0 19.4 15Z"/></symbol>
+    <symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 19a9 9 0 1 1 16 0M12 13l4-4M12 19h.01"/></symbol>
+    <symbol id="i-chart-no-axes-column" viewBox="0 0 24 24"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></symbol>
+    <symbol id="i-trending-up" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></symbol>
+    <symbol id="i-archive" viewBox="0 0 24 24"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></symbol>
+    <symbol id="i-restore" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v6h6"/></symbol>
+  </svg>
+  <div class="dashboard-layout">
+    <aside class="dash__sidebar" aria-label="Menu principal">
+      <div class="sidebar__top">
+        <a class="dashboard-brand" href="index.html" aria-label="AeroGuard — página inicial"><img src="assets/brand/aeroguard-vertical.svg" alt="AeroGuard" width="887" height="887"></a>
+        <span class="dash__espacador" aria-hidden="true"></span>
+        <nav class="dashboard-nav" aria-label="Navegação da dashboard">
+          <a href="dashboard.html" class="dash__nav-item"><svg class="icon icon--20" aria-hidden="true"><use href="#i-server"/></svg><span>Visão Geral</span></a>
+          <a href="maquinas.html" class="dash__nav-item"><svg class="icon icon--20" aria-hidden="true"><use href="#i-settings"/></svg><span>Máquinas</span></a>
+          <a href="cpu.html" class="dash__nav-item is-active" aria-current="page"><svg class="icon icon--20" aria-hidden="true"><use href="#i-cpu"/></svg><span>Análise de CPU</span></a>
+          <a href="cadastro-funcionarios.html" class="dash__nav-item" data-admin-only hidden><svg class="icon icon--20" aria-hidden="true"><use href="#i-user-plus"/></svg><span>Usuários</span></a>
+        </nav>
+      </div>
+      <div class="sidebar__bottom">
+        <span class="dash__espacador" aria-hidden="true"></span>
+        <div class="sidebar-user"><div class="sidebar-user__info"><span class="sidebar-user__role">Logado como:</span><span class="sidebar-user__name" data-user-name>Usuário</span></div></div>
+        <a href="index.html" class="btn btn--secondary btn--logout">Sair</a>
+        <p>© AeroGuard - 2026</p>
+      </div>
+    </aside>
+    <main class="dashboard-main" id="conteudo">
+      <header class="dashboard-header"><div class="dashboard-header__host"><p class="mono-label">Monitoramento</p><h1>Análise de CPU</h1><p>Monitore o comportamento do processador, identifique sobrecargas e acompanhe tendências de utilização.</p></div></header>
+      <section class="dashboard-servers cpu-machine-selector" aria-label="Seleção de máquina">
+        <div class="grid panel panel--wide">
+          <div class="content"><p class="mono-label">Servidor selecionado:</p><h2 class="dash__host" data-machine-title>Carregando servidor...</h2><p class="panel__meta cpu-machine-feedback" id="feedback" aria-live="polite" hidden></p></div>
+          <select id="machine-select" aria-label="Selecionar servidor"><option value="">Carregando máquinas...</option></select>
+        </div>
+      </section>
+      <section class="dashboard-kpis" aria-label="Indicadores de CPU"><dl class="kpis cpu-kpis"><div class="kpi"><dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true"><use href="#i-gauge"/></svg>Utilização atual</dt><dd class="kpi__value" data-kpi="current">—</dd><dd class="kpi__bar"><span data-kpi-bar="current" style="width:0%"></span></dd><dd class="kpi__delta" data-kpi-info="current">Sem dados</dd></div><div class="kpi"><dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true"><use href="#i-chart-no-axes-column"/></svg>Mediana do período</dt><dd class="kpi__value" data-kpi="median">—</dd><dd class="kpi__bar"><span data-kpi-bar="median" style="width:0%"></span></dd><dd class="cpu-kpi-extremes"><span data-kpi-min="median">Min: —</span><span data-kpi-max="median">Max: —</span></dd><dd class="kpi__delta" data-kpi-info="median">Sem dados</dd></div><div class="kpi"><dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true"><use href="#i-trending-up"/></svg>Pico máximo</dt><dd class="kpi__value" data-kpi="peak">—</dd><dd class="kpi__bar"><span data-kpi-bar="peak" style="width:0%"></span></dd><dd class="kpi__delta" data-kpi-info="peak">Sem dados</dd></div><div class="kpi"><dt class="kpi__label"><svg class="icon icon--16 text-signal" aria-hidden="true"><use href="#i-activity"/></svg>Maior carga sustentada</dt><dd class="kpi__value" data-kpi="sustained">—</dd><dd class="kpi__bar"><span data-kpi-bar="sustained" style="width:0%"></span></dd><dd class="cpu-kpi-extremes"><span data-kpi-min="sustained">Min: —</span><span data-kpi-max="sustained">Max: —</span></dd><dd class="kpi__delta" data-kpi-info="sustained">Sem dados</dd></div></dl></section>
+      <div class="dashboard-grid cpu-charts-grid"><section class="panel cpu-chart-panel"><div class="panel__head"><h2 class="panel__title">Histórico de utilização</h2><div class="segmented" role="group" aria-label="Período da análise"><button type="button" data-period="1h" aria-pressed="false">1h</button><button type="button" data-period="6h" class="is-active" aria-pressed="true">6h</button><button type="button" data-period="24h" aria-pressed="false">24h</button><button type="button" data-period="7d" aria-pressed="false">7d</button></div></div><div class="legend"><span><i class="legend__swatch legend__swatch--cpu"></i>Utilização</span><span><i class="legend__swatch cpu-swatch--warning"></i>Limite de atenção</span><span><i class="legend__swatch cpu-swatch--critical"></i>Limite crítico</span><span class="panel__meta cpu-chart-meta" id="chart-meta">—</span></div><div class="timeseries"><canvas id="cpu-chart" aria-label="Histórico de utilização da CPU"></canvas></div></section><section class="panel cpu-distribution-panel"><div class="panel__head"><h2 class="panel__title">Distribuição do tempo por faixa</h2><span class="panel__meta" id="distribution-meta">—</span></div><div class="timeseries"><canvas id="distribution-chart" aria-label="Distribuição do tempo observado por faixa de utilização"></canvas></div><p class="panel__meta cpu-empty-state" id="distribution-feedback" hidden></p></section></div>
+      <div class="dashboard-grid cpu-analysis-grid"><section class="panel"><div class="panel__head"><h2 class="panel__title">Indicadores de sobrecarga</h2></div><dl class="cpu-overload"><div><dt>Tempo em atenção</dt><dd id="attention-duration">—</dd></div><div><dt>Tempo em criticidade</dt><dd id="critical-duration">—</dd></div><div><dt>Episódios de sobrecarga</dt><dd id="overload-episodes">—</dd></div><div><dt>Maior duração de episódio</dt><dd id="episode-duration">—</dd></div></dl></section><section class="panel"><div class="panel__head"><h2 class="panel__title">Diagnóstico e recomendações</h2></div><ul class="alerts cpu-insights" id="insights"><li class="text-muted">Aguardando dados da análise.</li></ul></section></div>
+      <section class="panel cpu-history-panel"><div class="panel__head"><h2 class="panel__title">Histórico dos episódios</h2><button class="btn btn--secondary cpu-history-toggle" id="toggle-archived" type="button" aria-pressed="false">Arquivados (<span id="archived-count">0</span>)</button><span class="panel__meta" id="alert-count">—</span></div><div class="machine-table-wrap"><table class="machine-table"><thead><tr><th>Início</th><th>Fim</th><th>Classificação</th><th>Pico</th><th>Duração estimada</th><th class="cpu-history-action">Ações</th></tr></thead><tbody id="alert-history"><tr><td colspan="6">Carregando episódios...</td></tr></tbody></table></div><button class="btn btn--secondary cpu-show-more" id="show-more-alerts" type="button" hidden>Ver mais</button></section>
+    </main>
+  </div>
+  <dialog class="discretizacao-dialog" id="archive-episode-dialog" aria-labelledby="archive-episode-title" aria-describedby="archive-episode-description"><div class="discretizacao-dialog__content"><p class="mono-label">Histórico de episódios</p><h2 class="discretizacao-dialog__title" id="archive-episode-title">Arquivar episódio?</h2><p id="archive-episode-description">O episódio será ocultado somente desta tabela e poderá ser restaurado depois.</p><div class="discretizacao-dialog__actions"><button class="btn btn--secondary" type="button" data-close-archive>Cancelar</button><button class="btn btn--filled" type="button" id="confirm-archive">Arquivar</button></div></div></dialog>
+</body>
+</html>

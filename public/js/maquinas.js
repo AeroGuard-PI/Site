@@ -1,15 +1,6 @@
 (() => {
   "use strict";
 
-  const biblioteca = document.querySelector(".icon-library");
-  if (biblioteca) {
-    biblioteca.innerHTML = `
-      <symbol id="i-layout-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></symbol>
-      <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01M11 6.5h6M11 17.5h6"/></symbol>
-      <symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></symbol>
-    `;
-  }
-
   const empresaId = sessionStorage.EMPRESA_ID;
   const form = document.querySelector("#machine-form");
   const feedback = document.querySelector("[data-feedback]");
@@ -70,7 +61,9 @@
 
   const abrir = (maquina) => {
     form.hidden = false;
-    document.querySelector("#toggle-form").setAttribute("aria-expanded", "true");
+    document
+      .querySelector("#toggle-form")
+      .setAttribute("aria-expanded", "true");
     form.reset();
     form.id.value = maquina ? maquina.id : "";
     if (maquina) {
@@ -98,13 +91,17 @@
 
   async function maquinas() {
     try {
-      const r = await fetch(`/maquinas/listar/${encodeURIComponent(empresaId)}`);
+      const r = await fetch(
+        `/maquinas/listar/${encodeURIComponent(empresaId)}`,
+      );
       const dados = await r.json();
       if (!r.ok) throw new Error(dados.mensagem);
       lista.replaceChildren();
-      document.querySelector("#machine-count").textContent = `${dados.length} máquina${dados.length === 1 ? "" : "s"}`;
+      document.querySelector("#machine-count").textContent =
+        `${dados.length} máquina${dados.length === 1 ? "" : "s"}`;
       if (!dados.length) {
-        lista.innerHTML = '<tr><td colspan="6">Nenhuma máquina cadastrada.</td></tr>';
+        lista.innerHTML =
+          '<tr><td colspan="6">Nenhuma máquina cadastrada.</td></tr>';
         return;
       }
       dados.forEach((m) => {
@@ -125,11 +122,18 @@
           const res = await fetch(`/maquinas/buscar/${m.id}/${empresaId}`);
           const d = await res.json();
           if (!res.ok) return mostrar(d.mensagem, true);
-          abrir({ ...m, componentesIds: d.filter((x) => x.componenteId).map((x) => x.componenteId) });
+          abrir({
+            ...m,
+            componentesIds: d
+              .filter((x) => x.componenteId)
+              .map((x) => x.componenteId),
+          });
         };
         excluir.onclick = async () => {
           if (!confirm(`Excluir ${m.hostname}?`)) return;
-          const res = await fetch(`/maquinas/deletar/${m.id}/${empresaId}`, { method: "DELETE" });
+          const res = await fetch(`/maquinas/deletar/${m.id}/${empresaId}`, {
+            method: "DELETE",
+          });
           if (res.status === 204) {
             mostrar("Máquina excluída.");
             maquinas();
@@ -153,7 +157,9 @@
 
   form.onsubmit = async (e) => {
     e.preventDefault();
-    const componentesIds = [...form.querySelectorAll("#component-options input:checked")].map((i) => Number(i.value));
+    const componentesIds = [
+      ...form.querySelectorAll("#component-options input:checked"),
+    ].map((i) => Number(i.value));
     const dados = {
       hostname: form.hostname.value.trim(),
       so: form.so.value.trim(),
@@ -161,13 +167,17 @@
       empresaId: Number(empresaId),
       componentesIds,
     };
-    if (!componentesIds.length) return mostrar("Selecione ao menos um componente.", true);
+    if (!componentesIds.length)
+      return mostrar("Selecione ao menos um componente.", true);
     const editando = Boolean(form.id.value);
-    const r = await fetch(editando ? `/maquinas/editar/${form.id.value}` : "/maquinas/cadastrar", {
-      method: editando ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dados),
-    });
+    const r = await fetch(
+      editando ? `/maquinas/editar/${form.id.value}` : "/maquinas/cadastrar",
+      {
+        method: editando ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados),
+      },
+    );
     if (r.ok) {
       mostrar(editando ? "Máquina atualizada." : "Máquina cadastrada.");
       form.hidden = true;
@@ -185,7 +195,9 @@
   if (!empresaId) {
     mostrar("Faça login para gerenciar máquinas.", true);
   } else {
-    componentes().then(maquinas).catch((e) => mostrar(e.message, true));
+    componentes()
+      .then(maquinas)
+      .catch((e) => mostrar(e.message, true));
     carregarSlack().catch((e) => mostrar(e.message, true, feedbackSlack));
   }
 })();

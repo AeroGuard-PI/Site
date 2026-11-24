@@ -55,7 +55,7 @@
         rgba(5, 7, 9, 0.8) 40%,
         rgba(5, 7, 9, 0) 60%
     ),
-    url("/assets/images/monitoring.png") center / cover no-repeat;
+    url("/assets/images/monitoring.jpg") center / cover no-repeat;
     overflow: hidden;
 }
 
@@ -67,7 +67,7 @@
         rgba(5, 7, 9, 0.8) 40%,
         rgba(5, 7, 9, 0) 60%
     ),
-    url("/assets/images/anomaly.png") center / cover no-repeat;
+    url("/assets/images/anomaly.jpg") center / cover no-repeat;
     overflow: hidden;
 }
 
@@ -79,7 +79,7 @@
         rgba(5, 7, 9, 0.8) 40%,
         rgba(5, 7, 9, 0) 60%
     ),
-    url("/assets/images/smart-alerts.png") center / cover no-repeat;
+    url("/assets/images/smart-alerts.jpg") center / cover no-repeat;
     overflow: hidden;
 }
 
