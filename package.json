@@ -7,7 +7,8 @@
     "start": "node app.js",
     "dev": "nodemon --exec node app.js",
     "build:css": "node scripts/build-css.js",
-    "build": "npm run build:css"
+    "build": "npm run build:css",
+    "test": "node --test test/*.test.js"
   },
   "author": "Feito pelos desenvolvedores @ São Paulo Tech School / Bandtec Digital School",
   "license": "MIT",
