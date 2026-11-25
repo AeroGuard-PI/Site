@@ -493,8 +493,34 @@
   }
   .dashboard-page .dash__nav-item {
     width: 3rem;
+    justify-content: center;
+    padding-inline: 0;
+    gap: 0;
+  }
+  .dashboard-page .dash__nav-item span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+  .dashboard-page .sidebar-user {
+    padding: .5rem;
+    text-align: center;
+  }
+  .dashboard-page .sidebar-user__role,
+  .dashboard-page .sidebar__bottom p {
+    display: none;
+  }
+  .dashboard-page .sidebar__bottom .btn {
+    padding-inline: .35rem;
+    font-size: .75rem;
   }
   .dashboard-main {
+    width: 100%;
+    left: 0;
     padding: 1rem;
   }
   .dashboard-grid {
@@ -510,10 +536,11 @@
   }
   .dashboard-page .dash__sidebar {
     position: static;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .5rem;
     width: 100%;
-    height: 100%;
+    height: auto;
     min-height: 3.75rem;
     padding: 0.5rem 0.75rem;
     border-right: 0;
@@ -521,19 +548,65 @@
   }
   .dashboard-brand {
     width: auto;
-    margin: 0 auto 0 0;
+    margin: 0;
+    grid-column: 1;
+    grid-row: 1;
   }
   .dashboard-brand img {
     width: 2rem;
   }
-  .dashboard-nav {
+  .dashboard-page .sidebar__top {
+    display: contents;
+  }
+  .dashboard-page .dash__sidebar .dash__espacador {
+    display: none;
+  }
+  .dashboard-page .sidebar__bottom {
+    grid-column: 2;
+    grid-row: 1;
     flex-direction: row;
-    justify-content: flex-end;
+    gap: .65rem;
     width: auto;
+    margin: 0;
+    padding: 0;
+  }
+  .dashboard-page .sidebar-user {
+    width: auto;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
+  }
+  .dashboard-page .sidebar__bottom .btn {
+    width: auto;
+    min-height: 2.5rem;
+    margin: 0;
+    padding-inline: .75rem;
+  }
+  .dashboard-page .dashboard-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: .35rem;
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
   }
   .dashboard-page .dash__nav-item {
-    width: 2.5rem;
-    height: 2.25rem;
+    width: auto;
+    min-height: 2.5rem;
+    padding-inline: .65rem;
+    gap: .4rem;
+    font-size: .75rem;
+  }
+  .dashboard-page .dash__nav-item span {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
   }
   .dashboard-main {
     padding: 1rem 0.75rem 1.5rem;

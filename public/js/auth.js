@@ -76,6 +76,17 @@
     elemento.hidden = sessionStorage.IS_ADMIN !== "1";
   });
 
+  const menuCompacto = window.matchMedia("(max-width: 560px)");
+  const manterDestinoVisivel = () => {
+    const menu = document.querySelector(".dashboard-nav");
+    const destino = menu?.querySelector(".is-active");
+    if (!menuCompacto.matches || !destino) return;
+    const area = menu.getBoundingClientRect(), item = destino.getBoundingClientRect();
+    if (item.right > area.right || item.left < area.left) menu.scrollLeft += item.left - area.left;
+  };
+  document.fonts.ready.then(manterDestinoVisivel);
+  window.addEventListener("resize", manterDestinoVisivel, { passive: true });
+
   if (window.location.pathname.endsWith("cadastro-funcionarios.html") && sessionStorage.IS_ADMIN !== "1") {
     if (sessionStorage.ID_USUARIO) {
       window.location.href = "dashboard.html";
