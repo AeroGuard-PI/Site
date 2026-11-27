@@ -8,4 +8,6 @@ POST /usuarios/instalar recebe emailServer e senhaServer. O backend usa o cadast
 
 Para desenvolvimento, .env.example documenta as variáveis usadas pelo site. Na instalação Docker, o script gera a configuração. Não publique arquivos .env com credenciais.
 
-A dashboard permanece no estágio atual do projeto. Esta versão prepara o login da instalação e a persistência dos coletores.
+A navegação operacional inclui Visão Geral, Máquinas, Análise de CPU e Análise de rede. A análise de rede reúne tráfego por interface, contadores locais e relatório Python em PDF, com download e envio ao Slack conforme a configuração da empresa.
+
+O [guia da análise de rede](docs/dashboard-redes.md) descreve a atualização aditiva do banco, os indicadores e a execução do relatório. O [roteiro da apresentação individual](docs/apresentacao-redes.md) organiza escopo, persona, fluxo de dados e demonstração.

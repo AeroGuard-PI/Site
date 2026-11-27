@@ -23,3 +23,11 @@ Os componentes de dashboard têm regras equivalentes, mas delimitadas: `.dashboa
 - `.btn--logout`: complemento de `.btn--secondary` para a saída da conta. Exemplo: `<a class="btn btn--secondary btn--logout">Sair</a>`. Mantém a aparência secundária normal e recebe fundo vermelho apenas no hover.
 
 `.btn--outlined` continua disponível como variante legada neutra. Vermelho (`--problem`) é reservado à `.btn--danger` e à interação explícita `.btn--logout`; não deve ser aplicado a botões pelo texto, pela posição ou por seletores genéricos.
+
+## Composição da análise de rede
+
+`public/redes.html` reutiliza sidebar, KPI, painel, segmentado e tabela operacionais. `public/css/redes.css` contém apenas a composição específica: `.redes-filters`, `.redes-context`, `.redes-counters`, `.redes-summary` e `.redes-report-links`.
+
+Os filtros identificam máquina e interface; os contadores mantêm RX, TX e descartes separados. Carregamento, falha, ausência de registros e campos sem suporte têm mensagens próprias. A geração do relatório desabilita a ação enquanto está em andamento e mantém resultado de envio separado do download.
+
+RX utiliza `--signal`, TX utiliza `--mem`; os rótulos mantêm o significado sem depender da cor. Até 1100px, filtros e cartões usam duas colunas; até 820px, painéis passam a uma coluna; até 560px, filtros e resumos ficam em uma coluna, mantendo os cartões em duas. A navegação e o overflow da tabela seguem os componentes compartilhados.
