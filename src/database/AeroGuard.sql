@@ -3,6 +3,7 @@ SET CHARACTER SET utf8mb4;
 
 CREATE DATABASE IF NOT EXISTS AeroGuard CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE AeroGuard;
+-- DROP DATABASE AeroGuard;
 
 CREATE TABLE localizacao (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -79,6 +80,7 @@ CREATE TABLE configuracao_maquina (
 
 CREATE TABLE captura (
 	id 	INT NOT NULL AUTO_INCREMENT,
+    descricao VARCHAR(60),
     tipo VARCHAR(60) NOT NULL,
     valor DOUBLE NOT NULL,
     data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -95,6 +97,13 @@ CREATE TABLE captura (
 	CONSTRAINT fk_config_maquina_componentes
 		FOREIGN KEY (configuracao_maquina_componentes_id) REFERENCES configuracao_maquina(id)
 );
+
+-- CREATE TABLE discretizacao (
+-- 	id INT PRIMARY KEY AUTO_INCREMENT,
+--     limite INT NOT NULL,
+--     nivel_alerta VARCHAR(20) NOT NULL
+-- );
+
 
 CREATE TABLE discretizacao (
     id INT PRIMARY KEY AUTO_INCREMENT,
